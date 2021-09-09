@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -22,6 +22,8 @@
 		F209B2A526E8AAC90083574D /* HTTPMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = F209B2A426E8AAC90083574D /* HTTPMessage.swift */; };
 		F209B2A726E8ABD10083574D /* HTTPHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = F209B2A626E8ABD10083574D /* HTTPHeader.swift */; };
 		F257301A26E9A6310072BAF1 /* NSAttributedStringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F257301926E9A6310072BAF1 /* NSAttributedStringExtension.swift */; };
+		F257301C26E9ECCC0072BAF1 /* DTWiFiInformation.swift in Sources */ = {isa = PBXBuildFile; fileRef = F257301B26E9ECCC0072BAF1 /* DTWiFiInformation.swift */; };
+		F257301F26E9F1C30072BAF1 /* DTPermissionKit in Frameworks */ = {isa = PBXBuildFile; productRef = F257301E26E9F1C30072BAF1 /* DTPermissionKit */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -42,6 +44,7 @@
 		F209B2A426E8AAC90083574D /* HTTPMessage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HTTPMessage.swift; sourceTree = "<group>"; };
 		F209B2A626E8ABD10083574D /* HTTPHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HTTPHeader.swift; sourceTree = "<group>"; };
 		F257301926E9A6310072BAF1 /* NSAttributedStringExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSAttributedStringExtension.swift; sourceTree = "<group>"; };
+		F257301B26E9ECCC0072BAF1 /* DTWiFiInformation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DTWiFiInformation.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -49,6 +52,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F257301F26E9F1C30072BAF1 /* DTPermissionKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -91,6 +95,7 @@
 		F209B29426E844780083574D /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				F257301B26E9ECCC0072BAF1 /* DTWiFiInformation.swift */,
 				F209B29526E844820083574D /* ActionPublisher.swift */,
 				F209B29626E844820083574D /* FluentInterface.swift */,
 			);
@@ -134,6 +139,9 @@
 			dependencies = (
 			);
 			name = HttpRequestMonitor;
+			packageProductDependencies = (
+				F257301E26E9F1C30072BAF1 /* DTPermissionKit */,
+			);
 			productName = HttpRequestMonitor;
 			productReference = F209B27D26E83EFD0083574D /* HttpRequestMonitor.app */;
 			productType = "com.apple.product-type.application";
@@ -161,6 +169,9 @@
 				Base,
 			);
 			mainGroup = F209B27426E83EFD0083574D;
+			packageReferences = (
+				F257301D26E9F1C30072BAF1 /* XCRemoteSwiftPackageReference "DTPermissionKit" */,
+			);
 			productRefGroup = F209B27E26E83EFD0083574D /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -200,6 +211,7 @@
 				F209B2A726E8ABD10083574D /* HTTPHeader.swift in Sources */,
 				F209B28326E83EFD0083574D /* SceneDelegate.swift in Sources */,
 				F209B29F26E859BB0083574D /* HTTPConnection.swift in Sources */,
+				F257301C26E9ECCC0072BAF1 /* DTWiFiInformation.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -399,6 +411,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		F257301D26E9F1C30072BAF1 /* XCRemoteSwiftPackageReference "DTPermissionKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Darktt/DTPermissionKit";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.0.2;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		F257301E26E9F1C30072BAF1 /* DTPermissionKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F257301D26E9F1C30072BAF1 /* XCRemoteSwiftPackageReference "DTPermissionKit" */;
+			productName = DTPermissionKit;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = F209B27526E83EFD0083574D /* Project object */;
 }

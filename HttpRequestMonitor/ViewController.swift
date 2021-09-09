@@ -7,6 +7,7 @@
 
 import UIKit
 import Combine
+import DTPermissionKit
 
 class ViewController: UIViewController
 {
@@ -38,6 +39,7 @@ class ViewController: UIViewController
     {
         super.viewDidAppear(animated)
         
+        self.checkLocationPremission()
     }
     
     public override func viewWillDisappear(_ animated: Bool)
@@ -115,14 +117,28 @@ private extension ViewController
     func setupToolbarItem()
     {
         let range = NSRange(location: 0, length: 9)
+        let wifiInformation = DTWiFiInformation.current
+        let ipAddress: String = wifiInformation.ipAddresses.first ?? ""
+        let addressText: String = {
+            
+            var text: String = "Address: http://localhost:2208"
+            
+            if !ipAddress.isEmpty {
+                
+                text += "\nor http://\(ipAddress):2208"
+            }
+            
+            return text
+        }()
         
-        let addressAttributedText = NSMutableAttributedString(string: "Address: http://localhost:2208")
+        let addressAttributedText = NSMutableAttributedString(string: addressText)
                                             .forgroundColor(.systemGray)
                                             .forgroundColor(.black, range: range)
                                             .systemFont(ofSize: 14.0)
         
         let addressLabel = UILabel(frame: .zero).fluent
                             .attributedText(addressAttributedText)
+                            .numberOfLines(0)
                             .subject
         
         let flexItem = UIBarButtonItem(systemItem: .flexibleSpace)
@@ -182,6 +198,20 @@ private extension ViewController
     func receiveRequest(request: HTTPMessage)
     {
         self.requests.append(request)
+    }
+    
+    func checkLocationPremission()
+    {
+        DTPermission.locationWhenInUse.request { //<#DTPermission.Status#> in
+            
+            guard $0 != .authorizedWhenInUse else {
+                
+                self.setupToolbarItem()
+                return
+            }
+            
+            
+        }
     }
     
     func presentAlert(with error: Error)

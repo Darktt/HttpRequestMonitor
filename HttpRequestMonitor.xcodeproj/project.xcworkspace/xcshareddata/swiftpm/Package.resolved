@@ -1,0 +1,16 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "DTPermissionKit",
+        "repositoryURL": "https://github.com/Darktt/DTPermissionKit",
+        "state": {
+          "branch": null,
+          "revision": "89e658295fc9cb76fc2cb70859715e691f5495d3",
+          "version": "0.0.2"
+        }
+      }
+    ]
+  },
+  "version": 1
+}
