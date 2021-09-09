@@ -114,10 +114,15 @@ private extension ViewController
     
     func setupToolbarItem()
     {
+        let range = NSRange(location: 0, length: 9)
+        
+        let addressAttributedText = NSMutableAttributedString(string: "Address: http://localhost:2208")
+                                            .forgroundColor(.systemGray)
+                                            .forgroundColor(.black, range: range)
+                                            .systemFont(ofSize: 14.0)
+        
         let addressLabel = UILabel(frame: .zero).fluent
-                            .text("Address: http://localhost:2208")
-                            .font(UIFont.systemFont(ofSize: 14.0))
-                            .textColor(.systemGray)
+                            .attributedText(addressAttributedText)
                             .subject
         
         let flexItem = UIBarButtonItem(systemItem: .flexibleSpace)

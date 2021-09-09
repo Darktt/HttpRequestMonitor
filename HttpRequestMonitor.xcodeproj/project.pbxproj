@@ -21,6 +21,7 @@
 		F209B2A326E8AA1F0083574D /* HTTPMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = F209B2A226E8AA1F0083574D /* HTTPMethod.swift */; };
 		F209B2A526E8AAC90083574D /* HTTPMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = F209B2A426E8AAC90083574D /* HTTPMessage.swift */; };
 		F209B2A726E8ABD10083574D /* HTTPHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = F209B2A626E8ABD10083574D /* HTTPHeader.swift */; };
+		F257301A26E9A6310072BAF1 /* NSAttributedStringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F257301926E9A6310072BAF1 /* NSAttributedStringExtension.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -40,6 +41,7 @@
 		F209B2A226E8AA1F0083574D /* HTTPMethod.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HTTPMethod.swift; sourceTree = "<group>"; };
 		F209B2A426E8AAC90083574D /* HTTPMessage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HTTPMessage.swift; sourceTree = "<group>"; };
 		F209B2A626E8ABD10083574D /* HTTPHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HTTPHeader.swift; sourceTree = "<group>"; };
+		F257301926E9A6310072BAF1 /* NSAttributedStringExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSAttributedStringExtension.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -72,6 +74,7 @@
 		F209B27F26E83EFD0083574D /* HttpRequestMonitor */ = {
 			isa = PBXGroup;
 			children = (
+				F257301826E9A6250072BAF1 /* Extension */,
 				F209B29426E844780083574D /* Model */,
 				F209B29B26E849180083574D /* Service */,
 				F209B28026E83EFD0083574D /* AppDelegate.swift */,
@@ -105,6 +108,14 @@
 				F209B29926E845770083574D /* HTTPStatus.swift */,
 			);
 			path = Service;
+			sourceTree = "<group>";
+		};
+		F257301826E9A6250072BAF1 /* Extension */ = {
+			isa = PBXGroup;
+			children = (
+				F257301926E9A6310072BAF1 /* NSAttributedStringExtension.swift */,
+			);
+			path = Extension;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -180,6 +191,7 @@
 				F209B29A26E845770083574D /* HTTPStatus.swift in Sources */,
 				F209B29726E844830083574D /* ActionPublisher.swift in Sources */,
 				F209B29826E844830083574D /* FluentInterface.swift in Sources */,
+				F257301A26E9A6310072BAF1 /* NSAttributedStringExtension.swift in Sources */,
 				F209B28526E83EFD0083574D /* ViewController.swift in Sources */,
 				F209B28126E83EFD0083574D /* AppDelegate.swift in Sources */,
 				F209B2A526E8AAC90083574D /* HTTPMessage.swift in Sources */,
