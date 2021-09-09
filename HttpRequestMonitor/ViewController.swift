@@ -60,13 +60,12 @@ class ViewController: UIViewController
         
         self.title = "Server"
         
-//        self.navigationController?.setToolbarHidden(false, animated: true)
-        
         _ = self.tableView.fluent
             .delegate(self)
             .dataSource(self)
         
         self.setupRightBarButtonItem()
+        self.setupToolbarItem()
         self.setupService()
     }
     
@@ -113,6 +112,22 @@ private extension ViewController
         self.navigationItem.setRightBarButton(barButtonItem, animated: false)
     }
     
+    func setupToolbarItem()
+    {
+        let addressLabel = UILabel(frame: .zero).fluent
+                            .text("Address: http://localhost:2208")
+                            .font(UIFont.systemFont(ofSize: 14.0))
+                            .textColor(.systemGray)
+                            .subject
+        
+        let flexItem = UIBarButtonItem(systemItem: .flexibleSpace)
+        
+        let addressItem = UIBarButtonItem().fluent
+            .customView(addressLabel).subject
+        
+        self.setToolbarItems([flexItem, addressItem, flexItem,], animated: false)
+    }
+    
     func setupService()
     {
         do {
@@ -131,29 +146,31 @@ private extension ViewController
     {
         self.title = "Server \(status)"
         
-        if status == .suspend {
-            
-            self.navigationItem.rightBarButtonItem?.title = "Start"
-        }
+        // Update current state
+        var itemTitle: String = "Start"
+        var isEnabled: Bool = true
+        var isToolbarHidden: Bool = true
         
         if status == .runing {
             
-            self.navigationItem.rightBarButtonItem?.title = "Stop"
+            itemTitle = "Stop"
+            isToolbarHidden = false
         }
-        
-        if case let .failed(error) = status {
-            
-            self.presentAlert(with: error)
-        }
-        
-        var isEnabled: Bool = true
         
         if case .waitting(_) = status {
             
             isEnabled = false
         }
         
+        self.navigationItem.rightBarButtonItem?.title = itemTitle
         self.navigationItem.rightBarButtonItem?.isEnabled = isEnabled
+        self.navigationController?.setToolbarHidden(isToolbarHidden, animated: true)
+        
+        // Present error message.
+        if case let .failed(error) = status {
+            
+            self.presentAlert(with: error)
+        }
     }
     
     func receiveRequest(request: HTTPMessage)
