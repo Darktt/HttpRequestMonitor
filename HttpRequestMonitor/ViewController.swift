@@ -139,6 +139,7 @@ private extension ViewController
             
             let service = try HTTPService(port: 2208)
             service.statusUpdateHandler = self.serviceStatusUpdate(status:)
+            service.receiveRequestHandler = self.receiveRequest(request:)
             
             self.httpService = service
         } catch {
@@ -222,7 +223,16 @@ extension ViewController: UITableViewDataSource
         
         var cell: UITableViewCell? = tableView.dequeueReusableCell(withIdentifier: CellIdentifier)
         if cell == nil {
-            cell = UITableViewCell(style: .default, reuseIdentifier: CellIdentifier)
+            cell = UITableViewCell(style: .value1, reuseIdentifier: CellIdentifier)
+        }
+        
+        let request: HTTPMessage = self.requests[indexPath.row]
+        
+        if let url: URL = request.requestURL,
+           let method: HTTPMethod = request.requestMethod {
+            
+            cell?.textLabel?.text = url.absoluteString
+            cell?.detailTextLabel?.text = method.rawValue
         }
         
         return cell!

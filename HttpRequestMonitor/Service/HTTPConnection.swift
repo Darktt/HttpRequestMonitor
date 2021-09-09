@@ -35,7 +35,7 @@ public class HTTPConnection
         
         self.connection.stateUpdateHandler = self.connectionStateChange
         
-//        self.handleReceive()
+        self.handleReceive()
         self.connection.start(queue: queue)
     }
     
