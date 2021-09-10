@@ -22,7 +22,13 @@ import UIKit
 @dynamicMemberLookup
 public struct FluentInterface<Subject>
 {
+    // MARK: - Properties -
+    
     public let subject: Subject
+    
+    public let discardResult: Void = ()
+    
+    // MARK: - Methods -
     
     public subscript<Value>(dynamicMember keyPath: WritableKeyPath<Subject, Value>) -> ((Value) -> FluentInterface<Subject>)
     {

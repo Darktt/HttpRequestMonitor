@@ -62,9 +62,10 @@ class ViewController: UIViewController
         
         self.title = "Server"
         
-        _ = self.tableView.fluent
+        self.tableView.fluent
             .delegate(self)
             .dataSource(self)
+            .discardableResult
         
         self.setupRightBarButtonItem()
         self.setupToolbarItem()
@@ -81,34 +82,36 @@ private extension ViewController
 {
     func setupRightBarButtonItem()
     {
+        let transform: (UIBarButtonItem) -> (HTTPService, Bool)? = {
+            
+            guard let service = self.httpService else {
+                
+                return nil
+            }
+            
+            let isStarted: Bool = ($0.title != "Start")
+            
+            return (service, isStarted)
+        }
+        
+        let receiveValue: ((service: HTTPService, isStarted: Bool)) -> Void = {
+            
+            guard !$0.isStarted else {
+                
+                $0.service.cancel()
+                return
+            }
+            
+            $0.service.start()
+        }
+        
         let barButtonItem = UIBarButtonItem().fluent
                             .title("Start")
                             .subject
         
         barButtonItem.publisher()
-            .compactMap {
-                
-                item -> (HTTPService, Bool)? in
-                
-                guard let service = self.httpService else {
-                    
-                    return nil
-                }
-                
-                let isStart: Bool = (item.title == "Start")
-                
-                return (service, isStart)
-            }
-            .sink {
-                
-                if $0.1 {
-                    
-                    $0.0.start()
-                } else {
-                    
-                    $0.0.cancel()
-                }
-            }
+            .compactMap(transform)
+            .sink(receiveValue: receiveValue)
             .store(in: &self.cancellableSet)
         
         self.navigationItem.setRightBarButton(barButtonItem, animated: false)
