@@ -7,13 +7,15 @@
 
 import UIKit
 import Combine
-import DTPermissionKit
 
 class ViewController: UIViewController
 {
     // MARK: - Properties -
     
     @IBOutlet fileprivate weak var tableView: UITableView!
+    
+    @UserDefaultsWrapper("isIgnorePremissionCheck", defaultValue: false)
+    private var isIgnorePremissionCheck: Bool
     
     private var httpService: HTTPService?
     
@@ -39,7 +41,6 @@ class ViewController: UIViewController
     {
         super.viewDidAppear(animated)
         
-        self.checkLocationPremission()
     }
     
     public override func viewWillDisappear(_ animated: Bool)
@@ -65,7 +66,7 @@ class ViewController: UIViewController
         self.tableView.fluent
             .delegate(self)
             .dataSource(self)
-            .discardableResult
+            .discardResult
         
         self.setupRightBarButtonItem()
         self.setupToolbarItem()
@@ -136,7 +137,7 @@ private extension ViewController
         
         let addressAttributedText = NSMutableAttributedString(string: addressText)
                                             .forgroundColor(.systemGray)
-                                            .forgroundColor(.black, range: range)
+                                            .forgroundColor(.label, range: range)
                                             .systemFont(ofSize: 14.0)
         
         let addressLabel = UILabel(frame: .zero).fluent
@@ -203,9 +204,12 @@ private extension ViewController
         self.requests.append(request)
     }
     
-    func checkLocationPremission()
+    /*
+    func requestLocationPremission()
     {
-        DTPermission.locationWhenInUse.request { //<#DTPermission.Status#> in
+        DTPermission.locationWhenInUse.request {
+            
+            [unowned self] in
             
             guard $0 != .authorizedWhenInUse else {
                 
@@ -213,22 +217,48 @@ private extension ViewController
                 return
             }
             
-            
+            self.presentLocationPremissionDeniedMessage()
         }
     }
     
-    func presentAlert(with error: Error)
+    func presentLocationPremissionDeniedMessage()
     {
-        let okAction = UIAlertAction(title: "OK", style: .default) {
+        let title: String = "Cannot get IP address"
+        let message: String = "Please accept the location when in use premission."
+        let alertController = UIAlertController.alert(title: title, message: message) {
             
-            _ in
+            AlertAction.cancel("Setting") {
+                
+                guard let url = URL(string: UIApplication.openSettingsURLString) else {
+                    
+                    return
+                }
+                
+                let application = UIApplication.shared
+                application.open(url, options: [:], completionHandler: nil)
+            }
             
-            self.navigationItem.rightBarButtonItem?.title = "Start"
-            self.httpService?.cancel()
+            AlertAction.default("Don't remine me.") {
+                
+                self.isIgnorePremissionCheck = true
+            }
         }
         
-        let alertController = UIAlertController(title: "Server start failed!", message: "\(error)", preferredStyle: .alert)
-        alertController.addAction(okAction)
+        self.present(alertController, animated: true)
+    }
+    */
+    func presentAlert(with error: Error)
+    {
+        let title: String = "Server start failed!"
+        let message: String = "\(error)"
+        let alertController = UIAlertController.alert(title: title, message: message) {
+            
+            AlertAction.default("OK") {
+                
+                self.navigationItem.rightBarButtonItem?.title = "Start"
+                self.httpService?.cancel()
+            }
+        }
         
         self.present(alertController, animated: true)
     }

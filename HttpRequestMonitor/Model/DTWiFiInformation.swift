@@ -131,7 +131,12 @@ private extension DTWiFiInformation
     func wifiThenCellularThenOther(interfaceOne one: ifaddrs, interfaceTwo two: ifaddrs) -> Bool
     {
         let name = String(cString: one.ifa_name)
-        let result: Bool = (name == IPAddress.wifi || name == IPAddress.cellular)
+        let familyname: UInt8 = one.ifa_addr.pointee.sa_family
+        
+        var result: Bool = (name == IPAddress.wifi || name == IPAddress.cellular)
+        
+        // Prefer IPv4 then IPv6
+        result = result && (familyname == UInt8(AF_INET))
         
         return result
     }
@@ -142,6 +147,8 @@ private extension DTWiFiInformation
     /// - Returns: optional string, nil if operation fails
     func readableString(fromInterface interface: ifaddrs) -> String?
     {
+        print("Name: \(String(cString: interface.ifa_name))")
+        
         var address: sockaddr = interface.ifa_addr.pointee
         var hostname: [CChar] = Array(repeating: 0, count: Int(NI_MAXHOST))
         
@@ -152,6 +159,8 @@ private extension DTWiFiInformation
             
             return nil
         }
+        
+        print("ipAddress: \(ipAddress)")
         
         return ipAddress
     }
