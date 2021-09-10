@@ -17,11 +17,13 @@ public class HTTPService
     
     public private(set) var port: NWEndpoint.Port
     
-    public private(set) var listener: NWListener?
+    public private(set) var status: Status = .suspend
     
     public var statusUpdateHandler: StatusUpdateHandler?
     
     public var receiveRequestHandler: ReceiveRequestHandler?
+    
+    private var listener: NWListener?
     
     private var connections: Dictionary<String, HTTPConnection> = [:]
     
@@ -108,6 +110,8 @@ private extension HTTPService
         let status = Status(state)
         
         handler(status)
+        
+        self.status = status
     }
     
     func connectionHandler(_ connection: NWConnection)

@@ -1,5 +1,5 @@
 //
-//  ViewController.swift
+//  RootViewController.swift
 //  HttpRequestMonitor
 //
 //  Created by Eden on 2021/9/8.
@@ -8,7 +8,7 @@
 import UIKit
 import Combine
 
-class ViewController: UIViewController
+class RootViewController: UIViewController
 {
     // MARK: - Properties -
     
@@ -26,12 +26,30 @@ class ViewController: UIViewController
     
     private var cancellableSet: Set<AnyCancellable> = Set()
     
+    // MARK: - Methods -
+    // MARK: Initial Method
+    
+    public init()
+    {
+        super.init(nibName: "RootViewController", bundle: nil)
+        
+    }
+    
+    required init?(coder: NSCoder)
+    {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     // MARK: View Live Cycle
     
     public override func viewWillAppear(_ animated: Bool)
     {
         super.viewWillAppear(animated)
         
+        if self.httpService?.status == .runing {
+            
+            self.navigationController?.setToolbarHidden(false, animated: true)
+        }
     }
     
     public override func viewDidAppear(_ animated: Bool)
@@ -76,7 +94,7 @@ class ViewController: UIViewController
     }
 }
 
-private extension ViewController
+private extension RootViewController
 {
     func setupRightBarButtonItem()
     {
@@ -149,7 +167,7 @@ private extension ViewController
                             .numberOfLines(0)
                             .subject
         
-        let flexItem = UIBarButtonItem(systemItem: .flexibleSpace)
+        let flexItem = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
         
         let addressItem = UIBarButtonItem().fluent
             .customView(addressLabel).subject
@@ -276,7 +294,7 @@ private extension ViewController
 
 // MARK:  - Delegate Methods -
 
-extension ViewController: UITableViewDataSource
+extension RootViewController: UITableViewDataSource
 {
     //MARK: - UITableView DataSource Methods
     
@@ -297,6 +315,7 @@ extension ViewController: UITableViewDataSource
         var cell: UITableViewCell? = tableView.dequeueReusableCell(withIdentifier: CellIdentifier)
         if cell == nil {
             cell = UITableViewCell(style: .value1, reuseIdentifier: CellIdentifier)
+            cell?.accessoryType = .disclosureIndicator
         }
         
         let request: HTTPMessage = self.requests[indexPath.row]
@@ -312,10 +331,15 @@ extension ViewController: UITableViewDataSource
     }
 }
 
-extension ViewController: UITableViewDelegate
+extension RootViewController: UITableViewDelegate
 {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath)
     {
+        tableView.deselectRow(at: indexPath, animated: true)
         
+        let request = self.requests[indexPath.row]
+        let detailController = DetailRequestController(request: request)
+        
+        self.navigationController?.pushViewController(detailController, animated: true)
     }
 }
