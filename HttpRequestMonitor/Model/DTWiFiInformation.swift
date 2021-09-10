@@ -147,8 +147,6 @@ private extension DTWiFiInformation
     /// - Returns: optional string, nil if operation fails
     func readableString(fromInterface interface: ifaddrs) -> String?
     {
-        print("Name: \(String(cString: interface.ifa_name))")
-        
         var address: sockaddr = interface.ifa_addr.pointee
         var hostname: [CChar] = Array(repeating: 0, count: Int(NI_MAXHOST))
         
@@ -159,8 +157,6 @@ private extension DTWiFiInformation
             
             return nil
         }
-        
-        print("ipAddress: \(ipAddress)")
         
         return ipAddress
     }

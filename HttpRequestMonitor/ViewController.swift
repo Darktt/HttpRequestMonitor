@@ -14,16 +14,13 @@ class ViewController: UIViewController
     
     @IBOutlet fileprivate weak var tableView: UITableView!
     
-    @UserDefaultsWrapper("isIgnorePremissionCheck", defaultValue: false)
-    private var isIgnorePremissionCheck: Bool
-    
     private var httpService: HTTPService?
     
     private var requests: Array<HTTPMessage> = [] {
         
         didSet {
             
-            self.tableView.reloadData()
+            self.tableView.reloadSection(0)
         }
     }
     
@@ -85,6 +82,8 @@ private extension ViewController
     {
         let transform: (UIBarButtonItem) -> (HTTPService, Bool)? = {
             
+            [unowned self] in
+            
             guard let service = self.httpService else {
                 
                 return nil
@@ -97,6 +96,8 @@ private extension ViewController
         
         let receiveValue: ((service: HTTPService, isStarted: Bool)) -> Void = {
             
+            [unowned self] in
+            
             guard !$0.isStarted else {
                 
                 $0.service.cancel()
@@ -104,6 +105,8 @@ private extension ViewController
             }
             
             $0.service.start()
+            
+            self.requests.removeAll()
         }
         
         let barButtonItem = UIBarButtonItem().fluent
@@ -111,6 +114,7 @@ private extension ViewController
                             .subject
         
         barButtonItem.publisher()
+            .throttle(for: 2.0, scheduler: RunLoop.main, latest: false)
             .compactMap(transform)
             .sink(receiveValue: receiveValue)
             .store(in: &self.cancellableSet)
@@ -164,7 +168,7 @@ private extension ViewController
             self.httpService = service
         } catch {
             
-            print("Error: \(error)")
+            self.presentAlert(with: error)
         }
     }
     
@@ -201,7 +205,13 @@ private extension ViewController
     
     func receiveRequest(request: HTTPMessage)
     {
-        self.requests.append(request)
+        guard !self.requests.isEmpty else {
+            
+            self.requests.append(request)
+            return
+        }
+        
+        self.requests.insert(request, at: 0)
     }
     
     /*
