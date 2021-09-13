@@ -235,4 +235,12 @@ extension Array where Element == HTTPHeader
         
         return description
     }
+    
+    func sorted() -> Array
+    {
+        self.sorted {
+            
+            $0.field < $1.field
+        }
+    }
 }

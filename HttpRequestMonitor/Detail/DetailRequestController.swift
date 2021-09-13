@@ -11,9 +11,13 @@ public class DetailRequestController: UIViewController
 {
     // MARK: - Properties -
     
+    @IBOutlet fileprivate weak var tableView: UITableView!
+    
     private let request: HTTPMessage
     
-//    @IBOutlet fileprivate weak var <#Variable name#>: <#Class#>!
+    private var requestHeaders: Array<HTTPHeader> = []
+    
+    private var requestBody: String = ""
     
     // MARK: - Methods -
     // MARK: Initial Method
@@ -72,6 +76,16 @@ public class DetailRequestController: UIViewController
         // Do any additional setup after loading the view.
         
         self.title = self.request.requestURL?.absoluteString
+        
+        self.tableView.fluent
+            .delegate(self)
+            .dataSource(self)
+            .rowHeight(UITableView.automaticDimension)
+            .estimatedRowHeight(UITableView.automaticDimension)
+            .separatorStyle(.none)
+            .discardResult
+        
+        self.resolveRequest()
     }
     
     deinit
@@ -84,5 +98,59 @@ public class DetailRequestController: UIViewController
 
 private extension DetailRequestController
 {
+    func resolveRequest()
+    {
+        let headers: Array<HTTPHeader> = self.request.httpHeaders().sorted()
+        let body: String = {
+            
+            guard let data = self.request.data else {
+                
+                return ""
+            }
+            
+            let bodyString: String = String(data: data, encoding: .utf8) ?? ""
+            
+            return bodyString
+        }()
+        
+        self.requestHeaders = headers
+        self.requestBody = body
+    }
+}
+
+// MARK: - Delagate Methods -
+
+extension DetailRequestController: UITableViewDataSource
+{
+    //MARK: - UITableView DataSource Methods
     
+    public func numberOfSections(in tableView: UITableView) -> Int
+    {
+        return 2
+    }
+    
+    public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int
+    {
+        return 1
+    }
+    
+    public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell
+    {
+        let CellIdentifier: String = "CellIdentifier"
+        
+        var cell: UITableViewCell? = tableView.dequeueReusableCell(withIdentifier: CellIdentifier)
+        if cell == nil {
+            cell = UITableViewCell(style: .default, reuseIdentifier: CellIdentifier)
+        }
+        
+        return cell!
+    }
+}
+
+extension DetailRequestController: UITableViewDelegate
+{
+    public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath)
+    {
+        tableView.deselectRow(at: indexPath, animated: true)
+    }
 }
