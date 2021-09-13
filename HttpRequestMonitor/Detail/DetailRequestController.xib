@@ -11,6 +11,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="DetailRequestController" customModule="HttpRequestMonitor" customModuleProvider="target">
             <connections>
+                <outlet property="tableView" destination="WS4-Ib-nhh" id="s1R-sg-Okn"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>

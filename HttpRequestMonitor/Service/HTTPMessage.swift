@@ -35,7 +35,7 @@ public extension HTTPMessage
     
     var data: Data? {
         
-        let data: Data? = CFHTTPMessageCopySerializedMessage(self).map({ $0.takeRetainedValue() as Data })
+        let data: Data? = CFHTTPMessageCopyBody(self).map({ $0.takeRetainedValue() as Data })
         
         return data
     }

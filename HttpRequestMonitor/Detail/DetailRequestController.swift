@@ -15,6 +15,8 @@ public class DetailRequestController: UIViewController
     
     private let request: HTTPMessage
     
+    private var queryItems: Array<URLQueryItem> = []
+    
     private var requestHeaders: Array<HTTPHeader> = []
     
     private var requestBody: String = ""
@@ -85,6 +87,9 @@ public class DetailRequestController: UIViewController
             .separatorStyle(.none)
             .discardResult
         
+        self.tableView.register(FieldValueCell.self)
+        self.tableView.register(BodyCell.self)
+        
         self.resolveRequest()
     }
     
@@ -114,6 +119,39 @@ private extension DetailRequestController
         self.requestHeaders = headers
         self.requestBody = body
     }
+    
+    func queryCell(with tableView: UITableView, at indexPath: IndexPath) -> FieldValueCell?
+    {
+        guard !self.queryItems.isEmpty,
+              let cell = tableView.dequeueReusableCell(FieldValueCell.self, for: indexPath) else {
+            
+            return nil
+        }
+        
+        return cell
+    }
+    
+    func headerCell(with tableView: UITableView, at indexPath: IndexPath) -> FieldValueCell?
+    {
+        guard (indexPath.section == 0 && self.queryItems.isEmpty) || (indexPath.section == 1 && !self.queryItems.isEmpty),
+              let cell = tableView.dequeueReusableCell(FieldValueCell.self, for: indexPath) else {
+            
+            return nil
+        }
+        
+        return cell
+    }
+    
+    func bodyCell(with tableView: UITableView, at indexPath: IndexPath) -> BodyCell?
+    {
+        guard (indexPath.section == 1 && self.queryItems.isEmpty) || (indexPath.section == 2),
+              let cell = tableView.dequeueReusableCell(BodyCell.self, for: indexPath) else {
+            
+            return nil
+        }
+        
+        return cell
+    }
 }
 
 // MARK: - Delagate Methods -
@@ -124,39 +162,116 @@ extension DetailRequestController: UITableViewDataSource
     
     public func numberOfSections(in tableView: UITableView) -> Int
     {
+        guard self.queryItems.isEmpty else {
+            
+            return 3
+        }
+        
         return 2
     }
     
     public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int
     {
-        guard section == 0 else {
+        var numberOfRowsInSection: Int = 0
+        
+        if section == 0 {
             
-            return 1
+            if !self.queryItems.isEmpty {
+                
+                numberOfRowsInSection = self.queryItems.count
+            } else {
+                
+                numberOfRowsInSection = self.requestHeaders.count
+            }
         }
         
-        return self.requestHeaders.count
+        if section == 1 {
+            
+            if !self.queryItems.isEmpty {
+                
+                numberOfRowsInSection = self.requestHeaders.count
+            } else {
+                
+                numberOfRowsInSection = 1
+            }
+        }
+        
+        if section == 2 {
+            
+            numberOfRowsInSection = 1
+        }
+        
+        return numberOfRowsInSection
     }
     
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell
     {
-        let CellIdentifier: String = "CellIdentifier"
-        
-        var cell: UITableViewCell? = tableView.dequeueReusableCell(withIdentifier: CellIdentifier)
-        if cell == nil {
-            cell = UITableViewCell(style: .default, reuseIdentifier: CellIdentifier)
+        if let cell = self.queryCell(with: tableView, at: indexPath) {
+            
+            let queryItem: URLQueryItem = self.queryItems[indexPath.row]
+            
+            cell.fluent
+                .quertyItem(queryItem)
+                .discardResult
+            
+            return cell
         }
         
-        return cell!
+        if let cell = self.headerCell(with: tableView, at: indexPath) {
+            
+            let header: HTTPHeader = self.requestHeaders[indexPath.row]
+            
+            cell.fluent
+                .requestHeader(header)
+                .discardResult
+            
+            return cell
+        }
+        
+        if let cell = self.bodyCell(with: tableView, at: indexPath) {
+            
+            cell.fluent
+                .bodyString(self.requestBody)
+                .discardResult
+            
+            return cell
+        }
+        
+        return UITableViewCell()
     }
     
     public func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String?
     {
-        guard section == 0 else {
+        var sectionTitle: String = ""
+        
+        if section == 0 {
             
-            return "Body"
+            if !self.queryItems.isEmpty {
+                
+                sectionTitle = "Queries"
+            } else {
+                
+                sectionTitle = "Headers"
+            }
         }
         
-        return "Headers"
+        if section == 1 {
+            
+            if !self.queryItems.isEmpty {
+                
+                sectionTitle = "Headers"
+            } else {
+                
+                sectionTitle = "Body"
+            }
+        }
+        
+        if section == 2 {
+            
+            sectionTitle = "Body"
+        }
+        
+        return sectionTitle
     }
 }
 
