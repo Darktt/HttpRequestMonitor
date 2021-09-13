@@ -77,7 +77,7 @@ public class DetailRequestController: UIViewController
         
         // Do any additional setup after loading the view.
         
-        self.title = self.request.requestURL?.absoluteString
+        self.title = self.request.rootURL?.absoluteString
         
         self.tableView.fluent
             .delegate(self)
@@ -105,10 +105,23 @@ private extension DetailRequestController
 {
     func resolveRequest()
     {
+        let queryItems: Array<URLQueryItem> = {
+            
+            guard let url: URL = self.request.requestURL else {
+                
+                return []
+            }
+            
+            let urlComponents = URLComponents(url: url, resolvingAgainstBaseURL: true)
+            let queryItems: Array<URLQueryItem> = urlComponents?.queryItems ?? []
+            
+            return queryItems
+        }()
         let headers: Array<HTTPHeader> = self.request.httpHeaders().sorted()
         let body: String = {
             
-            guard let data = self.request.data, let bodyString: String = String(data: data, encoding: .utf8) else {
+            guard let data = self.request.data,
+                  let bodyString: String = String(data: data, encoding: .utf8) else {
                 
                 return ""
             }
@@ -116,13 +129,14 @@ private extension DetailRequestController
             return bodyString
         }()
         
+        self.queryItems = queryItems
         self.requestHeaders = headers
         self.requestBody = body
     }
     
     func queryCell(with tableView: UITableView, at indexPath: IndexPath) -> FieldValueCell?
     {
-        guard !self.queryItems.isEmpty,
+        guard indexPath.section == 0, !self.queryItems.isEmpty,
               let cell = tableView.dequeueReusableCell(FieldValueCell.self, for: indexPath) else {
             
             return nil

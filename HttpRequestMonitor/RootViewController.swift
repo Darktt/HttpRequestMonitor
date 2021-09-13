@@ -320,7 +320,7 @@ extension RootViewController: UITableViewDataSource
         
         let request: HTTPMessage = self.requests[indexPath.row]
         
-        if let url: URL = request.requestURL,
+        if let url: URL = request.rootURL,
            let method: HTTPMethod = request.requestMethod {
             
             cell?.textLabel?.text = url.absoluteString

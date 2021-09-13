@@ -20,6 +20,21 @@ public extension HTTPMessage
         return url
     }
     
+    var rootURL: URL? {
+        
+        guard let requestURL: URL = self.requestURL,
+              let scheme: String = requestURL.scheme,
+              let host: String = requestURL.host,
+              let port: Int = requestURL.port else {
+            
+            return nil
+        }
+        
+        let rootURL = URL(string: "\(scheme)://\(host):\(port)")
+        
+        return rootURL
+    }
+    
     var requestMethod: HTTPMethod? {
         
         let method: HTTPMethod? = CFHTTPMessageCopyRequestMethod(self).flatMap {
