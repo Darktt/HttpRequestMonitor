@@ -28,6 +28,8 @@
 		F257301A26E9A6310072BAF1 /* NSAttributedStringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F257301926E9A6310072BAF1 /* NSAttributedStringExtension.swift */; };
 		F257301C26E9ECCC0072BAF1 /* DTWiFiInformation.swift in Sources */ = {isa = PBXBuildFile; fileRef = F257301B26E9ECCC0072BAF1 /* DTWiFiInformation.swift */; };
 		F25BC3F226EAF26A006A2CB5 /* UIAlertActionBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = F25BC3F126EAF26A006A2CB5 /* UIAlertActionBuilder.swift */; };
+		F2677FDA26F045FB00DBACF7 /* Appliable.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2677FD926F045FB00DBACF7 /* Appliable.swift */; };
+		F2677FDC26F0462500DBACF7 /* OptionalExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2677FDB26F0462500DBACF7 /* OptionalExtension.swift */; };
 		F271195B26EB3F5500701963 /* UITableViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F271195A26EB3F5500701963 /* UITableViewExtension.swift */; };
 		F271195E26EB44C100701963 /* DetailRequestController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F271195C26EB44C100701963 /* DetailRequestController.swift */; };
 		F271195F26EB44C100701963 /* DetailRequestController.xib in Resources */ = {isa = PBXBuildFile; fileRef = F271195D26EB44C100701963 /* DetailRequestController.xib */; };
@@ -59,6 +61,9 @@
 		F257301926E9A6310072BAF1 /* NSAttributedStringExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSAttributedStringExtension.swift; sourceTree = "<group>"; };
 		F257301B26E9ECCC0072BAF1 /* DTWiFiInformation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DTWiFiInformation.swift; sourceTree = "<group>"; };
 		F25BC3F126EAF26A006A2CB5 /* UIAlertActionBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIAlertActionBuilder.swift; sourceTree = "<group>"; };
+		F2677FD926F045FB00DBACF7 /* Appliable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Appliable.swift; sourceTree = "<group>"; };
+		F2677FDB26F0462500DBACF7 /* OptionalExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OptionalExtension.swift; sourceTree = "<group>"; };
+		F2677FDD26F04A5600DBACF7 /* HttpRequestMonitor.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = HttpRequestMonitor.entitlements; sourceTree = "<group>"; };
 		F271195A26EB3F5500701963 /* UITableViewExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UITableViewExtension.swift; sourceTree = "<group>"; };
 		F271195C26EB44C100701963 /* DetailRequestController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailRequestController.swift; sourceTree = "<group>"; };
 		F271195D26EB44C100701963 /* DetailRequestController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DetailRequestController.xib; sourceTree = "<group>"; };
@@ -96,6 +101,7 @@
 		F209B27F26E83EFD0083574D /* HttpRequestMonitor */ = {
 			isa = PBXGroup;
 			children = (
+				F2677FDD26F04A5600DBACF7 /* HttpRequestMonitor.entitlements */,
 				F257301826E9A6250072BAF1 /* Extension */,
 				F249D70C26EEFDEB001E1926 /* Protocol */,
 				F209B29426E844780083574D /* Model */,
@@ -156,6 +162,8 @@
 		F257301826E9A6250072BAF1 /* Extension */ = {
 			isa = PBXGroup;
 			children = (
+				F2677FD926F045FB00DBACF7 /* Appliable.swift */,
+				F2677FDB26F0462500DBACF7 /* OptionalExtension.swift */,
 				F257301926E9A6310072BAF1 /* NSAttributedStringExtension.swift */,
 				F25BC3F126EAF26A006A2CB5 /* UIAlertActionBuilder.swift */,
 				F271195A26EB3F5500701963 /* UITableViewExtension.swift */,
@@ -266,6 +274,8 @@
 				F249D71526EF2890001E1926 /* BodyCell.swift in Sources */,
 				F271195B26EB3F5500701963 /* UITableViewExtension.swift in Sources */,
 				F209B29726E844830083574D /* ActionPublisher.swift in Sources */,
+				F2677FDA26F045FB00DBACF7 /* Appliable.swift in Sources */,
+				F2677FDC26F0462500DBACF7 /* OptionalExtension.swift in Sources */,
 				F209B29826E844830083574D /* FluentInterface.swift in Sources */,
 				F249D70E26EEFE23001E1926 /* CustomCellRegistrable.swift in Sources */,
 				F271195E26EB44C100701963 /* DetailRequestController.swift in Sources */,
@@ -418,15 +428,18 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = HttpRequestMonitor/HttpRequestMonitor.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = Y5PE34DHT4;
 				INFOPLIST_FILE = HttpRequestMonitor/Resource/Info.plist;
+				"IPHONEOS_DEPLOYMENT_TARGET[sdk=macosx*]" = 14.2;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.darktt.personal.company.HttpRequestMonitor;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTS_MACCATALYST = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -437,15 +450,18 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = HttpRequestMonitor/HttpRequestMonitor.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = Y5PE34DHT4;
 				INFOPLIST_FILE = HttpRequestMonitor/Resource/Info.plist;
+				"IPHONEOS_DEPLOYMENT_TARGET[sdk=macosx*]" = 14.2;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.darktt.personal.company.HttpRequestMonitor;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTS_MACCATALYST = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

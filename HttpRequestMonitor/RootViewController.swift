@@ -339,7 +339,8 @@ extension RootViewController: UITableViewDelegate
         
         let request = self.requests[indexPath.row]
         let detailController = DetailRequestController(request: request)
+        let navigationController = UINavigationController(rootViewController: detailController)
         
-        self.navigationController?.pushViewController(detailController, animated: true)
+        self.splitViewController?.showDetailViewController(navigationController, sender: nil)
     }
 }

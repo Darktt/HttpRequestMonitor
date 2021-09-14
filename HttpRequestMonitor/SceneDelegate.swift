@@ -25,9 +25,18 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate
         
         let navigationController = UINavigationController(rootViewController: rootViewController)
         
+        let splitController = UISplitViewController().fluent
+                                .viewControllers([navigationController])
+                                .presentsWithGesture(false)
+                                .preferredDisplayMode(.oneBesideSecondary)
+                                .primaryBackgroundStyle(.sidebar)
+                                .subject
+        
+        splitController.showDetailViewController(navigationController, sender: nil)
+        
         let window = UIWindow(frame: windowScene.coordinateSpace.bounds).fluent
                             .windowScene(windowScene)
-                            .rootViewController(navigationController)
+                            .rootViewController(splitController)
                             .subject
         
         window.makeKeyAndVisible()
