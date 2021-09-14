@@ -32,6 +32,7 @@
 		F271195F26EB44C100701963 /* DetailRequestController.xib in Resources */ = {isa = PBXBuildFile; fileRef = F271195D26EB44C100701963 /* DetailRequestController.xib */; };
 		F271196226EB44F500701963 /* UIViewControllerExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F271196126EB44F500701963 /* UIViewControllerExtension.swift */; };
 		F271196426EB495F00701963 /* RootViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = F271196326EB495F00701963 /* RootViewController.xib */; };
+		F2E69FF526F0874E007EFA4A /* UIAlertActionBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2E69FF426F0874E007EFA4A /* UIAlertActionBuilder.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -63,6 +64,7 @@
 		F271195D26EB44C100701963 /* DetailRequestController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DetailRequestController.xib; sourceTree = "<group>"; };
 		F271196126EB44F500701963 /* UIViewControllerExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIViewControllerExtension.swift; sourceTree = "<group>"; };
 		F271196326EB495F00701963 /* RootViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = RootViewController.xib; sourceTree = "<group>"; };
+		F2E69FF426F0874E007EFA4A /* UIAlertActionBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIAlertActionBuilder.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -157,6 +159,7 @@
 			isa = PBXGroup;
 			children = (
 				F257301926E9A6310072BAF1 /* NSAttributedStringExtension.swift */,
+				F2E69FF426F0874E007EFA4A /* UIAlertActionBuilder.swift */,
 				F271195A26EB3F5500701963 /* UITableViewExtension.swift */,
 				F271196126EB44F500701963 /* UIViewControllerExtension.swift */,
 			);
@@ -271,6 +274,7 @@
 				F209B28526E83EFD0083574D /* RootViewController.swift in Sources */,
 				F209B28126E83EFD0083574D /* AppDelegate.swift in Sources */,
 				F209B2A526E8AAC90083574D /* HTTPMessage.swift in Sources */,
+				F2E69FF526F0874E007EFA4A /* UIAlertActionBuilder.swift in Sources */,
 				F209B2A326E8AA1F0083574D /* HTTPMethod.swift in Sources */,
 				F209B29D26E856FD0083574D /* HTTPService.swift in Sources */,
 				F209B2A726E8ABD10083574D /* HTTPHeader.swift in Sources */,
