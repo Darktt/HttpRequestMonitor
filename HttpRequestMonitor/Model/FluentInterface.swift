@@ -61,6 +61,8 @@ extension FluentCompatible
 
 extension UIBarItem: FluentCompatible { }
 
+extension UIMenuElement: FluentCompatible { }
+
 extension UIGestureRecognizer: FluentCompatible { }
 
 extension UIResponder: FluentCompatible { }

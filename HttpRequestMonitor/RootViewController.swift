@@ -12,6 +12,17 @@ class RootViewController: UIViewController
 {
     // MARK: - Properties -
     
+    override var keyCommands: [UIKeyCommand]? {
+        
+        let startTitle: String = "Start server…"
+        let startKeyCommand = UIKeyCommand(title: startTitle, action: #selector(self.startServerAction(_:)), input: "s", modifierFlags: .command)
+        
+        let stopTitle: String = "Stop server…"
+        let stopKeyCommand = UIKeyCommand(title: stopTitle, action: #selector(self.stopServerAction(_:)), input: "x", modifierFlags: .command)
+        
+        return [startKeyCommand, stopKeyCommand]
+    }
+    
     @IBOutlet fileprivate weak var tableView: UITableView!
     
     private var httpService: HTTPService?
@@ -93,6 +104,25 @@ class RootViewController: UIViewController
         
     }
 }
+
+// MARK: - Actions -
+
+private extension RootViewController
+{
+    @objc
+    func startServerAction(_ sender: UIKeyCommand)
+    {
+        self.httpService?.start()
+    }
+    
+    @objc
+    func stopServerAction(_ sender: UIKeyCommand)
+    {
+        self.httpService?.cancel()
+    }
+}
+
+// MARK: - Private Methods -
 
 private extension RootViewController
 {
