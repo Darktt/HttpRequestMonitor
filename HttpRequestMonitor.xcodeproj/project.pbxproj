@@ -33,6 +33,7 @@
 		F271196226EB44F500701963 /* UIViewControllerExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F271196126EB44F500701963 /* UIViewControllerExtension.swift */; };
 		F271196426EB495F00701963 /* RootViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = F271196326EB495F00701963 /* RootViewController.xib */; };
 		F2E69FF526F0874E007EFA4A /* UIAlertActionBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2E69FF426F0874E007EFA4A /* UIAlertActionBuilder.swift */; };
+		F2E69FF826F08B75007EFA4A /* MenuManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2E69FF726F08B75007EFA4A /* MenuManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -65,6 +66,7 @@
 		F271196126EB44F500701963 /* UIViewControllerExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIViewControllerExtension.swift; sourceTree = "<group>"; };
 		F271196326EB495F00701963 /* RootViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = RootViewController.xib; sourceTree = "<group>"; };
 		F2E69FF426F0874E007EFA4A /* UIAlertActionBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIAlertActionBuilder.swift; sourceTree = "<group>"; };
+		F2E69FF726F08B75007EFA4A /* MenuManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -103,6 +105,7 @@
 				F209B29426E844780083574D /* Model */,
 				F209B29B26E849180083574D /* Service */,
 				F249D70726EEF34C001E1926 /* Cell */,
+				F2E69FF626F08A9E007EFA4A /* Menu */,
 				F25BC3EE26EAF07F006A2CB5 /* Resource */,
 				F209B28026E83EFD0083574D /* AppDelegate.swift */,
 				F209B28226E83EFD0083574D /* SceneDelegate.swift */,
@@ -185,6 +188,14 @@
 			path = Detail;
 			sourceTree = "<group>";
 		};
+		F2E69FF626F08A9E007EFA4A /* Menu */ = {
+			isa = PBXGroup;
+			children = (
+				F2E69FF726F08B75007EFA4A /* MenuManager.swift */,
+			);
+			path = Menu;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -262,6 +273,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F2E69FF826F08B75007EFA4A /* MenuManager.swift in Sources */,
 				F209B29A26E845770083574D /* HTTPStatus.swift in Sources */,
 				F271196226EB44F500701963 /* UIViewControllerExtension.swift in Sources */,
 				F249D71526EF2890001E1926 /* BodyCell.swift in Sources */,
