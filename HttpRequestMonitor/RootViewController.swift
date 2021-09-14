@@ -210,8 +210,11 @@ private extension RootViewController
             isEnabled = false
         }
         
-        self.navigationItem.rightBarButtonItem?.title = itemTitle
-        self.navigationItem.rightBarButtonItem?.isEnabled = isEnabled
+        self.navigationItem.rightBarButtonItem?.fluent
+                            .title(itemTitle)
+                            .isEnabled(isEnabled)
+                            .discardResult
+        
         self.navigationController?.setToolbarHidden(isToolbarHidden, animated: true)
         
         // Present error message.
@@ -232,49 +235,6 @@ private extension RootViewController
         self.requests.insert(request, at: 0)
     }
     
-    /*
-    func requestLocationPremission()
-    {
-        DTPermission.locationWhenInUse.request {
-            
-            [unowned self] in
-            
-            guard $0 != .authorizedWhenInUse else {
-                
-                self.setupToolbarItem()
-                return
-            }
-            
-            self.presentLocationPremissionDeniedMessage()
-        }
-    }
-    
-    func presentLocationPremissionDeniedMessage()
-    {
-        let title: String = "Cannot get IP address"
-        let message: String = "Please accept the location when in use premission."
-        let alertController = UIAlertController.alert(title: title, message: message) {
-            
-            AlertAction.cancel("Setting") {
-                
-                guard let url = URL(string: UIApplication.openSettingsURLString) else {
-                    
-                    return
-                }
-                
-                let application = UIApplication.shared
-                application.open(url, options: [:], completionHandler: nil)
-            }
-            
-            AlertAction.default("Don't remine me.") {
-                
-                self.isIgnorePremissionCheck = true
-            }
-        }
-        
-        self.present(alertController, animated: true)
-    }
-    */
     func presentAlert(with error: Error)
     {
         let title: String = "Server start failed!"

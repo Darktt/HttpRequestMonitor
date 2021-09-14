@@ -82,9 +82,10 @@ public class DetailRequestController: UIViewController
         self.tableView.fluent
             .delegate(self)
             .dataSource(self)
+            .separatorStyle(.none)
+            .allowsSelection(false)
             .rowHeight(UITableView.automaticDimension)
             .estimatedRowHeight(UITableView.automaticDimension)
-            .separatorStyle(.none)
             .discardResult
         
         self.tableView.register(FieldValueCell.self)
