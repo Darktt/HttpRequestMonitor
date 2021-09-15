@@ -117,12 +117,22 @@ private extension RootViewController
     @objc
     func startServerAction(_ sender: UIKeyCommand)
     {
+        guard self.httpService?.status != .runing else {
+            
+            return
+        }
+        
         self.httpService?.start()
     }
     
     @objc
     func stopServerAction(_ sender: UIKeyCommand)
     {
+        guard self.httpService?.status == .runing else {
+            
+            return
+        }
+        
         self.httpService?.cancel()
     }
 }

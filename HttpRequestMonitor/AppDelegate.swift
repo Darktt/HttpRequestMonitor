@@ -14,6 +14,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate
     
     override func buildMenu(with builder: UIMenuBuilder)
     {
+        super.buildMenu(with: builder)
+        
         guard builder.system == .main else {
             
             return

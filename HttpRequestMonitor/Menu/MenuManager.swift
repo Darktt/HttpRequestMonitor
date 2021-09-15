@@ -23,7 +23,7 @@ public class MenuManager
     public static func startKeyCommand(action: Selector) -> UIKeyCommand
     {
         let startTitle: String = "Start server"
-        let startKeyCommand = UIKeyCommand(title: startTitle, action: action, input: "S", modifierFlags: .command)
+        let startKeyCommand = UIKeyCommand(title: startTitle, action: action, input: "S", modifierFlags: .command, attributes: [.destructive])
         
         return startKeyCommand
     }
@@ -58,7 +58,7 @@ private extension MenuManager
 {
     func startMenu() -> UIMenu
     {
-        let startKeyCommand: UIKeyCommand = MenuManager.startKeyCommand(action: Selector(("startServiceAction:")))
+        let startKeyCommand: UIKeyCommand = MenuManager.startKeyCommand(action: Selector(("startServerAction:")))
         let startServerMenu = UIMenu(title: "", image: nil, identifier: MenuManager.Identifier.startMenu, options: .displayInline, children: [startKeyCommand])
         
         return startServerMenu
@@ -82,17 +82,5 @@ private extension MenuManager
         static let startMenu: UIMenu.Identifier = UIMenu.Identifier(kIdentifier + ".startServer")
         
         static let stopMenu: UIMenu.Identifier = UIMenu.Identifier(kIdentifier + ".stopServer")
-    }
-}
-
-// MARK: - MenuManager.NotificationName -
-
-public extension MenuManager
-{
-    struct NotificationName
-    {
-        static let startServerNotificationName: Notification.Name = Notification.Name("MenuManager.NotificationName.startServer")
-        
-        static let stopServerNotificationName: Notification.Name = Notification.Name("MenuManager.NotificationName.stopServer")
     }
 }
