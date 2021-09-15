@@ -8,11 +8,11 @@
 import UIKit
 import Combine
 
-class RootViewController: UIViewController
+public class RootViewController: UIViewController
 {
     // MARK: - Properties -
     
-    override var keyCommands: [UIKeyCommand]? {
+    public override var keyCommands: [UIKeyCommand]? {
         
 #if targetEnvironment(macCatalyst)
         
@@ -338,7 +338,7 @@ extension RootViewController: UITableViewDataSource
 
 extension RootViewController: UITableViewDelegate
 {
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath)
+    public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath)
     {
         tableView.deselectRow(at: indexPath, animated: true)
         

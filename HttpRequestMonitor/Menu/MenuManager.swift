@@ -7,11 +7,11 @@
 
 import UIKit
 
-private let kIdentifier: String = "com.darktt.personal.company"
-
 public class MenuManager
 {
     // MARK: - Properties -
+    
+    public static let identifier: String = "com.darktt.personal.company"
     
     private lazy var noticationCenter: NotificationCenter = {
         
@@ -79,8 +79,8 @@ private extension MenuManager
 {
     struct Identifier
     {
-        static let startMenu: UIMenu.Identifier = UIMenu.Identifier(kIdentifier + ".startServer")
+        static let startMenu: UIMenu.Identifier = UIMenu.Identifier(MenuManager.identifier + ".startServer")
         
-        static let stopMenu: UIMenu.Identifier = UIMenu.Identifier(kIdentifier + ".stopServer")
+        static let stopMenu: UIMenu.Identifier = UIMenu.Identifier(MenuManager.identifier + ".stopServer")
     }
 }

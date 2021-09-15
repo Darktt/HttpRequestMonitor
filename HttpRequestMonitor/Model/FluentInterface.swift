@@ -64,3 +64,11 @@ extension UIBarItem: FluentCompatible { }
 extension UIGestureRecognizer: FluentCompatible { }
 
 extension UIResponder: FluentCompatible { }
+
+#if targetEnvironment(macCatalyst)
+
+extension NSTouchBar: FluentCompatible { }
+
+extension NSTouchBarItem: FluentCompatible { }
+
+#endif
