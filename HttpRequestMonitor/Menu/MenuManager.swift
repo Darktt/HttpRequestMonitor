@@ -22,16 +22,16 @@ public class MenuManager
     
     public static func startKeyCommand(action: Selector) -> UIKeyCommand
     {
-        let startTitle: String = "Start server…"
-        let startKeyCommand = UIKeyCommand(title: startTitle, action: action, input: "s", modifierFlags: .command)
+        let startTitle: String = "Start server"
+        let startKeyCommand = UIKeyCommand(title: startTitle, action: action, input: "S", modifierFlags: .command)
         
         return startKeyCommand
     }
     
     public static func stopKeyCommand(action: Selector) -> UIKeyCommand
     {
-        let stopTitle: String = "Stop server…"
-        let stopKeyCommand = UIKeyCommand(title: stopTitle, action: action, input: "x", modifierFlags: .command)
+        let stopTitle: String = "Stop server"
+        let stopKeyCommand = UIKeyCommand(title: stopTitle, action: action, input: "X", modifierFlags: .command)
         
         return stopKeyCommand
     }
@@ -47,25 +47,8 @@ public class MenuManager
         builder.remove(menu: .view)
         builder.remove(menu: .window)
         
-        builder.insertChild(startMenu, atStartOfMenu: .file)
         builder.insertChild(stopMenu, atStartOfMenu: .file)
-    }
-}
-
-// MARK: - Actions -
-
-private extension MenuManager
-{
-    @objc
-    func startServiceAction(_ sender: UIKeyCommand)
-    {
-        self.noticationCenter.post(name: MenuManager.NotificationName.startServerNotificationName, object: nil)
-    }
-    
-    @objc
-    func stopServerAction(_ sender: UIKeyCommand)
-    {
-        self.noticationCenter.post(name: MenuManager.NotificationName.stopServerNotificationName, object: nil)
+        builder.insertChild(startMenu, atStartOfMenu: .file)
     }
 }
 
@@ -75,7 +58,7 @@ private extension MenuManager
 {
     func startMenu() -> UIMenu
     {
-        let startKeyCommand: UIKeyCommand = MenuManager.startKeyCommand(action: #selector(self.startServiceAction(_:)))
+        let startKeyCommand: UIKeyCommand = MenuManager.startKeyCommand(action: Selector(("startServiceAction:")))
         let startServerMenu = UIMenu(title: "", image: nil, identifier: MenuManager.Identifier.startMenu, options: .displayInline, children: [startKeyCommand])
         
         return startServerMenu
@@ -83,7 +66,7 @@ private extension MenuManager
     
     func stopMenu() -> UIMenu
     {
-        let stopKeyCommand: UIKeyCommand = MenuManager.stopKeyCommand(action: #selector(self.stopServerAction(_:)))
+        let stopKeyCommand: UIKeyCommand = MenuManager.stopKeyCommand(action: Selector(("stopServerAction:")))
         let stopServerMenu = UIMenu(title: "", image: nil, identifier: MenuManager.Identifier.stopMenu, options: .displayInline, children: [stopKeyCommand])
         
         return stopServerMenu

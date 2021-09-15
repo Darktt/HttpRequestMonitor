@@ -13,14 +13,19 @@ class RootViewController: UIViewController
     // MARK: - Properties -
     
     override var keyCommands: [UIKeyCommand]? {
-            
-        let startTitle: String = "Start server…"
-        let startKeyCommand = UIKeyCommand(title: startTitle, action: #selector(self.startServerAction(_:)), input: "s", modifierFlags: .command)
         
-        let stopTitle: String = "Stop server…"
-        let stopKeyCommand = UIKeyCommand(title: stopTitle, action: #selector(self.stopServerAction(_:)), input: "x", modifierFlags: .command)
+#if targetEnvironment(macCatalyst)
+        
+        return nil
+        
+#else
+        
+        let startKeyCommand = MenuManager.startKeyCommand(action: #selector(self.startServerAction(_:)))
+        let stopKeyCommand = MenuManager.stopKeyCommand(action: #selector(self.stopServerAction(_:)))
         
         return [startKeyCommand, stopKeyCommand]
+        
+#endif
     }
     
     @IBOutlet fileprivate weak var tableView: UITableView!
