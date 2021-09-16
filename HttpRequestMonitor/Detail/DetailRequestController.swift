@@ -13,28 +13,20 @@ public class DetailRequestController: UIViewController
     
     @IBOutlet fileprivate weak var tableView: UITableView!
     
-    private let request: HTTPMessage
-    
-    private var queryItems: Array<URLQueryItem> = []
-    
-    private var requestHeaders: Array<HTTPHeader> = []
-    
-    private var requestBody: String = ""
+    private let viewModel: DetailViewModel = .init()
     
     // MARK: - Methods -
     // MARK: Initial Method
     
     public init(request: HTTPMessage)
     {
-        self.request = request
+        self.viewModel.setRequest(request)
         
         super.init(nibName: "DetailRequestController", bundle: nil)
     }
     
     internal required init?(coder: NSCoder)
     {
-        self.request = HTTPMessage.response(statusCode: .notFound, htmlString: "Not found!!!")
-        
         super.init(coder: coder)
     }
     
@@ -77,7 +69,7 @@ public class DetailRequestController: UIViewController
         
         // Do any additional setup after loading the view.
         
-        self.title = self.request.rootURL?.absoluteString
+        self.title = self.viewModel.rootURL?.absoluteString
         
         self.tableView.fluent
             .delegate(self)
@@ -90,8 +82,6 @@ public class DetailRequestController: UIViewController
         
         self.tableView.register(FieldValueCell.self)
         self.tableView.register(BodyCell.self)
-        
-        self.resolveRequest()
     }
     
     deinit
@@ -104,40 +94,9 @@ public class DetailRequestController: UIViewController
 
 private extension DetailRequestController
 {
-    func resolveRequest()
-    {
-        let queryItems: Array<URLQueryItem> = {
-            
-            guard let url: URL = self.request.requestURL else {
-                
-                return []
-            }
-            
-            let urlComponents = URLComponents(url: url, resolvingAgainstBaseURL: true)
-            let queryItems: Array<URLQueryItem> = urlComponents?.queryItems ?? []
-            
-            return queryItems
-        }()
-        let headers: Array<HTTPHeader> = self.request.httpHeaders().sorted()
-        let body: String = {
-            
-            guard let data = self.request.data,
-                  let bodyString: String = String(data: data, encoding: .utf8) else {
-                
-                return ""
-            }
-            
-            return bodyString
-        }()
-        
-        self.queryItems = queryItems
-        self.requestHeaders = headers
-        self.requestBody = body
-    }
-    
     func queryCell(with tableView: UITableView, at indexPath: IndexPath) -> FieldValueCell?
     {
-        guard indexPath.section == 0, !self.queryItems.isEmpty,
+        guard indexPath.section == 0, !self.viewModel.isQuertItemsEmpty,
               let cell = tableView.dequeueReusableCell(FieldValueCell.self, for: indexPath) else {
             
             return nil
@@ -148,7 +107,7 @@ private extension DetailRequestController
     
     func headerCell(with tableView: UITableView, at indexPath: IndexPath) -> FieldValueCell?
     {
-        guard (indexPath.section == 0 && self.queryItems.isEmpty) || (indexPath.section == 1 && !self.queryItems.isEmpty),
+        guard (indexPath.section == 0 && self.viewModel.isQuertItemsEmpty) || (indexPath.section == 1 && !self.viewModel.isQuertItemsEmpty),
               let cell = tableView.dequeueReusableCell(FieldValueCell.self, for: indexPath) else {
             
             return nil
@@ -159,7 +118,7 @@ private extension DetailRequestController
     
     func bodyCell(with tableView: UITableView, at indexPath: IndexPath) -> BodyCell?
     {
-        guard (indexPath.section == 1 && self.queryItems.isEmpty) || (indexPath.section == 2),
+        guard (indexPath.section == 1 && self.viewModel.isQuertItemsEmpty) || (indexPath.section == 2),
               let cell = tableView.dequeueReusableCell(BodyCell.self, for: indexPath) else {
             
             return nil
@@ -177,7 +136,7 @@ extension DetailRequestController: UITableViewDataSource
     
     public func numberOfSections(in tableView: UITableView) -> Int
     {
-        guard self.queryItems.isEmpty else {
+        guard self.viewModel.isQuertItemsEmpty else {
             
             return 3
         }
@@ -191,20 +150,20 @@ extension DetailRequestController: UITableViewDataSource
         
         if section == 0 {
             
-            if !self.queryItems.isEmpty {
+            if !self.viewModel.isQuertItemsEmpty {
                 
-                numberOfRowsInSection = self.queryItems.count
+                numberOfRowsInSection = self.viewModel.queryItems.count
             } else {
                 
-                numberOfRowsInSection = self.requestHeaders.count
+                numberOfRowsInSection = self.viewModel.requestHeaders.count
             }
         }
         
         if section == 1 {
             
-            if !self.queryItems.isEmpty {
+            if !self.viewModel.isQuertItemsEmpty {
                 
-                numberOfRowsInSection = self.requestHeaders.count
+                numberOfRowsInSection = self.viewModel.requestHeaders.count
             } else {
                 
                 numberOfRowsInSection = 1
@@ -221,9 +180,8 @@ extension DetailRequestController: UITableViewDataSource
     
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell
     {
-        if let cell = self.queryCell(with: tableView, at: indexPath) {
-            
-            let queryItem: URLQueryItem = self.queryItems[indexPath.row]
+        if let cell = self.queryCell(with: tableView, at: indexPath),
+           let queryItem: URLQueryItem = self.viewModel.queryItem(at: indexPath) {
             
             cell.fluent
                 .quertyItem(queryItem)
@@ -232,9 +190,8 @@ extension DetailRequestController: UITableViewDataSource
             return cell
         }
         
-        if let cell = self.headerCell(with: tableView, at: indexPath) {
-            
-            let header: HTTPHeader = self.requestHeaders[indexPath.row]
+        if let cell = self.headerCell(with: tableView, at: indexPath),
+           let header: HTTPHeader = self.viewModel.requestHeaders(at: indexPath) {
             
             cell.fluent
                 .requestHeader(header)
@@ -246,7 +203,7 @@ extension DetailRequestController: UITableViewDataSource
         if let cell = self.bodyCell(with: tableView, at: indexPath) {
             
             cell.fluent
-                .bodyString(self.requestBody)
+                .bodyString(self.viewModel.requestBody)
                 .discardResult
             
             return cell
@@ -261,7 +218,7 @@ extension DetailRequestController: UITableViewDataSource
         
         if section == 0 {
             
-            if !self.queryItems.isEmpty {
+            if !self.viewModel.isQuertItemsEmpty {
                 
                 sectionTitle = "Queries"
             } else {
@@ -272,7 +229,7 @@ extension DetailRequestController: UITableViewDataSource
         
         if section == 1 {
             
-            if !self.queryItems.isEmpty {
+            if !self.viewModel.isQuertItemsEmpty {
                 
                 sectionTitle = "Headers"
             } else {
