@@ -35,14 +35,16 @@ extension RootViewController: NSTouchBarDelegate
     {
         var touchBarItem: NSTouchBarItem? = nil
         
-        if identifier == TouchBarIdentifier.startServer, let image = UIImage(systemName: "arrowtriangle.right.fill") {
+        if identifier == TouchBarIdentifier.startServer,
+           let image = UIImage(systemName: "arrowtriangle.right.fill") {
             
             touchBarItem = NSButtonTouchBarItem(identifier: identifier, title: "Start server", image: image, target: self, action: Selector(("startServerAction:"))).fluent
                                 .bezelColor(.systemBlue)
                                 .subject
         }
         
-        if identifier == TouchBarIdentifier.stopServer, let image = UIImage(systemName: "stop.fill") {
+        if identifier == TouchBarIdentifier.stopServer,
+           let image = UIImage(systemName: "stop.fill") {
             
             touchBarItem = NSButtonTouchBarItem(identifier: identifier, title: "Stop server", image: image, target: self, action: Selector(("stopServerAction:"))).fluent
                                 .bezelColor(.systemRed)

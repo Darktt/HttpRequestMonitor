@@ -23,7 +23,7 @@ public class MenuManager
     public static func startKeyCommand(action: Selector) -> UIKeyCommand
     {
         let startTitle: String = "Start server"
-        let startKeyCommand = UIKeyCommand(title: startTitle, action: action, input: "S", modifierFlags: .command, attributes: [.destructive])
+        let startKeyCommand = UIKeyCommand(title: startTitle, action: action, input: "S", modifierFlags: .command)
         
         return startKeyCommand
     }
@@ -31,7 +31,7 @@ public class MenuManager
     public static func stopKeyCommand(action: Selector) -> UIKeyCommand
     {
         let stopTitle: String = "Stop server"
-        let stopKeyCommand = UIKeyCommand(title: stopTitle, action: action, input: "X", modifierFlags: .command)
+        let stopKeyCommand = UIKeyCommand(title: stopTitle, action: action, input: "S", modifierFlags: [.alternate, .command])
         
         return stopKeyCommand
     }
