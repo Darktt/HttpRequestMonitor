@@ -30,20 +30,39 @@ public struct FluentInterface<Subject>
     
     // MARK: - Methods -
     
-    public subscript<Value>(dynamicMember keyPath: WritableKeyPath<Subject, Value>) -> ((Value) -> FluentInterface<Subject>)
+    public subscript<Value>(dynamicMember keyPath: WritableKeyPath<Subject, Value>) -> FluentCaller<Subject, Value>
     {
-        var subject: Subject = self.subject
+        let caller = FluentCaller(subject: self.subject, keyPath: keyPath)
         
-        let returnHandler: (Value) -> FluentInterface<Subject> = {
+        return caller
+    }
+}
+
+@dynamicCallable
+public struct FluentCaller<Subject, Value>
+{
+    // MARK: - Properties -
+    
+    fileprivate let subject: Subject
+    
+    fileprivate let keyPath: WritableKeyPath<Subject, Value>
+    
+    // MARK: - Methods -
+    // MARK: Initial Method
+    
+    func dynamicallyCall(withArguments arguments: Array<Value>) -> FluentInterface<Subject>
+    {
+        guard let value: Value = arguments.first else {
             
-            subject[keyPath: keyPath] = $0
-            
-            let fluentInterface = FluentInterface(subject: subject)
-            
-            return fluentInterface
+            return FluentInterface(subject: self.subject)
         }
         
-        return returnHandler
+        var subject: Subject = self.subject
+        subject[keyPath: self.keyPath] = value
+        
+        let fluentInterface = FluentInterface(subject: subject)
+        
+        return fluentInterface
     }
 }
 

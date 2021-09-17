@@ -30,11 +30,9 @@ public class HTTPService
     // MARK: - Methods -
     // MARK: Initial Method
     
-    public init(port: UInt16) throws
+    public init(port: NWEndpoint.Port) throws
     {
-        let _port = NWEndpoint.Port(integerLiteral: port)
-        
-        self.port = _port
+        self.port = port
         try self.setupListener()
     }
     
@@ -54,6 +52,7 @@ public class HTTPService
         print("Cancelling service...")
         
         self.connections.values.forEach({ $0.cancel() })
+        self.connections.removeAll()
         self.listener?.cancel()
         self.listener = nil
     }

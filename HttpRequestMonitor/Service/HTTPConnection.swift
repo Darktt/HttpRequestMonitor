@@ -10,8 +10,6 @@ import Network
 
 public class HTTPConnection
 {
-    public typealias StateUpdateHandler = ((NWConnection.State) -> Void)
-    
     //The TCP maximum package size is 64K 65536
     public let MTU: Int = 65536
     
@@ -50,7 +48,7 @@ public class HTTPConnection
     
     public func send(_ data: Data)
     {
-        let complation: NWConnection.SendCompletion = .contentProcessed { //<#NWError?#> in
+        let complation: NWConnection.SendCompletion = .contentProcessed {
             
             guard let error = $0 else {
                 
