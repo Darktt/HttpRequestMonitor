@@ -255,10 +255,12 @@ private extension RootViewController
             isEnabled = false
         }
         
-        self.navigationItem.rightBarButtonItem?.fluent
-                            .title(itemTitle)
-                            .isEnabled(isEnabled)
-                            .discardResult
+        self.navigationItem
+            .rightBarButtonItem?
+            .fluent
+            .title(itemTitle)
+            .isEnabled(isEnabled)
+            .discardResult
         
         self.navigationController?.setToolbarHidden(isToolbarHidden, animated: true)
         
@@ -319,6 +321,7 @@ extension RootViewController: UITableViewDataSource
         
         var cell: UITableViewCell? = tableView.dequeueReusableCell(withIdentifier: CellIdentifier)
         if cell == nil {
+            
             cell = UITableViewCell(style: .value1, reuseIdentifier: CellIdentifier)
             cell?.accessoryType = .disclosureIndicator
         }

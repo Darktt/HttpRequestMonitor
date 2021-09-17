@@ -21,6 +21,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate
             return
         }
         
+        let frame: CGRect = windowScene.coordinateSpace.bounds
+        
         let rootViewController = RootViewController()
         
         let navigationController = UINavigationController(rootViewController: rootViewController)
@@ -34,7 +36,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate
         
         splitController.showDetailViewController(navigationController, sender: nil)
         
-        let window = UIWindow(frame: windowScene.coordinateSpace.bounds).fluent
+        let window = UIWindow(frame: frame).fluent
                             .windowScene(windowScene)
                             .rootViewController(splitController)
                             .subject
