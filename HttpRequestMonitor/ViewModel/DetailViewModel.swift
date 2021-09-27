@@ -42,7 +42,7 @@ public class DetailViewModel
     {
         let index: Int = indexPath.row
         
-        guard self.queryItems.count < index else {
+        guard self.queryItems.count > index else {
             
             return nil
         }
@@ -56,7 +56,7 @@ public class DetailViewModel
     {
         let index: Int = indexPath.row
         
-        guard self.requestHeaders.count < index else {
+        guard self.requestHeaders.count > index else {
             
             return nil
         }

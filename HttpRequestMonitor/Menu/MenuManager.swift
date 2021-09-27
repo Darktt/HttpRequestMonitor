@@ -13,11 +13,6 @@ public class MenuManager
     
     public static let identifier: String = "com.darktt.personal.company"
     
-    private lazy var noticationCenter: NotificationCenter = {
-        
-        NotificationCenter.default
-    }()
-    
     // MARK: - Methods -
     
     public static func startKeyCommand(action: Selector) -> UIKeyCommand

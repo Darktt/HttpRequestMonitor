@@ -7,6 +7,9 @@
 
 import UIKit
 import Combine
+import Network
+
+private let kPortNumber: UInt16 = 3000
 
 public class RootViewController: UIViewController
 {
@@ -192,11 +195,11 @@ private extension RootViewController
         let ipAddress: String = wifiInformation.ipAddresses.first ?? ""
         let addressText: String = {
             
-            var text: String = "Address: http://localhost:2208"
+            var text: String = "Address: http://localhost:\(kPortNumber)"
             
             if !ipAddress.isEmpty {
                 
-                text += "\nor http://\(ipAddress):2208"
+                text += "\nor http://\(ipAddress):\(kPortNumber)"
             }
             
             return text
@@ -217,14 +220,15 @@ private extension RootViewController
         let addressItem = UIBarButtonItem().fluent
             .customView(addressLabel).subject
         
-        self.setToolbarItems([flexItem, addressItem, flexItem,], animated: false)
+        self.setToolbarItems([flexItem, addressItem, flexItem], animated: false)
     }
     
     func setupService()
     {
         do {
             
-            let service = try HTTPService(port: 2208)
+            let port = NWEndpoint.Port(integerLiteral: kPortNumber)
+            let service = try HTTPService(port: port)
             service.statusUpdateHandler = self.serviceStatusUpdate(status:)
             service.receiveRequestHandler = self.receiveRequest(request:)
             
@@ -295,7 +299,17 @@ private extension RootViewController
             }
         }
         
-        self.present(alertController, animated: true)
+        if #available(iOS 15.0, *) {
+            
+            Task(priority: .userInitiated) {
+                
+                await self.present(alertController, animated: true)
+            }
+            
+        } else {
+            
+            self.present(alertController, animated: true)
+        }
     }
 }
 

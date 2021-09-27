@@ -31,11 +31,39 @@ public extension UIViewController
         return barButtonItem
     }
     
+    @available(macOS 12.0, iOS 15.0, watchOS 8.0, tvOS 15.0, *)
+    func present(_ viewControllerToPresent: UIViewController, animated: Bool) async
+    {
+        await withCheckedContinuation {
+            
+            [unowned self] contination in
+            
+            self.present(viewControllerToPresent, animated: animated) {
+                
+                contination.resume()
+            }
+        }
+    }
+    
     func presentFullScreen(_ viewControllerToPresent: UIViewController, animated: Bool, completion: (() -> Void)? = nil)
     {
         viewControllerToPresent.modalPresentationStyle = .fullScreen
         
         self.present(viewControllerToPresent, animated: animated, completion: completion)
+    }
+    
+    @available(macOS 12.0, iOS 15.0, watchOS 8.0, tvOS 15.0, *)
+    func presentFullScreen(_ viewControllerToPresent: UIViewController, animated: Bool) async
+    {
+        await withCheckedContinuation {
+            
+            [unowned self] contination in
+            
+            self.presentFullScreen(viewControllerToPresent, animated: true) {
+                
+                contination.resume()
+            }
+        }
     }
     
     func presentedViewController<ViewController>(of type: ViewController.Type) -> ViewController? where ViewController: UIViewController

@@ -9,8 +9,8 @@ import UIKit
 
 #if targetEnvironment(macCatalyst)
 
-private struct TouchBarIdentifier {
-    
+private struct TouchBarIdentifier
+{
     static let startServer: NSTouchBarItem.Identifier = NSTouchBarItem.Identifier(MenuManager.identifier + ".startServer")
     
     static let stopServer: NSTouchBarItem.Identifier = NSTouchBarItem.Identifier(MenuManager.identifier + ".stopServer")
