@@ -30,6 +30,12 @@ public class DetailViewModel
     private var request: HTTPMessage?
     
     // MARK: - Methods -
+    // MARK: Initial Method
+    
+    public init()
+    {
+        
+    }
     
     public func setRequest(_ request: HTTPMessage)
     {

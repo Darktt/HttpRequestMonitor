@@ -98,6 +98,11 @@ private extension HTTPConnection
             
             if let data: Data = $0, let httpMessage = HTTPMessage.request(withData: data) {
                 
+                if let string = String(data: data, encoding: .utf8) {
+                    
+                    print("Request data: \(string)")
+                }
+                
                 print("Did receive request: \(httpMessage)")
                 
                 if let handler: HTTPService.ReceiveRequestHandler = self.receiveRequestHandler {
