@@ -25,16 +25,16 @@ jobs:
       - name: Build
         uses: sersoft-gmbh/xcodebuild-action@v1
         with:
-          project: githubTest.xcodeproj
-          scheme: githubTest
+          project: HttpRequestMonitor.xcodeproj
+          scheme: HttpRequestMonitor
           destination: platform=iOS Simulator,name=iPhone 13
           action: build
 
       - name: Runing tests
         uses: sersoft-gmbh/xcodebuild-action@v1
         with:
-          project: githubTest.xcodeproj
-          scheme: githubTest
+          project: HttpRequestMonitor.xcodeproj
+          scheme: HttpRequestMonitor
           destination: platform=iOS Simulator,name=iPhone 13
           action: test
 
