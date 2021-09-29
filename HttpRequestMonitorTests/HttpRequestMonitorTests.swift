@@ -78,7 +78,7 @@ public class HttpRequestMonitorTests: XCTestCase
         XCTAssertTrue(isContainedToken, "Header have not token field.")
     }
     
-    public func testGetRequestTableView()
+    public func testGetRequestTableViewIndexPath()
     {
         guard let requestData: Data = self.getRequestDataString.data(using: .utf8) else {
             
