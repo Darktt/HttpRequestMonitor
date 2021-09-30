@@ -23,6 +23,22 @@ public class HttpRequestMonitorTests: XCTestCase
             Connection: keep-alive
             """
     
+    private let postRequestDataString: String = """
+            POST /account HTTP/1.1
+            Host: localhost:3000
+            Content-Type: application/json
+            Connection: keep-alive
+            Accept: */*
+            User-Agent: Rested/2009 CFNetwork/1240.0.4 Darwin/20.6.0
+            Accept-Language: zh-tw
+            Accept-Encoding: gzip, deflate
+            Content-Length: 53
+            
+            {
+              "token": "1ABC20F8-F0A6-44B6-8DF4-2A0CA5498B0D"
+            }
+            """
+    
     override public func setUpWithError() throws
     {
         // Put setup code here. This method is called before the invocation of each test method in the class.
@@ -35,20 +51,6 @@ public class HttpRequestMonitorTests: XCTestCase
         // Put teardown code here. This method is called after the invocation of each test method in the class.
         
         self.detailViewModel = nil
-    }
-    
-    public func testExample() throws
-    {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-    }
-    
-    public func testPerformanceExample() throws
-    {
-        // This is an example of a performance test case.
-        measure {
-            // Put the code you want to measure the time of here.
-        }
     }
     
     public func testParseGetRequest()
@@ -65,9 +67,11 @@ public class HttpRequestMonitorTests: XCTestCase
             return
         }
         
+        XCTAssertTrue(request.requestMethod == .get, "Request not get method.")
+        
         self.detailViewModel.setRequest(request)
         
-        XCTAssert(!self.detailViewModel.isQuertItemsEmpty, "Quert items have not empty.")
+        XCTAssertFalse(self.detailViewModel.isQuertItemsEmpty, "Quert items not empty.")
         
         // Check headers has 7 headers.
         XCTAssert(self.detailViewModel.requestHeaders.count == 7, "Headers have not 7 headers.")
@@ -112,6 +116,40 @@ public class HttpRequestMonitorTests: XCTestCase
             let isContainedToken: Bool = (header.field == "token") && (header.value == "1ABC20F8-F0A6-44B6-8DF4-2A0CA5498B0D")
             
             XCTAssertTrue(isContainedToken, "Header have not token field.")
+        }
+    }
+    
+    public func testParsePostRequest()
+    {
+        guard let requestData: Data = self.postRequestDataString.data(using: .utf8) else {
+            
+            XCTAssert(false, "Create request data failed.")
+            return
+        }
+        
+        guard let request = HTTPMessage.request(withData: requestData) else {
+            
+            XCTAssert(false, "Create request failed.")
+            return
+        }
+        
+        XCTAssertTrue(request.requestMethod == .post, "Request not post method.")
+        
+        self.detailViewModel.setRequest(request)
+        
+        XCTAssert(self.detailViewModel.isQuertItemsEmpty, "Quert items is empty.")
+        
+        // Check headers has 8 headers.
+        XCTAssert(self.detailViewModel.requestHeaders.count == 8, "Headers have not 6 headers.")
+        
+        // Check request body.
+        XCTAssertFalse(self.detailViewModel.requestBody.isEmpty, "Request body is empty.")
+        
+        if let bodyData: Data = request.data,
+            let requestDictionary = try? JSONDecoder().decode(Dictionary<String, String>.self, from: bodyData),
+            let token: String = requestDictionary["token"] {
+            
+            XCTAssert(token == "1ABC20F8-F0A6-44B6-8DF4-2A0CA5498B0D", "Token not matched.")
         }
     }
 }
