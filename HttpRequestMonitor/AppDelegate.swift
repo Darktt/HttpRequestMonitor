@@ -7,6 +7,11 @@
 
 import UIKit
 
+public enum ActionType: String
+{
+    case startAction = "Start action"
+}
+
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate
 {
@@ -29,6 +34,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool
     {
         // Override point for customization after application launch.
+        // Setup app quick actions.
+        
+        let startIcon = UIApplicationShortcutIcon(systemImageName: "arrowtriangle.right.fill")
+        let startAction = UIApplicationShortcutItem(type: ActionType.startAction.rawValue, localizedTitle: "Start server", localizedSubtitle: nil, icon: startIcon)
+        
+        application.shortcutItems = [startAction]
+        
         return true
     }
     
@@ -47,5 +59,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate
         // If any sessions were discarded while the application was not running, this will be called shortly after application:didFinishLaunchingWithOptions.
         // Use this method to release any resources that were specific to the discarded scenes, as they will not return.
     }
+    
+    func application(_ application: UIApplication, performActionFor shortcutItem: UIApplicationShortcutItem, completionHandler: @escaping (Bool) -> Void)
+    {
+        guard let actionType = ActionType(rawValue: shortcutItem.type), actionType == .startAction else {
+            
+            completionHandler(false)
+            return
+        }
+        
+        NotificationCenter.default.post(name: RootViewController.startServerNoticationName, object: nil)
+    }
 }
-

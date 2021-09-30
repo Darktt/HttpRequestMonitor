@@ -13,6 +13,8 @@ private let kPortNumber: UInt16 = 3000
 
 public class RootViewController: UIViewController
 {
+    public static let startServerNoticationName: Notification.Name = Notification.Name(rawValue: "RootViewController.StartServer")
+    
     // MARK: - Properties -
     
     public override var keyCommands: [UIKeyCommand]? {
@@ -105,6 +107,7 @@ public class RootViewController: UIViewController
         self.setupRightBarButtonItem()
         self.setupToolbarItem()
         self.setupService()
+        self.setupNotification()
     }
     
     deinit
@@ -310,6 +313,15 @@ private extension RootViewController
             
             self.present(alertController, animated: true)
         }
+    }
+    
+    func setupNotification()
+    {
+        NotificationCenter.default
+            .publisher(for: RootViewController.startServerNoticationName, object: nil)
+            .compactMap({ [unowned self] _ in (self.httpService?.status != .runing) ? self.httpService : nil })
+            .sink(receiveValue: { $0.start() })
+            .store(in: &cancellableSet)
     }
 }
 
