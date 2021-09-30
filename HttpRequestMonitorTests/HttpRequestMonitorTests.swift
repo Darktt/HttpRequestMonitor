@@ -116,6 +116,9 @@ public class HttpRequestMonitorTests: XCTestCase
             let isContainedToken: Bool = (header.field == "token") && (header.value == "1ABC20F8-F0A6-44B6-8DF4-2A0CA5498B0D")
             
             XCTAssertTrue(isContainedToken, "Header have not token field.")
+        } else {
+            
+            XCTFail("Request header out of range.")
         }
     }
     
@@ -150,6 +153,9 @@ public class HttpRequestMonitorTests: XCTestCase
             let token: String = requestDictionary["token"] {
             
             XCTAssert(token == "1ABC20F8-F0A6-44B6-8DF4-2A0CA5498B0D", "Token not matched.")
+        } else {
+            
+            XCTFail("Parse request body failed.")
         }
     }
 }
