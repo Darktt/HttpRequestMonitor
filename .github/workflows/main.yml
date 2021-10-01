@@ -22,7 +22,7 @@ jobs:
         with:
           version: "13"
       
-      - name: Build
+      - name: Build for iOS
         uses: sersoft-gmbh/xcodebuild-action@v1
         with:
           project: HttpRequestMonitor.xcodeproj
@@ -30,7 +30,15 @@ jobs:
           destination: platform=iOS Simulator,name=iPhone 13
           action: build
 
-      - name: Runing tests
+      - name: Build for mac catalyst
+        uses: sersoft-gmbh/xcodebuild-action@v1
+        with:
+          project: HttpRequestMonitor.xcodeproj
+          scheme: HttpRequestMonitor
+          destination: platform=macOS,variant=Mac Catalyst
+          action: build          
+
+      - name: Runing tests for iOS
         uses: sersoft-gmbh/xcodebuild-action@v1
         with:
           project: HttpRequestMonitor.xcodeproj
@@ -38,8 +46,10 @@ jobs:
           destination: platform=iOS Simulator,name=iPhone 13
           action: test
 
-      # - name: Build
-      #   run: xcodebuild clean -project githubTest.xcodeproj -scheme githubTest
-      
-      # - name: Run tests
-      #   run: xcodebuild test -project githubTest.xcodeproj -scheme githubTest -destination 'platform=iOS Simulator,name=iPhone 12'
+      - name: Runing tests for mac catalyst
+        uses: sersoft-gmbh/xcodebuild-action@v1
+        with:
+          project: HttpRequestMonitor.xcodeproj
+          scheme: HttpRequestMonitor
+          destination: platform=macOS,variant=Mac Catalyst
+          action: test

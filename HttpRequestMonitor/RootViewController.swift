@@ -302,17 +302,7 @@ private extension RootViewController
             }
         }
         
-        if #available(iOS 15.0, *) {
-            
-            Task(priority: .userInitiated) {
-                
-                await self.present(alertController, animated: true)
-            }
-            
-        } else {
-            
-            self.present(alertController, animated: true)
-        }
+        self.present(alertController, animated: true)
     }
     
     func setupNotification()

@@ -65,6 +65,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate
         self.savedShortcutItem.unwrapped {
             
             self.handleSortcutItem($0)
+            self.savedShortcutItem = nil
         }
     }
     
