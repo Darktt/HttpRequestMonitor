@@ -1,8 +1,6 @@
 name: Swift
 
 on: [push]
-  # push:
-    # - master
 
 jobs:
   build:
@@ -29,7 +27,7 @@ jobs:
           scheme: HttpRequestMonitor
           destination: platform=iOS Simulator,name=iPhone 13
           action: build
-
+      
       - name: Build for mac catalyst
         uses: sersoft-gmbh/xcodebuild-action@v1
         with:
@@ -46,10 +44,10 @@ jobs:
           destination: platform=iOS Simulator,name=iPhone 13
           action: test
 
-      - name: Runing tests for mac catalyst
-        uses: sersoft-gmbh/xcodebuild-action@v1
-        with:
-          project: HttpRequestMonitor.xcodeproj
-          scheme: HttpRequestMonitor
-          destination: platform=macOS,variant=Mac Catalyst
-          action: test
+      #- name: Runing tests for mac catalyst
+      #  uses: sersoft-gmbh/xcodebuild-action@v1
+      #  with:
+      #    project: HttpRequestMonitor.xcodeproj
+      #    scheme: HttpRequestMonitor
+      #    destination: platform=macOS,variant=Mac Catalyst
+      #    action: test
