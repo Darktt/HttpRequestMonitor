@@ -311,7 +311,7 @@ private extension RootViewController
             .publisher(for: RootViewController.startServerNoticationName, object: nil)
             .compactMap({ [unowned self] _ in (self.httpService?.status != .runing) ? self.httpService : nil })
             .sink(receiveValue: { $0.start() })
-            .store(in: &cancellableSet)
+            .store(in: &self.cancellableSet)
     }
 }
 
