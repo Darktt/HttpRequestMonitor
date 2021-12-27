@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6EB419F527796AF400C6D3F6 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 6EB419F427796AF400C6D3F6 /* README.md */; };
 		F209B28126E83EFD0083574D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F209B28026E83EFD0083574D /* AppDelegate.swift */; };
 		F209B28326E83EFD0083574D /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F209B28226E83EFD0083574D /* SceneDelegate.swift */; };
 		F209B28526E83EFD0083574D /* RootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F209B28426E83EFD0083574D /* RootViewController.swift */; };
@@ -51,6 +52,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		6EB419F427796AF400C6D3F6 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		F209B27D26E83EFD0083574D /* HttpRequestMonitor.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HttpRequestMonitor.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F209B28026E83EFD0083574D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F209B28226E83EFD0083574D /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -109,6 +111,7 @@
 		F209B27426E83EFD0083574D = {
 			isa = PBXGroup;
 			children = (
+				6EB419F427796AF400C6D3F6 /* README.md */,
 				F209B27F26E83EFD0083574D /* HttpRequestMonitor */,
 				F291B8912702F12E00B6FF82 /* HttpRequestMonitorTests */,
 				F209B27E26E83EFD0083574D /* Products */,
@@ -330,6 +333,7 @@
 				F271195F26EB44C100701963 /* DetailRequestController.xib in Resources */,
 				F209B28D26E83EFD0083574D /* LaunchScreen.storyboard in Resources */,
 				F271196426EB495F00701963 /* RootViewController.xib in Resources */,
+				6EB419F527796AF400C6D3F6 /* README.md in Resources */,
 				F249D70B26EEFD8D001E1926 /* FieldValueCell.xib in Resources */,
 				F209B28A26E83EFD0083574D /* Assets.xcassets in Resources */,
 				F249D71626EF2890001E1926 /* BodyCell.xib in Resources */,
