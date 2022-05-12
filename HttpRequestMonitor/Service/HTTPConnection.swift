@@ -48,17 +48,17 @@ public class HTTPConnection
     
     public func send(_ data: Data)
     {
-        let complation: NWConnection.SendCompletion = .contentProcessed {
+        let completion: NWConnection.SendCompletion = .contentProcessed {
             
             guard let error = $0 else {
                 
                 return
             }
             
-            print("Connection: \(self.connection), content peocessed with error: \(error)")
+            print("Connection: \(self.connection), content processed with error: \(error)")
         }
         
-        self.connection.send(content: data, completion: complation)
+        self.connection.send(content: data, contentContext: .finalMessage, completion: completion)
     }
 }
 
