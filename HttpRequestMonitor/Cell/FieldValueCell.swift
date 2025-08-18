@@ -11,7 +11,8 @@ public class FieldValueCell: UITableViewCell
 {
     // MARK: - Properties -
     
-    public var quertyItem: URLQueryItem? {
+    public
+    var quertyItem: URLQueryItem? {
         
         willSet {
             
@@ -20,7 +21,8 @@ public class FieldValueCell: UITableViewCell
         }
     }
     
-    public var requestHeader: HTTPHeader? {
+    public
+    var requestHeader: HTTPHeader? {
         
         willSet {
             
@@ -29,13 +31,17 @@ public class FieldValueCell: UITableViewCell
         }
     }
     
-    @IBOutlet fileprivate weak var titleLabel: UILabel!
-    @IBOutlet fileprivate weak var valueLabel: UILabel!
+    @IBOutlet fileprivate
+    weak var titleLabel: UILabel!
+    
+    @IBOutlet fileprivate
+    weak var valueLabel: UILabel!
     
     // MARK: - Methods -
     // MARK: Initial Method
     
-    public override func awakeFromNib()
+    public override
+    func awakeFromNib()
     {
         super.awakeFromNib()
         // Initialization code
@@ -51,14 +57,16 @@ public class FieldValueCell: UITableViewCell
 
 extension FieldValueCell: CustomCellRegistrable
 {
-    public static var cellNib: UINib? {
+    public static
+    var cellNib: UINib? {
         
         let nib = UINib(nibName: "FieldValueCell", bundle: nil)
         
         return nib
     }
  
-    public static var cellIdentifier: String {
+    public static
+    var cellIdentifier: String {
         
         return "FieldValueCell"
     }

@@ -11,40 +11,49 @@ public class DetailViewModel
 {
     // MARK: - Properties -
     
-    public var rootURL: URL? {
+    public
+    var rootURL: URL? {
         
         self.request?.rootURL
     }
     
-    public var isQuertItemsEmpty: Bool {
+    public
+    var isQuertItemsEmpty: Bool {
         
         self.queryItems.isEmpty
     }
     
-    public private(set) var queryItems: Array<URLQueryItem> = []
+    public private(set)
+    var queryItems: Array<URLQueryItem> = []
     
-    public private(set) var requestHeaders: Array<HTTPHeader> = []
+    public private(set)
+    var requestHeaders: Array<HTTPHeader> = []
     
-    public private(set) var requestBody: String = ""
+    public private(set) 
+    var requestBody: String = ""
     
-    private var request: HTTPMessage?
+    private
+    var request: HTTPMessage?
     
     // MARK: - Methods -
     // MARK: Initial Method
     
-    public init()
+    public
+    init()
     {
         
     }
     
-    public func setRequest(_ request: HTTPMessage)
+    public
+    func setRequest(_ request: HTTPMessage)
     {
         self.request = request
         
         self.resolveRequest()
     }
     
-    public func queryItem(at indexPath: IndexPath) -> URLQueryItem?
+    public
+    func queryItem(at indexPath: IndexPath) -> URLQueryItem?
     {
         let index: Int = indexPath.row
         
@@ -58,7 +67,8 @@ public class DetailViewModel
         return quertItem
     }
     
-    public func requestHeaders(at indexPath: IndexPath) -> HTTPHeader?
+    public
+    func requestHeaders(at indexPath: IndexPath) -> HTTPHeader?
     {
         let index: Int = indexPath.row
         
@@ -73,7 +83,8 @@ public class DetailViewModel
     }
 }
 
-private extension DetailViewModel
+private
+extension DetailViewModel
 {
     func resolveRequest()
     {
@@ -91,7 +102,7 @@ private extension DetailViewModel
         let headers: Array<HTTPHeader> = self.request?.httpHeaders().sorted() ?? []
         let body: String = {
             
-            guard let data = self.request?.data,
+            guard let data = self.request?.body,
                   let bodyString: String = String(data: data, encoding: .utf8) else {
                 
                 return ""

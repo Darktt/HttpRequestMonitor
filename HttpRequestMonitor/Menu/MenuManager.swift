@@ -7,11 +7,13 @@
 
 import UIKit
 
-public class MenuManager
+public
+class MenuManager
 {
     // MARK: - Properties -
     
-    public static let identifier: String = "com.darktt.personal.company"
+    public static
+    let identifier: String = "com.darktt.personal.company"
     
     // MARK: - Methods -
     

@@ -11,7 +11,8 @@ import UIKit.UIGestureRecognizer
 
 // MARK: - Actor -
 
-public protocol Actor
+public
+protocol Actor
 {
     func addTarget(_ target: AnyObject, action: Selector)
 }
@@ -42,22 +43,28 @@ extension UIGestureRecognizer: Actor {
 @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
 public struct ActionPublisher<Source>: Publisher where Source: Actor
 {
-    public typealias Output = Source
-    public typealias Failure = Never
+    public
+    typealias Output = Source
+    
+    public
+    typealias Failure = Never
     
     // MARK: - Properties -
     
-    public var source: Source
+    public
+    var source: Source
     
     // MARK: - Methods -
     // MARK: Initial Method
     
-    public init(source: Source)
+    public
+    init(source: Source)
     {
         self.source = source
     }
     
-    public func receive<S>(subscriber: S) where S : Subscriber, Never == S.Failure, Source == S.Input
+    public
+    func receive<S>(subscriber: S) where S : Subscriber, Never == S.Failure, Source == S.Input
     {
         let subscription = ActionSubscription(subscriber: subscriber, source: self.source)
         
@@ -68,18 +75,22 @@ public struct ActionPublisher<Source>: Publisher where Source: Actor
 // MARK: - ActionSubscription -
 
 @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-public final class ActionSubscription<SubscriberType, Source>: Subscription where SubscriberType: Subscriber, SubscriberType.Input == Source, Source: Actor
+public final
+class ActionSubscription<SubscriberType, Source>: Subscription where SubscriberType: Subscriber, SubscriberType.Input == Source, Source: Actor
 {
     // MARK: - Properties -
     
-    private var subscriber: SubscriberType?
+    private
+    var subscriber: SubscriberType?
     
-    private var source: Source
+    private
+    var source: Source
     
     // MARK: - Methods -
     // MARK: Initial Method
     
-    public init(subscriber: SubscriberType, source: Source)
+    public
+    init(subscriber: SubscriberType, source: Source)
     {
         self.subscriber = subscriber
         self.source = source
@@ -87,19 +98,22 @@ public final class ActionSubscription<SubscriberType, Source>: Subscription wher
         source.addTarget(self, action: #selector(self.actionHandler))
     }
     
-    public func request(_ demand: Subscribers.Demand)
+    public
+    func request(_ demand: Subscribers.Demand)
     {
         // We do nothing here as we only want to send events when they occur.
         // See, for more info: https://developer.apple.com/documentation/combine/subscribers/demand
     }
     
-    public func cancel()
+    public
+    func cancel()
     {
         self.subscriber = nil
     }
     
     @objc
-    private func actionHandler()
+    private
+    func actionHandler()
     {
         _ = self.subscriber?.receive(self.source)
     }
@@ -107,12 +121,14 @@ public final class ActionSubscription<SubscriberType, Source>: Subscription wher
 
 // MARK: - ActionPublisherCompartible -
 
-public protocol ActionPublisherCompartible {}
+public
+protocol ActionPublisherCompartible {}
 
 @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
 extension ActionPublisherCompartible where Self: Actor
 {
-    public func publisher() -> ActionPublisher<Self>
+    public
+    func publisher() -> ActionPublisher<Self>
     {
         let publisher = ActionPublisher(source: self)
         

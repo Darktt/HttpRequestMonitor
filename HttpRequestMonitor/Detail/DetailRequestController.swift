@@ -7,30 +7,36 @@
 
 import UIKit
 
-public class DetailRequestController: UIViewController
+public
+class DetailRequestController: UIViewController
 {
     // MARK: - Properties -
     
-    @IBOutlet fileprivate weak var tableView: UITableView!
+    @IBOutlet private
+    weak var tableView: UITableView!
     
-    private let viewModel: DetailViewModel = .init()
+    private
+    let viewModel: DetailViewModel = .init()
     
     // MARK: - Methods -
     // MARK: Initial Method
     
-    public init(request: HTTPMessage)
+    public
+    init(request: HTTPMessage)
     {
         self.viewModel.setRequest(request)
         
         super.init(nibName: "DetailRequestController", bundle: nil)
     }
     
-    internal required init?(coder: NSCoder)
+    internal required
+    init?(coder: NSCoder)
     {
         super.init(coder: coder)
     }
     
-    public override func awakeFromNib()
+    public override
+    func awakeFromNib()
     {
         super.awakeFromNib()
         
@@ -38,32 +44,37 @@ public class DetailRequestController: UIViewController
     
     // MARK: View Live Cycle
     
-    public override func viewWillAppear(_ animated: Bool)
+    public override
+    func viewWillAppear(_ animated: Bool)
     {
         super.viewWillAppear(animated)
         
         self.navigationController?.setToolbarHidden(true, animated: true)
     }
     
-    public override func viewDidAppear(_ animated: Bool)
+    public override
+    func viewDidAppear(_ animated: Bool)
     {
         super.viewDidAppear(animated)
         
     }
     
-    public override func viewWillDisappear(_ animated: Bool)
+    public override
+    func viewWillDisappear(_ animated: Bool)
     {
         super.viewWillDisappear(animated)
         
     }
     
-    public override func viewDidDisappear(_ animated: Bool)
+    public override
+    func viewDidDisappear(_ animated: Bool)
     {
         super.viewDidDisappear(animated)
         
     }
     
-    public override func viewDidLoad()
+    public override
+    func viewDidLoad()
     {
         super.viewDidLoad()
         

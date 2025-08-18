@@ -8,26 +8,33 @@
 import Foundation
 import Network
 
-public class HTTPConnection
+public
+class HTTPConnection
 {
     //The TCP maximum package size is 64K 65536
-    public let MTU: Int = 65536
+    public
+    let MTU: Int = 65536
     
-    public let identifier: String = UUID().uuidString
+    public
+    let identifier: String = UUID().uuidString
     
-    public let connection: NWConnection
+    public
+    let connection: NWConnection
     
-    public var receiveRequestHandler: HTTPService.ReceiveRequestHandler?
+    public
+    var receiveRequestHandler: HTTPService.ReceiveRequestHandler?
     
     // MARK: - Methods -
     // MARK: Initial Method
     
-    public init(_ connection: NWConnection)
+    public
+    init(_ connection: NWConnection)
     {
         self.connection = connection
     }
     
-    public func start(queue: DispatchQueue = .main)
+    public
+    func start(queue: DispatchQueue = .main)
     {
         print("Starting connect the connection...")
         
@@ -37,7 +44,8 @@ public class HTTPConnection
         self.connection.start(queue: queue)
     }
     
-    public func cancel()
+    public
+    func cancel()
     {
         print("Canceling connect the connection...")
         
@@ -46,7 +54,8 @@ public class HTTPConnection
         self.connection.cancel()
     }
     
-    public func send(_ data: Data)
+    public
+    func send(_ data: Data)
     {
         let completion: NWConnection.SendCompletion = .contentProcessed {
             
@@ -71,7 +80,8 @@ public class HTTPConnection
     }
 }
 
-private extension HTTPConnection
+private
+extension HTTPConnection
 {
     func connectionStateChange(to state: NWConnection.State)
     {
@@ -168,8 +178,7 @@ private extension HTTPConnection
     
     func makeResponse(fromRequest request: HTTPMessage) -> HTTPMessage
     {
-        guard request.requestURL?.path == "/",
-              let method: HTTPMethod = request.requestMethod else {
+        guard let method: HTTPMethod = request.requestMethod else {
             
             let response = HTTPMessage.response(statusCode: .badRequest, htmlString: "<h1>Bad Request</h1>")
             

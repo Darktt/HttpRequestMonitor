@@ -7,12 +7,14 @@
 
 import UIKit
 
-public extension UITableView
+public
+extension UITableView
 {
     // MARK: - Methods -
     // MARK: Initial Method
     
-    convenience init(frame: CGRect, style: UITableView.Style = .plain, forTarget target: (UITableViewDataSource & UITableViewDelegate)? = nil)
+    convenience
+    init(frame: CGRect, style: UITableView.Style = .plain, forTarget target: (UITableViewDataSource & UITableViewDelegate)? = nil)
     {
         self.init(frame: frame, style: style)
         

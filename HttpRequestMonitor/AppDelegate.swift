@@ -7,7 +7,8 @@
 
 import UIKit
 
-public enum ActionType: String
+public
+enum ActionType: String
 {
     case startAction = "Start action"
 }
@@ -15,9 +16,16 @@ public enum ActionType: String
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate
 {
-    private var menuManager: MenuManager?
+    // MARK: - Properties -
     
-    override func buildMenu(with builder: UIMenuBuilder)
+    private
+    var menuManager: MenuManager?
+    
+    // MARK: - Methods -
+    // MARK: Initial Method
+    
+    override
+    func buildMenu(with builder: UIMenuBuilder)
     {
         super.buildMenu(with: builder)
         

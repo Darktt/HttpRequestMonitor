@@ -21,7 +21,8 @@ import UIKit.UIFont
 
 // MARK: - Text Color -
 
-public extension NSMutableAttributedString
+public
+extension NSMutableAttributedString
 {
 #if canImport(AppKit) && !targetEnvironment(macCatalyst)
     
@@ -325,7 +326,6 @@ public extension NSMutableAttributedString
 
 public extension NSMutableAttributedString
 {
-    @available(iOS 2.0, macCatalyst 13.0, *)
     @available(tvOS, unavailable)
     var bold: NSMutableAttributedString {
         
@@ -337,7 +337,6 @@ public extension NSMutableAttributedString
         return self
     }
     
-    @available(iOS 2.0, macCatalyst 13.0, *)
     @available(tvOS, unavailable)
     var italic: NSMutableAttributedString {
         

@@ -7,36 +7,47 @@
 
 import Network
 
-public class HTTPService
+public
+class HTTPService
 {
-    public typealias StatusUpdateHandler = ((HTTPService.Status) -> Void)
-    
-    public typealias ReceiveRequestHandler = ((HTTPMessage) -> Void)
-    
     // MARK: - Properties -
     
-    public private(set) var port: NWEndpoint.Port
+    public
+    typealias StatusUpdateHandler = ((HTTPService.Status) -> Void)
     
-    public private(set) var status: Status = .suspend
+    public
+    typealias ReceiveRequestHandler = ((HTTPMessage) -> Void)
     
-    public var statusUpdateHandler: StatusUpdateHandler?
+    public private(set)
+    var port: NWEndpoint.Port
     
-    public var receiveRequestHandler: ReceiveRequestHandler?
+    public private(set)
+    var status: Status = .suspend
     
-    private var listener: NWListener?
+    public
+    var statusUpdateHandler: StatusUpdateHandler?
     
-    private var connections: Dictionary<String, HTTPConnection> = [:]
+    public
+    var receiveRequestHandler: ReceiveRequestHandler?
+    
+    private
+    var listener: NWListener?
+    
+    private
+    var connections: Dictionary<String, HTTPConnection> = [:]
     
     // MARK: - Methods -
     // MARK: Initial Method
     
-    public init(port: NWEndpoint.Port) throws
+    public
+    init(port: NWEndpoint.Port) throws
     {
         self.port = port
         try self.setupListener()
     }
     
-    public func start(queue: DispatchQueue = .main)
+    public
+    func start(queue: DispatchQueue = .main)
     {
         print("Starting service...")
         
@@ -47,7 +58,8 @@ public class HTTPService
         self.listener?.start(queue: queue)
     }
     
-    public func cancel()
+    public
+    func cancel()
     {
         print("Cancelling service...")
         
@@ -58,7 +70,10 @@ public class HTTPService
     }
 }
 
-private extension HTTPService
+// MARK: - Private Methods -
+
+private
+extension HTTPService
 {
     func setupListener() throws
     {
@@ -89,7 +104,7 @@ private extension HTTPService
             print("Failed to start service, error: \(error)")
             
         case .cancelled:
-            print("Serivce is cancelled.")
+            print("Service is cancelled.")
             
         @unknown
         default:

@@ -9,15 +9,19 @@ import UIKit
 import Combine
 import Network
 
-private let kPortNumber: UInt16 = 3000
+private
+let kPortNumber: UInt16 = 3000
 
-public class RootViewController: UIViewController
+public
+class RootViewController: UIViewController
 {
-    public static let startServerNoticationName: Notification.Name = Notification.Name(rawValue: "RootViewController.StartServer")
-    
     // MARK: - Properties -
     
-    public override var keyCommands: [UIKeyCommand]? {
+    public static
+    let startServerNoticationName: Notification.Name = Notification.Name(rawValue: "RootViewController.StartServer")
+    
+    public override
+    var keyCommands: [UIKeyCommand]? {
         
 #if targetEnvironment(macCatalyst)
         
@@ -33,11 +37,14 @@ public class RootViewController: UIViewController
 #endif
     }
     
-    @IBOutlet fileprivate weak var tableView: UITableView!
+    @IBOutlet private
+    weak var tableView: UITableView!
     
-    private var httpService: HTTPService?
+    private
+    var httpService: HTTPService?
     
-    private var requests: Array<HTTPMessage> = [] {
+    private
+    var requests: Array<HTTPMessage> = [] {
         
         didSet {
             
@@ -45,25 +52,28 @@ public class RootViewController: UIViewController
         }
     }
     
-    private var cancellableSet: Set<AnyCancellable> = Set()
+    private
+    var cancellableSet: Set<AnyCancellable> = Set()
     
     // MARK: - Methods -
     // MARK: Initial Method
     
-    public init()
+    public
+    init()
     {
         super.init(nibName: "RootViewController", bundle: nil)
-        
     }
     
-    required init?(coder: NSCoder)
+    internal required
+    init?(coder: NSCoder)
     {
         fatalError("init(coder:) has not been implemented")
     }
     
     // MARK: View Live Cycle
     
-    public override func viewWillAppear(_ animated: Bool)
+    public override
+    func viewWillAppear(_ animated: Bool)
     {
         super.viewWillAppear(animated)
         
@@ -73,25 +83,26 @@ public class RootViewController: UIViewController
         }
     }
     
-    public override func viewDidAppear(_ animated: Bool)
+    public override
+    func viewDidAppear(_ animated: Bool)
     {
         super.viewDidAppear(animated)
-        
     }
     
-    public override func viewWillDisappear(_ animated: Bool)
+    public override
+    func viewWillDisappear(_ animated: Bool)
     {
         super.viewWillDisappear(animated)
-        
     }
     
-    public override func viewDidDisappear(_ animated: Bool)
+    public override
+    func viewDidDisappear(_ animated: Bool)
     {
         super.viewDidDisappear(animated)
-        
     }
     
-    public override func viewDidLoad()
+    public override
+    func viewDidLoad()
     {
         super.viewDidLoad()
         
@@ -112,13 +123,13 @@ public class RootViewController: UIViewController
     
     deinit
     {
-        
     }
 }
 
 // MARK: - Actions -
 
-private extension RootViewController
+private
+extension RootViewController
 {
     @objc
     func startServerAction(_ sender: UIKeyCommand)
@@ -145,7 +156,8 @@ private extension RootViewController
 
 // MARK: - Private Methods -
 
-private extension RootViewController
+private
+extension RootViewController
 {
     func setupLeftBarButtonItem()
     {
@@ -351,20 +363,22 @@ private extension RootViewController
     
     func setupNotification()
     {
-        NotificationCenter.default
+        let publisher = NotificationCenter.default
             .publisher(for: RootViewController.startServerNoticationName, object: nil)
             .compactMap({ [unowned self] _ in (self.httpService?.status != .runing) ? self.httpService : nil })
-            .sink(receiveValue: { $0.start() })
-            .store(in: &self.cancellableSet)
+        
+        let receiveValue: (HTTPService) -> Void = { $0.start() }
+        
+        publisher.sink(receiveValue: receiveValue)
+                 .store(in: &self.cancellableSet)
     }
 }
 
-// MARK:  - Delegate Methods -
+// MARK: - Delegate Methods -
+// MARK: #UITableViewDataSource, UITableViewDelegate
 
-extension RootViewController: UITableViewDataSource
+extension RootViewController: UITableViewDataSource, UITableViewDelegate
 {
-    //MARK: - UITableView DataSource Methods
-    
     public func numberOfSections(in tableView: UITableView) -> Int
     {
         1
@@ -377,12 +391,12 @@ extension RootViewController: UITableViewDataSource
     
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell
     {
-        let CellIdentifier: String = "CellIdentifier"
+        let cellIdentifier: String = "CellIdentifier"
         
-        var cell: UITableViewCell? = tableView.dequeueReusableCell(withIdentifier: CellIdentifier)
+        var cell: UITableViewCell? = tableView.dequeueReusableCell(withIdentifier: cellIdentifier)
         if cell == nil {
             
-            cell = UITableViewCell(style: .value1, reuseIdentifier: CellIdentifier)
+            cell = UITableViewCell(style: .value1, reuseIdentifier: cellIdentifier)
             cell?.accessoryType = .disclosureIndicator
         }
         
@@ -397,10 +411,7 @@ extension RootViewController: UITableViewDataSource
         
         return cell!
     }
-}
-
-extension RootViewController: UITableViewDelegate
-{
+    
     public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath)
     {
         tableView.deselectRow(at: indexPath, animated: true)

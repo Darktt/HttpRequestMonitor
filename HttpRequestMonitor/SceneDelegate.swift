@@ -9,9 +9,13 @@ import UIKit
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate
 {
+    // MARK: - Properties -
+    
     var window: UIWindow?
     
     var savedShortcutItem: UIApplicationShortcutItem?
+    
+    // MARK: - Methods -
     
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions)
     {
@@ -96,7 +100,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate
     }
 }
 
-private extension SceneDelegate
+// MARK: - Private Methods -
+
+private
+extension SceneDelegate
 {
     @discardableResult
     func handleSortcutItem(_ shortcutItem: UIApplicationShortcutItem) -> Bool

@@ -17,9 +17,11 @@ public protocol CustomCellRegistrable
 // MARK: - Extensions -
 // MARK: UITableView
 
-public typealias UITableViewCellRegistrable = (UITableViewCell & CustomCellRegistrable)
+public
+typealias UITableViewCellRegistrable = (UITableViewCell & CustomCellRegistrable)
 
-public extension UITableView
+public
+extension UITableView
 {
     func register<Cell>(_ cell: Cell.Type) where Cell: UITableViewCellRegistrable
     {
@@ -49,9 +51,11 @@ public extension UITableView
 
 // MARK: UICollectionView
 
-public typealias UICollectionViewCellRegistrable = (UICollectionViewCell & CustomCellRegistrable)
+public
+typealias UICollectionViewCellRegistrable = (UICollectionViewCell & CustomCellRegistrable)
 
-public extension UICollectionView
+public
+extension UICollectionView
 {
     func register<Cell>(_ cell: Cell.Type) where Cell: UICollectionViewCellRegistrable
     {

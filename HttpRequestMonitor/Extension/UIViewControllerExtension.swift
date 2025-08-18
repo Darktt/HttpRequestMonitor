@@ -7,12 +7,14 @@
 
 import UIKit
 
-public extension UIViewController
+public
+extension UIViewController
 {
     // MARK: - Methods -
     // MARK: Initial Method
     
-    convenience init(nibName: String)
+    convenience
+    init(nibName: String)
     {
         self.init(nibName: nibName, bundle: nil)
     }

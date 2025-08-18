@@ -20,7 +20,8 @@ import UIKit
 ///         .subject
 /// ```
 @dynamicMemberLookup
-public struct FluentInterface<Subject>
+public
+struct FluentInterface<Subject>
 {
     // MARK: - Properties -
     
@@ -39,13 +40,16 @@ public struct FluentInterface<Subject>
 }
 
 @dynamicCallable
-public struct FluentCaller<Subject, Value>
+public
+struct FluentCaller<Subject, Value>
 {
     // MARK: - Properties -
     
-    fileprivate let subject: Subject
+    fileprivate
+    let subject: Subject
     
-    fileprivate let keyPath: WritableKeyPath<Subject, Value>
+    fileprivate
+    let keyPath: WritableKeyPath<Subject, Value>
     
     // MARK: - Methods -
     // MARK: Initial Method
@@ -68,7 +72,8 @@ public struct FluentCaller<Subject, Value>
 
 // MARK: - FluentCompatible -
 
-public protocol FluentCompatible { }
+public
+protocol FluentCompatible { }
 
 extension FluentCompatible
 {

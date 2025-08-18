@@ -7,7 +7,8 @@
 
 import Foundation
 
-public enum HTTPMethod: String
+public
+enum HTTPMethod: String
 {
     case connect = "CONNECT"
     

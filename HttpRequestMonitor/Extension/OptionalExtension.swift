@@ -7,7 +7,8 @@
 
 import Foundation
 
-public extension Optional
+public
+extension Optional
 {
     /// Unwrap object, when unwrap success will execute block and return object, otherwise return nil.
     ///
@@ -147,9 +148,10 @@ public extension Optional
     }
 }
 
-extension Optional: Comparable where Wrapped: Comparable
+extension Optional: @retroactive Comparable where Wrapped: Comparable
 {
-    public static func < (lhs: Optional<Wrapped>, rhs: Optional<Wrapped>) -> Bool {
+    public static
+    func < (lhs: Optional<Wrapped>, rhs: Optional<Wrapped>) -> Bool {
         
         guard let left: Wrapped = lhs, let right: Wrapped = rhs else {
             
@@ -159,7 +161,8 @@ extension Optional: Comparable where Wrapped: Comparable
         return left < right
     }
     
-    public static func <= (lhs: Optional<Wrapped>, rhs: Optional<Wrapped>) -> Bool {
+    public static
+    func <= (lhs: Optional<Wrapped>, rhs: Optional<Wrapped>) -> Bool {
         
         guard let left: Wrapped = lhs, let right: Wrapped = rhs else {
             
@@ -169,7 +172,8 @@ extension Optional: Comparable where Wrapped: Comparable
         return left <= right
     }
     
-    public static func > (lhs: Optional<Wrapped>, rhs: Optional<Wrapped>) -> Bool {
+    public static
+    func > (lhs: Optional<Wrapped>, rhs: Optional<Wrapped>) -> Bool {
         
         guard let left: Wrapped = lhs, let right: Wrapped = rhs else {
             
@@ -179,7 +183,8 @@ extension Optional: Comparable where Wrapped: Comparable
         return left < right
     }
     
-    public static func >= (lhs: Optional<Wrapped>, rhs: Optional<Wrapped>) -> Bool {
+    public static
+    func >= (lhs: Optional<Wrapped>, rhs: Optional<Wrapped>) -> Bool {
         
         guard let left: Wrapped = lhs, let right: Wrapped = rhs else {
             
@@ -192,7 +197,8 @@ extension Optional: Comparable where Wrapped: Comparable
 
 // MARK: - Optional<Error> -
 
-public extension Optional where Wrapped == Error
+public
+extension Optional where Wrapped == Error
 {
     func or(_ else: (Wrapped) -> Void)
     {

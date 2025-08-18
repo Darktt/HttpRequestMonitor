@@ -126,13 +126,13 @@ public class HttpRequestMonitorTests: XCTestCase
     {
         guard let requestData: Data = self.postRequestDataString.data(using: .utf8) else {
             
-            XCTAssert(false, "Create request data failed.")
+            XCTFail("Create request data failed.")
             return
         }
         
         guard let request = HTTPMessage.request(withData: requestData) else {
             
-            XCTAssert(false, "Create request failed.")
+            XCTFail("Create request failed.")
             return
         }
         
@@ -148,14 +148,22 @@ public class HttpRequestMonitorTests: XCTestCase
         // Check request body.
         XCTAssertFalse(self.detailViewModel.requestBody.isEmpty, "Request body is empty.")
         
-        if let bodyData: Data = request.data,
-            let requestDictionary = try? JSONDecoder().decode(Dictionary<String, String>.self, from: bodyData),
-            let token: String = requestDictionary["token"] {
+        guard let bodyData: Data = request.body else {
+            
+            XCTFail("Body data is nil.")
+            return
+        }
+        
+        do {
+            
+            let requestDictionary = try JSONDecoder().decode(Dictionary<String, String>.self, from: bodyData)
+            let token: String = requestDictionary["token"] ?? ""
             
             XCTAssert(token == "1ABC20F8-F0A6-44B6-8DF4-2A0CA5498B0D", "Token not matched.")
-        } else {
             
-            XCTFail("Parse request body failed.")
+        } catch {
+            
+            XCTFail("Parse request body failed with error: \(error)")
         }
     }
 }

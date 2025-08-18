@@ -9,7 +9,8 @@ import UIKit
 
 #if targetEnvironment(macCatalyst)
 
-private struct TouchBarIdentifier
+private
+struct TouchBarIdentifier
 {
     static let startServer: NSTouchBarItem.Identifier = NSTouchBarItem.Identifier(MenuManager.identifier + ".startServer")
     
@@ -18,10 +19,12 @@ private struct TouchBarIdentifier
     static let allIdentifiers: Array<NSTouchBarItem.Identifier> = [TouchBarIdentifier.startServer, TouchBarIdentifier.stopServer]
 }
 
-extension RootViewController: NSTouchBarDelegate
+extension
+RootViewController: NSTouchBarDelegate
 {
     override
-    public func makeTouchBar() -> NSTouchBar? {
+    public
+    func makeTouchBar() -> NSTouchBar? {
         
         let touchBar = NSTouchBar().fluent
                         .delegate(self)
@@ -31,7 +34,8 @@ extension RootViewController: NSTouchBarDelegate
         return touchBar
     }
     
-    public func touchBar(_ touchBar: NSTouchBar, makeItemForIdentifier identifier: NSTouchBarItem.Identifier) -> NSTouchBarItem?
+    public
+    func touchBar(_ touchBar: NSTouchBar, makeItemForIdentifier identifier: NSTouchBarItem.Identifier) -> NSTouchBarItem?
     {
         var touchBarItem: NSTouchBarItem? = nil
         

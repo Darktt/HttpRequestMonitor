@@ -7,11 +7,13 @@
 
 import UIKit
 
-public class BodyCell: UITableViewCell
+public
+class BodyCell: UITableViewCell
 {
     // MARK: - Properties -
     
-    public var bodyString: String = "" {
+    public
+    var bodyString: String = "" {
         
         willSet {
             
@@ -19,12 +21,14 @@ public class BodyCell: UITableViewCell
         }
     }
     
-    @IBOutlet fileprivate weak var bodyLabel: UILabel!
+    @IBOutlet fileprivate
+    weak var bodyLabel: UILabel!
     
     // MARK: - Methods -
     // MARK: Initial Method
     
-    public override func awakeFromNib()
+    public override
+    func awakeFromNib()
     {
         super.awakeFromNib()
         // Initialization code
@@ -40,14 +44,16 @@ public class BodyCell: UITableViewCell
 
 extension BodyCell: CustomCellRegistrable
 {
-    public static var cellNib: UINib? {
+    public static
+    var cellNib: UINib? {
         
         let nib = UINib(nibName: "BodyCell", bundle: nil)
         
         return nib
     }
  
-    public static var cellIdentifier: String {
+    public static
+    var cellIdentifier: String {
         
         return "BodyCell"
     }

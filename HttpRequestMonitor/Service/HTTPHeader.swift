@@ -9,45 +9,53 @@ import Foundation
 
 // MARK: - HTTPHeader -
 
-public struct HTTPHeader
+public
+struct HTTPHeader
 {
     // MARK: - Properties -
     
-    public let field: String
+    public
+    let field: String
     
-    public let value: String
+    public
+    let value: String
     
     // MARK: - Methods -
     
-    public static func accept(_ value: String) -> HTTPHeader
+    public static
+    func accept(_ value: String) -> HTTPHeader
     {
         let header = HTTPHeader(field: "Accept", value: value)
         
         return header
     }
     
-    public static func acceptCharset(_ value: String) -> HTTPHeader
+    public static
+    func acceptCharset(_ value: String) -> HTTPHeader
     {
         let header = HTTPHeader(field: "Accept-Charset", value: value)
         
         return header
     }
     
-    public static func acceptEncoding(_ value: String) -> HTTPHeader
+    public static
+    func acceptEncoding(_ value: String) -> HTTPHeader
     {
         let header = HTTPHeader(field: "Accept-Encoding", value: value)
         
         return header
     }
     
-    public static func acceptLanguage(_ value: String) -> HTTPHeader
+    public static
+    func acceptLanguage(_ value: String) -> HTTPHeader
     {
         let header = HTTPHeader(field: "Accept-Language", value: value)
         
         return header
     }
     
-    public static func authorization(username: String, password: String) -> HTTPHeader
+    public static
+    func authorization(username: String, password: String) -> HTTPHeader
     {
         let value: String = "\(username):\(password)"
         let token: String = value.data(using: .utf8)!.base64EncodedString()
@@ -56,7 +64,8 @@ public struct HTTPHeader
         return header
     }
     
-    public static func authorization(token: String, type: AuthorizationType) -> HTTPHeader
+    public static
+    func authorization(token: String, type: AuthorizationType) -> HTTPHeader
     {
         let credential: String = "\(type) " + token
         let header = HTTPHeader.authorization(credential)
@@ -64,14 +73,16 @@ public struct HTTPHeader
         return header
     }
     
-    public static func authorization(_ value: String) -> HTTPHeader
+    public static
+    func authorization(_ value: String) -> HTTPHeader
     {
         let header = HTTPHeader(field: "Authorization", value: value)
         
         return header
     }
     
-    public static func contentDisposition(_ value: String, fileName: String? = nil) -> HTTPHeader
+    public static
+    func contentDisposition(_ value: String, fileName: String? = nil) -> HTTPHeader
     {
         var newValue: String = value
         
@@ -85,21 +96,24 @@ public struct HTTPHeader
         return header
     }
     
-    public static func contentType(_ value: String) -> HTTPHeader
+    public static
+    func contentType(_ value: String) -> HTTPHeader
     {
         let header = HTTPHeader(field: "Content-Type", value: value)
         
         return header
     }
     
-    public static func userAgent(_ value: String) -> HTTPHeader
+    public static
+    func userAgent(_ value: String) -> HTTPHeader
     {
         let header = HTTPHeader(field: "User-Agent", value: value)
         
         return header
     }
     
-    public static func dictionary<Key, Value>(_ dictionary: Dictionary<Key, Value>) -> Array<HTTPHeader> where Key: StringProtocol, Value: StringProtocol
+    public static
+    func dictionary<Key, Value>(_ dictionary: Dictionary<Key, Value>) -> Array<HTTPHeader> where Key: StringProtocol, Value: StringProtocol
     {
         let headers: Array<HTTPHeader> = dictionary.map(HTTPHeader.init)
         
@@ -108,13 +122,15 @@ public struct HTTPHeader
     
     // MARK: Initial Method
     
-    public init(field: String, value: String)
+    public
+    init(field: String, value: String)
     {
         self.field = field
         self.value = value
     }
     
-    private init<Key, Value>(_ keyValue: (key: Key, value: Value)) where Key: StringProtocol, Value: StringProtocol
+    private
+    init<Key, Value>(_ keyValue: (key: Key, value: Value)) where Key: StringProtocol, Value: StringProtocol
     {
         self.field = keyValue.key.description
         self.value = keyValue.value.description
@@ -134,7 +150,8 @@ public struct HTTPHeader
 /// - mutual: See: [RFC 8120](https://tools.ietf.org/html/rfc8120)
 /// - awsSignature: See: [AWS docs](https://docs.aws.amazon.com/AmazonS3/latest/API/sigv4-auth-using-authorization-header.html)
 /// - custom: Define custom authorization type.
-public enum AuthorizationType
+public
+enum AuthorizationType
 {
     /// Base64-encoded credentials. See below for more information.
     /// - SeeAlso: [RFC 7617](https://tools.ietf.org/html/rfc7617)
@@ -151,25 +168,24 @@ public enum AuthorizationType
     /// - SeeAlso: [RFC 7486](https://tools.ietf.org/html/rfc7486), Section 3
     case hoba
     
-    /// - SeeAlso: [RFC 8120](https://tools.ietf.org/html/rfc8120)
+    /// See: [RFC 8120](https://tools.ietf.org/html/rfc8120)
     case mutual
     
-    /// Amazon Web Services signature.
-    ///
-    /// - SeeAlso: [AWS docs](https://docs.aws.amazon.com/AmazonS3/latest/API/sigv4-auth-using-authorization-header.html)
+    /// See: [AWS docs](https://docs.aws.amazon.com/AmazonS3/latest/API/sigv4-auth-using-authorization-header.html)
     case awsSignature
     
     /// Define custom authorization type.
-    case custom(_ otherType: String)
+    case custom(String)
 }
 
 extension AuthorizationType: CustomStringConvertible
 {
     public var description: String {
         
-        let description: String!
+        let description: String
         
         switch self {
+            
         case .basic:
             description = "Basic"
             
@@ -188,33 +204,16 @@ extension AuthorizationType: CustomStringConvertible
         case .awsSignature:
             description = "AWS4-HMAC-SHA256"
             
-        case let .custom(otherType):
-            description = otherType
+        case .custom(let value):
+            description = value
         }
         
         return description
     }
 }
 
-// MARK: - HTTPHeaderBuilder -
-
-@resultBuilder
-public struct HTTPHeaderBuilder
-{
-    public static func buildBlock(_ header: HTTPHeader) -> Dictionary<String, String>
-    {
-        return [header.field: header.value]
-    }
-    
-    public static func buildBlock(_ headers: HTTPHeader...) -> Dictionary<String, String>
-    {
-        return headers.dictionary()
-    }
-}
-
-// MARK: - Other extensions -
-
-public extension Sequence where Element == HTTPHeader
+public
+extension Sequence where Element == HTTPHeader
 {
     // MARK: - Methods -
     

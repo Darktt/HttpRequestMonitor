@@ -9,7 +9,8 @@ import Network
 
 // MARK: - HTTPService.Status -
 
-public extension HTTPService
+public
+extension HTTPService
 {
     enum Status
     {
@@ -23,7 +24,8 @@ public extension HTTPService
     }
 }
 
-public extension HTTPService.Status
+public
+extension HTTPService.Status
 {
     init(_ state: NWListener.State)
     {
@@ -80,7 +82,8 @@ extension HTTPService.Status: Equatable
 
 // MARK: - HTTPConnection.State -
 
-public extension HTTPConnection
+public
+extension HTTPConnection
 {
     enum State
     {
@@ -104,7 +107,8 @@ public extension HTTPConnection
     }
 }
 
-public extension HTTPConnection.State
+public
+extension HTTPConnection.State
 {
     init(_ state: NWConnection.State)
     {

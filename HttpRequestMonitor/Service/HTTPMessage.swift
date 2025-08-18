@@ -7,9 +7,11 @@
 
 import Foundation
 
-public typealias HTTPMessage = CFHTTPMessage
+public
+typealias HTTPMessage = CFHTTPMessage
 
-public extension HTTPMessage
+public
+extension HTTPMessage
 {
     // MARK: - Properties -
     
@@ -48,6 +50,14 @@ public extension HTTPMessage
         return method
     }
     
+    var body: Data? {
+        
+        let data: Data? = CFHTTPMessageCopyBody(self).map({ $0.takeRetainedValue() as Data })
+        
+        return data
+    }
+    
+    internal
     var data: Data? {
         
         let data: Data? = CFHTTPMessageCopySerializedMessage(self).map({ $0.takeRetainedValue() as Data })
@@ -57,7 +67,8 @@ public extension HTTPMessage
     
     // MARK: - Methods -
     
-    static func request(withData data: Data) -> HTTPMessage?
+    static
+    func request(withData data: Data) -> HTTPMessage?
     {
         let message: HTTPMessage = CFHTTPMessageCreateEmpty(kCFAllocatorDefault, true).takeRetainedValue()
         let bytes: Array = Array(data)
@@ -66,7 +77,8 @@ public extension HTTPMessage
         return result ? message : nil
     }
     
-    static func response(statusCode: StatusCode, htmlString: String) -> HTTPMessage
+    static
+    func response(statusCode: StatusCode, htmlString: String) -> HTTPMessage
     {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "EEE',' dd' 'MMM' 'yyyy HH':'mm':'ss zzz"
