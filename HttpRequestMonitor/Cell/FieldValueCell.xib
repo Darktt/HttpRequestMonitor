@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="18122" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="32700.99.1234" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22684"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -19,20 +19,20 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" verticalCompressionResistancePriority="751" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DRG-FS-r0u">
-                        <rect key="frame" x="5" y="5" width="30" height="17"/>
+                        <rect key="frame" x="5" y="5" width="35" height="20.5"/>
                         <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="45H-gF-OF5">
-                        <rect key="frame" x="0.0" y="27" width="320" height="1"/>
+                        <rect key="frame" x="0.0" y="30.5" width="320" height="1"/>
                         <color key="backgroundColor" systemColor="separatorColor"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="1" id="OXq-Kh-Olm"/>
                         </constraints>
                     </view>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Value" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bXU-3x-6x2">
-                        <rect key="frame" x="279.5" y="33" width="35.5" height="50"/>
+                        <rect key="frame" x="279.5" y="36.5" width="35.5" height="46.5"/>
                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                         <color key="textColor" systemColor="systemIndigoColor"/>
                         <nil key="highlightedColor"/>
@@ -56,15 +56,15 @@
                 <outlet property="titleLabel" destination="DRG-FS-r0u" id="dVh-O1-f8P"/>
                 <outlet property="valueLabel" destination="bXU-3x-6x2" id="khm-zk-7hx"/>
             </connections>
-            <point key="canvasLocation" x="137.68115942028987" y="126.5625"/>
+            <point key="canvasLocation" x="1199" y="192"/>
         </tableViewCell>
     </objects>
     <resources>
         <systemColor name="separatorColor">
-            <color red="0.23529411764705882" green="0.23529411764705882" blue="0.2627450980392157" alpha="0.28999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.23529411759999999" green="0.23529411759999999" blue="0.26274509800000001" alpha="0.28999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemIndigoColor">
-            <color red="0.34509803921568627" green="0.33725490196078434" blue="0.83921568627450982" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.34509803919999998" green="0.33725490200000002" blue="0.83921568629999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>

@@ -50,7 +50,7 @@ public extension HTTPMessage
     
     var data: Data? {
         
-        let data: Data? = CFHTTPMessageCopyBody(self).map({ $0.takeRetainedValue() as Data })
+        let data: Data? = CFHTTPMessageCopySerializedMessage(self).map({ $0.takeRetainedValue() as Data })
         
         return data
     }
@@ -68,25 +68,24 @@ public extension HTTPMessage
     
     static func response(statusCode: StatusCode, htmlString: String) -> HTTPMessage
     {
-        
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "EEE',' dd' 'MMM' 'yyyy HH':'mm':'ss zzz"
         dateFormatter.locale = Locale(identifier: "en_US_POSIX")
         
         let dateString = dateFormatter.string(from: Date())
+        let htmlData = htmlString.data(using: .utf8) ?? Data()
+        let contentLength: Int = htmlData.count
         
         var httpHeaders: Array<HTTPHeader> = []
         httpHeaders.append(HTTPHeader(field: "Date", value: dateString))
         httpHeaders.append(HTTPHeader(field: "Server", value: "Swift HTTP Server"))
         httpHeaders.append(HTTPHeader(field: "Connection", value: "close"))
-        httpHeaders.append(HTTPHeader.contentType("text/html"))
-        httpHeaders.append(HTTPHeader(field: "Content-Length", value: "\(htmlString.count)"))
-        
-        let body: Data? = htmlString.data(using: .utf8)
+        httpHeaders.append(HTTPHeader.contentType("text/html; charset=utf-8"))
+        httpHeaders.append(HTTPHeader(field: "Content-Length", value: "\(contentLength)"))
         
         let message: HTTPMessage = CFHTTPMessageCreateResponse(kCFAllocatorDefault, statusCode.rawValue, statusCode.description as CFString, kCFHTTPVersion1_1).takeRetainedValue()
         message.setHttpHeaders(httpHeaders)
-        message.setBody(body)
+        message.setBody(htmlData)
         
         return message
     }
@@ -280,7 +279,7 @@ extension HTTPMessage.StatusCode: CustomStringConvertible
         switch self {
             
         case .`continue`:
-            description = "Countiune"
+            description = "Continue"
             
         case .switchingProtocols:
             description = "Switching Protocols"
@@ -307,7 +306,7 @@ extension HTTPMessage.StatusCode: CustomStringConvertible
             description = "Reset Content"
             
         case .partialContent:
-            description = "Rartial Content"
+            description = "Partial Content"
             
         case .multiStatus:
             description = "Multi Status"

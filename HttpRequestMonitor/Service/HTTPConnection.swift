@@ -50,12 +50,21 @@ public class HTTPConnection
     {
         let completion: NWConnection.SendCompletion = .contentProcessed {
             
-            guard let error = $0 else {
-                
-                return
-            }
+            [unowned self] error in
             
-            print("Connection: \(self.connection), content processed with error: \(error)")
+            if let error = error {
+                
+                print("ℹ️ Connection: \(self.connection), content processed with error: \(error)")
+            } else {
+                
+                print("ℹ️ Response sent successfully")
+                
+                // 發送完成後，給客戶端一點時間處理回應，然後關閉連接
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                    
+                    self.cancel()
+                }
+            }
         }
         
         self.connection.send(content: data, contentContext: .finalMessage, completion: completion)
@@ -69,22 +78,22 @@ private extension HTTPConnection
         switch state {
         
         case .setup:
-            print("Connection: \(self.connection) in setup.")
+            print("ℹ️ Connection: \(self.connection) in setup.")
         
         case .waiting(let error):
-            print("Connection: \(self.connection) is waiting with error: \(error)")
+            print("ℹ️ Connection: \(self.connection) is waiting with error: \(error)")
             
         case .preparing:
-            print("Connection: \(self.connection) is preparing.")
+            print("ℹ️ Connection: \(self.connection) is preparing.")
             
         case .ready:
-            print("Connection: \(self.connection) is ready.")
+            print("ℹ️ Connection: \(self.connection) is ready.")
             
         case .failed(let error):
-            print("Connection: \(self.connection), failed to start with error: \(error)")
+            print("ℹ️ Connection: \(self.connection), failed to start with error: \(error)")
             
         case .cancelled:
-            print("Connection: \(self.connection) is canceled.")
+            print("ℹ️ Connection: \(self.connection) is canceled.")
             
         @unknown
         default:
@@ -96,28 +105,63 @@ private extension HTTPConnection
     {
         self.connection.receive(minimumIncompleteLength: 1, maximumLength: self.MTU) {
             
-            if let data: Data = $0, let httpMessage = HTTPMessage.request(withData: data) {
+            [unowned self] data, _, isComplete, error in
+            
+            // 處理接收到的數據
+            if let data = data, !data.isEmpty {
                 
-                if let string = String(data: data, encoding: .utf8) {
+                if let httpMessage = HTTPMessage.request(withData: data) {
                     
-                    print("Request data: \(string)")
-                }
-                
-                print("Did receive request: \(httpMessage)")
-                
-                if let handler: HTTPService.ReceiveRequestHandler = self.receiveRequestHandler {
+                    if let string = String(data: data, encoding: .utf8) {
+                        print("ℹ️ Request data: \(string)")
+                    }
                     
-                    handler(httpMessage)
+                    print("ℹ️ Did receive request: \(httpMessage)")
+                    
+                    if let handler = self.receiveRequestHandler {
+                        handler(httpMessage)
+                    }
+                    
+                    let response = self.makeResponse(fromRequest: httpMessage)
+                    self.sendResponse(response)
+                } else {
+                    
+                    print("❗️ Failed to parse HTTP message from data")
+                    
+                    // 發送 400 Bad Request 回應
+                    let errorResponse = HTTPMessage.response(statusCode: .badRequest, htmlString: "<h1>400 Bad Request</h1><p>Invalid HTTP request format</p>")
+                    self.sendResponse(errorResponse)
                 }
-                
-                let response: HTTPMessage = self.makeResponse(fromRequest: httpMessage)
-                
-                self.sendResponse(response)
             }
             
-            if !$2, let error = $3 {
+            // 處理錯誤和連接狀態
+            if let error = error {
+                print("❌ Receive error: \(error)")
                 
-                print("\(error)")
+                // 如果是連接重置錯誤，不要嘗試繼續接收
+                
+                let error = error as NSError
+                if error.code == 54 {
+                    
+                    // ECONNRESET
+                    print("ℹ️ Connection reset by peer, closing connection")
+                    self.cancel()
+                    return
+                }
+            }
+            
+            // 如果連接完成，關閉連接
+            if isComplete {
+                
+                print("ℹ️ Connection completed, closing")
+                self.cancel()
+                return
+            }
+            
+            // 只有在連接仍然活躍時才繼續接收
+            if error == nil {
+                
+                self.handleReceive()
             }
         }
     }
