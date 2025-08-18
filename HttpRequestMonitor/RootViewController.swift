@@ -147,6 +147,33 @@ private extension RootViewController
 
 private extension RootViewController
 {
+    func setupLeftBarButtonItem()
+    {
+        let trashCanImage = UIImage(systemName: "trash")
+        let barButtonItem = UIBarButtonItem().fluent
+                                .image(trashCanImage)
+                                .subject
+        
+        let receiveValue: (ActionPublisher<UIBarButtonItem>.Output) -> Void = {
+            
+            [unowned self] _ in
+                
+            self.requests.removeAll()
+        }
+        
+        barButtonItem.publisher()
+                     .throttle(for: 0.5, scheduler: RunLoop.main, latest: false)
+                     .sink(receiveValue: receiveValue)
+                     .store(in: &self.cancellableSet)
+        
+        self.navigationItem.setLeftBarButton(barButtonItem, animated: true)
+    }
+    
+    func removeLeftBarButtonItem()
+    {
+        self.navigationItem.setLeftBarButton(nil, animated: true)
+    }
+    
     func setupRightBarButtonItem()
     {
         let transform: (UIBarButtonItem) -> (HTTPService, Bool)? = {
@@ -170,11 +197,13 @@ private extension RootViewController
             guard !$0.isStarted else {
                 
                 $0.service.cancel()
+                self.removeLeftBarButtonItem()
                 return
             }
             
             $0.service.start()
             
+            self.setupLeftBarButtonItem()
             self.requests.removeAll()
         }
         
@@ -183,10 +212,10 @@ private extension RootViewController
                             .subject
         
         barButtonItem.publisher()
-            .throttle(for: 2.0, scheduler: RunLoop.main, latest: false)
-            .compactMap(transform)
-            .sink(receiveValue: receiveValue)
-            .store(in: &self.cancellableSet)
+                     .throttle(for: 2.0, scheduler: RunLoop.main, latest: false)
+                     .compactMap(transform)
+                     .sink(receiveValue: receiveValue)
+                     .store(in: &self.cancellableSet)
         
         self.navigationItem.setRightBarButton(barButtonItem, animated: false)
     }
@@ -195,7 +224,22 @@ private extension RootViewController
     {
         let range = NSRange(location: 0, length: 9)
         let wifiInformation = DTWiFiInformation.current
-        let ipAddress: String = wifiInformation.ipAddresses.first ?? ""
+        let predicate: (DTWiFiInformation.IPAddressInfo) -> Bool = {
+            
+            guard $0.version == DTWiFiInformation.IPAddressInfo.Version.ipv4 else {
+                
+                return false
+            }
+            
+            let vaildInterface: [DTWiFiInformation.IPAddressInfo.Interface] = [.wifi, .ethernet, .loopback]
+            let isVaildInterface: Bool = vaildInterface.contains($0.interface)
+            
+            return isVaildInterface
+        }
+        
+        let ipAddress: String = wifiInformation.detailedIPAddresses
+                                                .filter(predicate)
+                                                .first?.address ?? ""
         let addressText: String = {
             
             var text: String = "Address: http://localhost:\(kPortNumber)"
