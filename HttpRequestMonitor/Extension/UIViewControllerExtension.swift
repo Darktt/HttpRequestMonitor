@@ -72,3 +72,17 @@ extension UIViewController
         }
     }
 }
+
+public
+extension UIViewController
+{
+    func presentErrorAlert(with error: MonitorError)
+    {
+        let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+        
+        let alertController = UIAlertController(title: "Error", message: error.message, preferredStyle: .alert)
+        alertController.addAction(okAction)
+        
+        self.present(alertController, animated: true, completion: nil)
+    }
+}

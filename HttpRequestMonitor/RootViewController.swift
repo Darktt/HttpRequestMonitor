@@ -9,9 +9,6 @@ import UIKit
 import Combine
 import Network
 
-private
-let kPortNumber: UInt16 = 3000
-
 public
 class RootViewController: UIViewController
 {
@@ -41,16 +38,7 @@ class RootViewController: UIViewController
     weak var tableView: UITableView!
     
     private
-    var httpService: HTTPService?
-    
-    private
-    var requests: Array<HTTPMessage> = [] {
-        
-        didSet {
-            
-            self.tableView.reloadSection(0)
-        }
-    }
+    let store: MonitorStore = kMonitorStore
     
     private
     var cancellableSet: Set<AnyCancellable> = Set()
@@ -77,7 +65,7 @@ class RootViewController: UIViewController
     {
         super.viewWillAppear(animated)
         
-        if self.httpService?.status == .runing {
+        if self.store.state.httpStatus == .runing {
             
             self.navigationController?.setToolbarHidden(false, animated: true)
         }
@@ -117,7 +105,7 @@ class RootViewController: UIViewController
         
         self.setupRightBarButtonItem()
         self.setupToolbarItem()
-        self.setupService()
+        self.setupSubscribes()
         self.setupNotification()
     }
     
@@ -134,23 +122,13 @@ extension RootViewController
     @objc
     func startServerAction(_ sender: UIKeyCommand)
     {
-        guard self.httpService?.status != .runing else {
-            
-            return
-        }
-        
-        self.httpService?.start()
+        self.startMonitor()
     }
     
     @objc
     func stopServerAction(_ sender: UIKeyCommand)
     {
-        guard self.httpService?.status == .runing else {
-            
-            return
-        }
-        
-        self.httpService?.cancel()
+        self.stopMonitor()
     }
 }
 
@@ -169,8 +147,10 @@ extension RootViewController
         let receiveValue: (ActionPublisher<UIBarButtonItem>.Output) -> Void = {
             
             [unowned self] _ in
-                
-            self.requests.removeAll()
+            
+            let action = MonitorAction.cleanRequests
+            
+            self.sendAction(action)
         }
         
         barButtonItem.publisher()
@@ -188,35 +168,24 @@ extension RootViewController
     
     func setupRightBarButtonItem()
     {
-        let transform: (UIBarButtonItem) -> (HTTPService, Bool)? = {
-            
-            [unowned self] in
-            
-            guard let service = self.httpService else {
-                
-                return nil
-            }
+        let transform: (UIBarButtonItem) -> Bool = {
             
             let isStarted: Bool = ($0.title != "Start")
             
-            return (service, isStarted)
+            return isStarted
         }
         
-        let receiveValue: ((service: HTTPService, isStarted: Bool)) -> Void = {
+        let receiveValue: (Bool) -> Void = {
             
-            [unowned self] in
+            [unowned self] isStarted in
             
-            guard !$0.isStarted else {
+            guard !isStarted else {
                 
-                $0.service.cancel()
-                self.removeLeftBarButtonItem()
+                self.stopMonitor()
                 return
             }
             
-            $0.service.start()
-            
-            self.setupLeftBarButtonItem()
-            self.requests.removeAll()
+            self.startMonitor()
         }
         
         let barButtonItem = UIBarButtonItem().fluent
@@ -252,13 +221,14 @@ extension RootViewController
         let ipAddress: String = wifiInformation.detailedIPAddresses
                                                 .filter(predicate)
                                                 .first?.address ?? ""
+        let portNumber: UInt16 = self.store.state.portNumber
         let addressText: String = {
             
-            var text: String = "Address: http://localhost:\(kPortNumber)"
+            var text: String = "Address: http://localhost:\(portNumber)"
             
             if !ipAddress.isEmpty {
                 
-                text += "\nor http://\(ipAddress):\(kPortNumber)"
+                text += "\nor http://\(ipAddress):\(portNumber)"
             }
             
             return text
@@ -282,20 +252,18 @@ extension RootViewController
         self.setToolbarItems([flexItem, addressItem, flexItem], animated: false)
     }
     
-    func setupService()
+    func setupSubscribes()
     {
-        do {
-            
-            let port = NWEndpoint.Port(integerLiteral: kPortNumber)
-            let service = try HTTPService(port: port)
-            service.statusUpdateHandler = self.serviceStatusUpdate(status:)
-            service.receiveRequestHandler = self.receiveRequest(request:)
-            
-            self.httpService = service
-        } catch {
-            
-            self.presentAlert(with: error)
-        }
+        self.store
+            .$state
+            .throttle(for: 1.0, scheduler: DispatchQueue.main, latest: false)
+            .sink {
+                
+                [weak self] state in
+                
+                self?.updateView(with: state)
+            }
+            .store(in: &self.cancellableSet)
     }
     
     func serviceStatusUpdate(status: HTTPService.Status)
@@ -334,17 +302,6 @@ extension RootViewController
         }
     }
     
-    func receiveRequest(request: HTTPMessage)
-    {
-        guard !self.requests.isEmpty else {
-            
-            self.requests.append(request)
-            return
-        }
-        
-        self.requests.insert(request, at: 0)
-    }
-    
     func presentAlert(with error: Error)
     {
         let title: String = "Server start failed!"
@@ -354,7 +311,7 @@ extension RootViewController
             AlertAction.default("OK") {
                 
                 self.navigationItem.rightBarButtonItem?.title = "Start"
-                self.httpService?.cancel()
+                self.stopMonitor()
             }
         }
         
@@ -363,14 +320,64 @@ extension RootViewController
     
     func setupNotification()
     {
-        let publisher = NotificationCenter.default
+        NotificationCenter.default
             .publisher(for: RootViewController.startServerNoticationName, object: nil)
-            .compactMap({ [unowned self] _ in (self.httpService?.status != .runing) ? self.httpService : nil })
+            .sink {
+                
+                [unowned self] _ in
+                
+                self.startMonitor()
+            }
+            .store(in: &self.cancellableSet)
+    }
+    
+    func startMonitor()
+    {
+        guard self.store.state.httpStatus != .runing else {
+            
+            return
+        }
         
-        let receiveValue: (HTTPService) -> Void = { $0.start() }
+        let action = MonitorAction.startMonitor
         
-        publisher.sink(receiveValue: receiveValue)
-                 .store(in: &self.cancellableSet)
+        self.sendAction(action)
+        self.setupLeftBarButtonItem()
+    }
+    
+    func stopMonitor()
+    {
+        guard self.store.state.httpStatus == .runing else {
+            
+            return
+        }
+        
+        let action = MonitorAction.stopMonitor
+        
+        self.sendAction(action)
+        self.removeLeftBarButtonItem()
+    }
+    
+    func cleanRequests()
+    {
+        let action = MonitorAction.cleanRequests
+        
+        self.sendAction(action)
+    }
+    
+    func sendAction(_ action: MonitorAction)
+    {
+        self.store.dispatch(action)
+    }
+    
+    func updateView(with state: MonitorState)
+    {
+        if let error = state.error {
+            
+            self.presentErrorAlert(with: error)
+        }
+        
+        self.serviceStatusUpdate(status: state.httpStatus)
+        self.tableView.reloadSection(0)
     }
 }
 
@@ -386,7 +393,7 @@ extension RootViewController: UITableViewDataSource, UITableViewDelegate
     
     public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int
     {
-        self.requests.count
+        self.store.state.requests.count
     }
     
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell
@@ -400,7 +407,7 @@ extension RootViewController: UITableViewDataSource, UITableViewDelegate
             cell?.accessoryType = .disclosureIndicator
         }
         
-        let request: HTTPMessage = self.requests[indexPath.row]
+        let request: HTTPMessage = self.store.state.requests[indexPath.row]
         
         if let url: URL = request.rootURL,
            let method: HTTPMethod = request.requestMethod {
@@ -416,7 +423,7 @@ extension RootViewController: UITableViewDataSource, UITableViewDelegate
     {
         tableView.deselectRow(at: indexPath, animated: true)
         
-        let request = self.requests[indexPath.row]
+        let request = self.store.state.requests[indexPath.row]
         let detailController = DetailRequestController(request: request)
         let navigationController = UINavigationController(rootViewController: detailController)
         
