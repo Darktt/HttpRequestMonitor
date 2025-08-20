@@ -19,23 +19,21 @@ struct RequestListView: View
     public
     var body: some View {
         
-        NavigationStack {
+        ScrollView {
             
-            ScrollView {
+            LazyVStack {
                 
-                LazyVStack {
+                ForEach(requests) { request in
                     
-                    ForEach(requests) { request in
-                        
-                        RequestCell(title: request.rootUrl, detail: request.requestMethod)
-                            .onTapGesture {
-                                
-                                self.selectedHandler?(request)
-                            }
-                    }
+                    RequestCell(title: request.rootUrl, detail: request.requestMethod)
+                        .onTapGesture {
+                            
+                            self.selectedHandler?(request)
+                        }
                 }
             }
         }
+        .padding(.top, 10.0)
     }
     
     // MARK: - Methods -

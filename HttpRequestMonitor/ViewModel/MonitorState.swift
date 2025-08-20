@@ -15,6 +15,9 @@ struct MonitorState
     public
     let portNumber: UInt16 = 3000
     
+    public
+    let ipAddress: String? = getIPAddress()
+    
     public private(set)
     var httpService: HTTPService?
     
@@ -62,6 +65,7 @@ struct MonitorState
     {
         self.httpService = service
         self.requests = []
+        self.selectedRequest = nil
     }
     
     public mutating
@@ -79,6 +83,7 @@ struct MonitorState
         guard !self.requests.isEmpty else {
             
             self.requests.append(request)
+            self.selectedRequest = request
             return
         }
         

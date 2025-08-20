@@ -13,6 +13,7 @@ struct MainView: View
     @EnvironmentObject
     var store: MonitorStore
     
+    private
     var state: MonitorState {
         
         self.store.state
@@ -25,8 +26,17 @@ struct MainView: View
             
             self.functionBar()
             
-            self.buttonView()
+            self.bottomView()
+            
+            if self.state.httpStatus == .runing {
+                
+                StatusBar(self.ipAddress())
+                    .background(.white.opacity(0.15))
+                    .transition(.move(edge: .bottom))
+            }
         }
+        .edgesIgnoringSafeArea(.top)
+        .animation(.easeInOut(duration: 0.3), value: self.state.httpStatus)
     }
 }
 
@@ -45,7 +55,7 @@ extension MainView
         }
     }
     
-    func buttonView() -> some View {
+    func bottomView() -> some View {
         
         GeometryReader {
             
@@ -70,6 +80,18 @@ extension MainView
                     .frame(width: geometry.size.width * 0.7)
             }
         }
+    }
+    
+    func ipAddress() -> String {
+        
+        let ipAddress: String = self.state.ipAddress.map {
+            
+            ipAddress in
+            
+            ", http://\(ipAddress):\(self.state.portNumber)"
+        } ?? ""
+        
+        return "http://localhost:\(self.state.portNumber)" + ipAddress
     }
 }
 

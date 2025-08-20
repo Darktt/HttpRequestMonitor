@@ -21,7 +21,7 @@ struct HttpRequestMonitorApp: App
         }
         .windowStyle(.hiddenTitleBar)
         .windowToolbarStyle(.unifiedCompact)
-        .windowResizability(.contentMinSize)
+        .windowResizability(.contentSize)
     }
     
     public

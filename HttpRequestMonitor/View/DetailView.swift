@@ -74,7 +74,7 @@ extension DetailView
                     self.bodyView(with: request.requestBody)
                 }
             }
-            .padding(EdgeInsets(top: 10.0, leading: 10.0, bottom: 10.0, trailing: 10.0))
+            .padding(.allEdge(10))
         }
     }
     

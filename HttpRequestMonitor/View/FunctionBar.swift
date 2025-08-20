@@ -19,21 +19,27 @@ struct FunctionBar: View
     public
     var body: some View {
         
-        VStack(alignment: .leading, spacing: 0.0) {
+        ZStack(alignment: .top) {
             
-            HStack(spacing: 0.0) {
+            VStack(alignment: .leading, spacing: 0.0) {
                 
-                Text(self.state.status)
-                    .bold()
+                HStack(spacing: 0.0) {
+                    
+                    Text(self.state.status)
+                        .bold()
+                    
+                    Spacer()
+                    
+                    self.buttons()
+                }
+                .padding(.allEdge(10.0))
                 
-                Spacer()
-                
-                self.buttons()
+                Divider()
             }
-            .padding(EdgeInsets(top: 10.0, leading: 10.0, bottom: 10.0, trailing: 10.0))
-            
-            Divider()
+            .padding(.top, 42.0)
         }
+        .background(self.state.httpStatus == .runing ? Color.accentColor : Color.clear)
+        .animation(.easeInOut(duration: 0.3), value: self.state.httpStatus)
     }
 }
 
@@ -49,7 +55,7 @@ extension FunctionBar
             if !self.state.requests.isEmpty {
                 
                 Image(systemName: "trash")
-                    .foregroundColor(.red)
+                    .foregroundColor(.white)
                     .onTapGesture {
                         
                         let action: MonitorAction = .cleanRequests
@@ -68,7 +74,7 @@ extension FunctionBar
             
             // Stop Monitor Button
             Image(systemName: "stop.fill")
-                .foregroundColor(.blue)
+                .foregroundColor(.white)
                 .onTapGesture {
                     
                     let action: MonitorAction = .stopMonitor
@@ -79,7 +85,7 @@ extension FunctionBar
             
             // Start Monitor Button
             Image(systemName: "play.fill")
-                .foregroundColor(.blue)
+                .foregroundColor(.accentColor)
                 .onTapGesture {
                     
                     let action: MonitorAction = .startMonitor
