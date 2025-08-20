@@ -20,6 +20,8 @@ struct StatusBar: View
             
             HStack(alignment: .center, spacing: 1.0) {
                 
+                Image(systemName: "network")
+                
                 Text("Address:")
                     .bold()
                 
