@@ -5,7 +5,7 @@
 //  
 //
 
-import UIKit
+import Foundation
 
 private
 func kReducer(state: MonitorState, action: MonitorAction) -> MonitorState {
@@ -31,6 +31,11 @@ func kReducer(state: MonitorState, action: MonitorAction) -> MonitorState {
     if case let .receiveRequest(request) = action {
         
         newState.addRequest(request)
+    }
+    
+    if case let .selectRequest(request) = action {
+        
+        newState.selectedRequest = request
     }
     
     if case .cleanRequests = action {

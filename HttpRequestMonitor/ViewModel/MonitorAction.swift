@@ -22,6 +22,8 @@ enum MonitorAction
     
     case stopMonitorResponse
     
+    case selectRequest(Request)
+    
     case cleanRequests
     
     case error(MonitorError)

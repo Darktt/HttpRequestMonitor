@@ -21,11 +21,32 @@ struct MonitorState
     public
     var httpStatus: HTTPService.Status = .suspend
     
+    public
+    var status: String {
+        
+        switch self.httpStatus {
+        case .suspend:
+            "Service is suspended"
+            
+        case .waitting(let error):
+            "Service is waiting: \(error.localizedDescription)"
+            
+        case .runing:
+            "Service is running"
+            
+        case .failed(let error):
+            "Service failed: \(error.localizedDescription)"
+        }
+    }
+    
     public private(set)
-    var requests: Array<HTTPMessage> = []
+    var requests: Array<Request> = []
     
     public
     var error: MonitorError?
+    
+    public
+    var selectedRequest: Request?
     
     // MARK: - Methods -
     // MARK: Initial Method
@@ -47,17 +68,20 @@ struct MonitorState
     func cleanRequests()
     {
         self.requests.removeAll()
+        self.selectedRequest = nil
     }
     
     public mutating
-    func addRequest(_ requests: HTTPMessage)
+    func addRequest(_ request: HTTPMessage)
     {
+        let request = Request(message: request)
+        
         guard !self.requests.isEmpty else {
-          
-            self.requests.append(requests)
+            
+            self.requests.append(request)
             return
         }
         
-        self.requests.insert(requests, at: 0)
+        self.requests.insert(request, at: 0)
     }
 }

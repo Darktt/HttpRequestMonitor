@@ -10,9 +10,12 @@ import Foundation
 // MARK: - HTTPHeader -
 
 public
-struct HTTPHeader
+struct HTTPHeader: Identifiable
 {
     // MARK: - Properties -
+    
+    public
+    var id: String { "\(field):\(value)" }
     
     public
     let field: String

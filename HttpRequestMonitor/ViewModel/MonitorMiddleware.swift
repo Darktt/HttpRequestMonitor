@@ -5,7 +5,7 @@
 //  
 //
 
-import UIKit
+import Foundation
 import Network
 
 @MainActor

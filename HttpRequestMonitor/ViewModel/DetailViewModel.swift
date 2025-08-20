@@ -55,7 +55,7 @@ public class DetailViewModel
     public
     func queryItem(at indexPath: IndexPath) -> URLQueryItem?
     {
-        let index: Int = indexPath.row
+        let index: Int = 0//indexPath.row
         
         guard self.queryItems.count > index else {
             
@@ -70,7 +70,7 @@ public class DetailViewModel
     public
     func requestHeaders(at indexPath: IndexPath) -> HTTPHeader?
     {
-        let index: Int = indexPath.row
+        let index: Int = 0//indexPath.row
         
         guard self.requestHeaders.count > index else {
             
