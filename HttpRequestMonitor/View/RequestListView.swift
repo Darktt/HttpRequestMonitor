@@ -32,8 +32,9 @@ struct RequestListView: View
                         }
                 }
             }
+            .padding(.top, 10.0)
+            .padding(.horizontal, 5.0)
         }
-        .padding(.top, 10.0)
     }
     
     // MARK: - Methods -

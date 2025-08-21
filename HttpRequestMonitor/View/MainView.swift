@@ -22,17 +22,23 @@ struct MainView: View
     public
     var body: some View {
         
-        VStack(alignment: .leading, spacing: 0.0) {
+        ZStack {
+            // 背景色，支援 Light/Dark Mode
+            Color(NSColor.windowBackgroundColor)
+                .ignoresSafeArea()
             
-            self.functionBar()
-            
-            self.bottomView()
-            
-            if self.state.httpStatus == .runing {
+            VStack(alignment: .leading, spacing: 0.0) {
                 
-                StatusBar(self.ipAddress())
-                    .background(.white.opacity(0.15))
-                    .transition(.move(edge: .bottom))
+                self.functionBar()
+                
+                self.bottomView()
+                
+                if self.state.httpStatus == .runing {
+                    
+                    StatusBar(self.ipAddress())
+                        .background(.ultraThinMaterial)
+                        .transition(.move(edge: .bottom))
+                }
             }
         }
         .edgesIgnoringSafeArea(.top)
@@ -61,25 +67,32 @@ extension MainView
             
             geometry in
             
-            HStack(alignment: .top, spacing: 2.0) {
+            HStack(alignment: .top, spacing: 0.0) {
                 
+                // Sidebar（RequestListView）
                 RequestListView(requests: self.state.requests)
                     .onSelected {
-                        
                         request in
-                        
                         let action = MonitorAction.selectRequest(request)
-                        
                         self.store.dispatch(action)
                     }
                     .frame(width: geometry.size.width * 0.3)
                 
-                Divider()
+                // 分隔線
+                Rectangle()
+                    .fill(Color.secondary.opacity(0.15))
+                    .frame(width: 1)
+                    .padding(.vertical, 8)
                 
+                // Content（DetailView）
                 DetailView(request: self.state.selectedRequest)
+                    .clipShape(RoundedRectangle(cornerRadius: 8.0, style: .continuous))
+                    .padding([.leading, .bottom], 5)
+                    .padding(.trailing, 7)
                     .frame(width: geometry.size.width * 0.7)
             }
         }
+        .padding(.top, 4)
     }
     
     func ipAddress() -> String {

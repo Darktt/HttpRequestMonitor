@@ -27,6 +27,7 @@ struct FunctionBar: View
                     
                     Text(self.state.status)
                         .bold()
+                        .foregroundColor(.primary)
                     
                     Spacer()
                     
@@ -36,10 +37,8 @@ struct FunctionBar: View
                 
                 Divider()
             }
-            .padding(.top, 42.0)
+            .padding(.top, 22.0)
         }
-        .background(self.state.httpStatus == .runing ? Color.accentColor : Color.clear)
-        .animation(.easeInOut(duration: 0.3), value: self.state.httpStatus)
     }
 }
 
@@ -50,18 +49,16 @@ extension FunctionBar
 {
     func buttons() -> some View
     {
-        HStack(spacing: 5.0) {
+        HStack(spacing: 12.0) {
             
             if !self.state.requests.isEmpty {
                 
-                Image(systemName: "trash")
-                    .foregroundColor(.white)
-                    .onTapGesture {
-                        
-                        let action: MonitorAction = .cleanRequests
-                        
-                        self.actionHandler(action)
-                    }
+                FunctionBarButton(icon: "trash", label: "清除") {
+                    
+                    let action: MonitorAction = .cleanRequests
+                    
+                    self.actionHandler(action)
+                }
             }
             
             self.startStopButton()
@@ -73,25 +70,61 @@ extension FunctionBar
         if self.state.httpStatus != .suspend {
             
             // Stop Monitor Button
-            Image(systemName: "stop.fill")
-                .foregroundColor(.white)
-                .onTapGesture {
-                    
-                    let action: MonitorAction = .stopMonitor
-                    
-                    self.actionHandler(action)
-                }
+            FunctionBarButton(icon: "stop.fill", label: "停止") {
+                
+                let action: MonitorAction = .stopMonitor
+                
+                self.actionHandler(action)
+            }
         } else {
             
             // Start Monitor Button
-            Image(systemName: "play.fill")
-                .foregroundColor(.accentColor)
-                .onTapGesture {
-                    
-                    let action: MonitorAction = .startMonitor
-                    
-                    self.actionHandler(action)
-                }
+            FunctionBarButton(icon: "play.fill", label: "啟動") {
+                
+                let action: MonitorAction = .startMonitor
+                
+                self.actionHandler(action)
+            }
         }
+    }
+}
+
+// 新增現代化按鈕元件
+private
+struct FunctionBarButton: View
+{
+    let icon: String
+    
+    let label: String
+    
+    let action: () -> Void
+    
+    @State
+    private
+    var isHover = false
+    
+    var body: some View {
+        
+        Button(action: action) {
+            HStack(spacing: 6) {
+                Image(systemName: icon)
+                    .font(.system(size: 15, weight: .semibold))
+                Text(label)
+                    .font(.system(size: 14, weight: .medium))
+            }
+            .padding(.vertical, 6)
+            .padding(.horizontal, 14)
+            .background(isHover ? Color.accentColor.opacity(0.18) : Color.clear)
+            .foregroundColor(isHover ? .accentColor : .primary)
+            .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
+            .shadow(color: isHover ? .accentColor.opacity(0.08) : .clear, radius: 4, x: 0, y: 1)
+        }
+        .buttonStyle(PlainButtonStyle())
+        .onHover {
+            hover in
+            
+            isHover = hover
+        }
+        .animation(.easeInOut(duration: 0.18), value: isHover)
     }
 }

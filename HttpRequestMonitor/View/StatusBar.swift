@@ -16,24 +16,30 @@ struct StatusBar: View
     public
     var body: some View {
         
-        VStack(alignment: .leading, spacing: 0.0) {
+        ZStack {
             
-            HStack(alignment: .center, spacing: 1.0) {
+            Color(NSColor.windowBackgroundColor).opacity(0.7)
+            
+            HStack(alignment: .center, spacing: 2.0) {
                 
                 Image(systemName: "network")
+                    .font(.system(size: 13, weight: .medium))
+                    .foregroundColor(.primary)
                 
                 Text("Address:")
                     .bold()
+                    .foregroundColor(.primary)
                 
                 Text(self.text ?? "")
+                    .foregroundColor(.secondary)
                 
                 Spacer(minLength: 1.0)
             }
             .font(.caption)
-            .foregroundColor(.secondary)
-            .padding([.leading, .trailing], 10.0)
+            .padding(.horizontal, 14.0)
+            .padding(.vertical, 6.0)
         }
-        .frame(height: 20.0)
+        .frame(height: 30.0)
     }
     
     // MARK: - Methods -
