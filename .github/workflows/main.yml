@@ -11,13 +11,11 @@ jobs:
 
       - name: Setup Swift version
         uses: fwal/setup-swift@v1
-        # with:
-        #   swift-version: '5.5'
 
       - name: Select Xcode
-        run: sudo xcode-select -switch /Applications/Xcode_16.2.app && /usr/bin/xcodebuild -version
+        run: sudo xcode-select -switch /Applications/Xcode_16.4.app && /usr/bin/xcodebuild -version
       
-      - name: Build for iOS
+      - name: Build for macOS
         uses: sersoft-gmbh/xcodebuild-action@v1
         with:
           project: HttpRequestMonitor.xcodeproj
@@ -25,7 +23,7 @@ jobs:
           destination: platform=macOS
           action: build     
 
-      - name: Runing tests for iOS
+      - name: Runing tests for macOS
         uses: sersoft-gmbh/xcodebuild-action@v1
         with:
           project: HttpRequestMonitor.xcodeproj
