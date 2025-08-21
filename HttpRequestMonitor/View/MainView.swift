@@ -69,8 +69,10 @@ extension MainView
             
             HStack(alignment: .top, spacing: 0.0) {
                 
+                let selectedRequest: Request? = self.state.selectedRequest
+                
                 // Sidebar（RequestListView）
-                RequestListView(requests: self.state.requests)
+                RequestListView(requests: self.state.requests, selected: selectedRequest)
                     .onSelected {
                         request in
                         let action = MonitorAction.selectRequest(request)
@@ -85,7 +87,7 @@ extension MainView
                     .padding(.vertical, 8)
                 
                 // Content（DetailView）
-                DetailView(request: self.state.selectedRequest)
+                DetailView(request: selectedRequest)
                     .clipShape(RoundedRectangle(cornerRadius: 8.0, style: .continuous))
                     .padding([.leading, .bottom], 5)
                     .padding(.trailing, 7)

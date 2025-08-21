@@ -14,6 +14,8 @@ struct RequestCell: View
     
     let detail: String
     
+    let isSelected: Bool
+    
     @State
     private
     var isHover = false
@@ -34,22 +36,69 @@ struct RequestCell: View
         }
         .padding(.vertical, 10.0)
         .padding(.horizontal, 16.0)
-        .background(
-            (self.isHover ? Color.accentColor.opacity(0.13) : Color(NSColor.controlBackgroundColor).opacity(0.85))
-        )
+        .background(self.backgroundColor())
+        .overlay(self.overlay())
         .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
-        .shadow(color: self.isHover ? .accentColor.opacity(0.10) : .black.opacity(0.04), radius: 4, x: 0, y: 1)
+        .shadow(color: self.shadowColor(), radius: self.isSelected ? 7 : 4, x: 0, y: 1)
         .onHover {
-            
             hover in
             
             self.isHover = hover
         }
         .animation(.easeInOut(duration: 0.18), value: self.isHover)
+        .animation(.easeInOut(duration: 0.18), value: self.isSelected)
     }
 }
 
-#Preview {
+// MARK: - Prvate Methods -
+
+private
+extension RequestCell
+{
+    func backgroundColor() -> Color
+    {
+        if self.isSelected {
+            
+            return Color.accentColor.opacity(0.22)
+        }
+        
+        if self.isHover {
+            
+            return Color.accentColor.opacity(0.13)
+        }
+        
+        return Color(NSColor.controlBackgroundColor).opacity(0.85)
+    }
     
-    RequestCell(title: "Request Method", detail: "GET")
+    func shadowColor() -> Color
+    {
+        if self.isSelected {
+            
+            return Color.accentColor.opacity(0.18)
+        }
+        
+        if self.isHover {
+            
+            return Color.accentColor.opacity(0.10)
+        }
+        
+        return Color.black.opacity(0.04)
+    }
+    
+    func overlay() -> some View
+    {
+        let borderColor: Color = self.isSelected ? Color.accentColor : Color.clear
+        let lineWidth: CGFloat = self.isSelected ? 2 : 0.5
+        
+        let view = RoundedRectangle(cornerRadius: 10, style: .continuous)
+            .stroke(borderColor, lineWidth: lineWidth)
+        
+        return view
+    }
+}
+
+// MARK: - Preview -
+
+#Preview {
+    RequestCell(title: "Request Method", detail: "GET", isSelected: true)
 }

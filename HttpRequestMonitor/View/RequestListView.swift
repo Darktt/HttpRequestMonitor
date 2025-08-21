@@ -16,6 +16,9 @@ struct RequestListView: View
     private
     var selectedHandler: ((Request) -> Void)?
     
+    private
+    var selectedRequest: Request?
+    
     public
     var body: some View {
         
@@ -25,7 +28,7 @@ struct RequestListView: View
                 
                 ForEach(requests) { request in
                     
-                    RequestCell(title: request.rootUrl, detail: request.requestMethod)
+                    RequestCell(title: request.rootUrl, detail: request.requestMethod, isSelected: (request == self.selectedRequest))
                         .onTapGesture {
                             
                             self.selectedHandler?(request)
@@ -41,9 +44,10 @@ struct RequestListView: View
     // MARK: Initial Method
     
     public
-    init(requests: Array<Request>)
+    init(requests: Array<Request>, selected: Request? = nil)
     {
         self.requests = requests
+        self.selectedRequest = selected
     }
     
     public
@@ -58,5 +62,5 @@ struct RequestListView: View
 
 #Preview {
         
-    RequestListView(requests: kDummyRequests)
+    RequestListView(requests: kDummyRequests, selected: kDummyRequests.first)
 }

@@ -136,3 +136,12 @@ extension Request
 // MARK: - Identifiable Conformance -
 
 extension Request: Identifiable {}
+
+extension Request: Equatable {
+    
+    public static
+    func == (lhs: Request, rhs: Request) -> Bool
+    {
+        lhs.id == rhs.id
+    }
+}
