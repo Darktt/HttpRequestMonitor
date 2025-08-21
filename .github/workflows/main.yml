@@ -4,8 +4,7 @@ on: [push]
 
 jobs:
   build:
-
-    runs-on: macos-11
+    runs-on: macos-15
 
     steps:
       - uses: actions/checkout@v2
@@ -15,39 +14,21 @@ jobs:
         # with:
         #   swift-version: '5.5'
 
-      - name: "Select the latest stable Xcode 13"
-        uses: devbotsxyz/xcode-select@v1
-        with:
-          version: "13"
+      - name: Select Xcode
+        run: sudo xcode-select -switch /Applications/Xcode_16.2.app && /usr/bin/xcodebuild -version
       
       - name: Build for iOS
         uses: sersoft-gmbh/xcodebuild-action@v1
         with:
           project: HttpRequestMonitor.xcodeproj
           scheme: HttpRequestMonitor
-          destination: platform=iOS Simulator,name=iPhone 13
-          action: build
-      
-      # - name: Build for mac catalyst
-      #   uses: sersoft-gmbh/xcodebuild-action@v1
-      #   with:
-      #     project: HttpRequestMonitor.xcodeproj
-      #     scheme: HttpRequestMonitor
-      #     destination: platform=macOS,variant=Mac Catalyst
-      #     action: build          
+          destination: platform=macOS
+          action: build     
 
       - name: Runing tests for iOS
         uses: sersoft-gmbh/xcodebuild-action@v1
         with:
           project: HttpRequestMonitor.xcodeproj
           scheme: HttpRequestMonitor
-          destination: platform=iOS Simulator,name=iPhone 13
+          destination: platform=macOS
           action: test
-
-      #- name: Runing tests for mac catalyst
-      #  uses: sersoft-gmbh/xcodebuild-action@v1
-      #  with:
-      #    project: HttpRequestMonitor.xcodeproj
-      #    scheme: HttpRequestMonitor
-      #    destination: platform=macOS,variant=Mac Catalyst
-      #    action: test

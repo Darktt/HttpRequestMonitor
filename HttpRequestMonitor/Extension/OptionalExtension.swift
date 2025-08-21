@@ -148,7 +148,7 @@ extension Optional
     }
 }
 
-extension Optional: @retroactive Comparable where Wrapped: Comparable
+extension Optional where Wrapped: Comparable
 {
     public static
     func < (lhs: Optional<Wrapped>, rhs: Optional<Wrapped>) -> Bool {
