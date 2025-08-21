@@ -20,17 +20,13 @@ jobs:
         with:
           platform: macOS
           xcode: ^16.4
-          project: HttpRequestMonitor.xcodeproj
           scheme: HttpRequestMonitor
-          destination: platform=macOS
-          action: build     
+          action: build
 
       - name: Runing tests for macOS
         uses: mxcl/xcodebuild@v3
         with:
           platform: macOS
           xcode: ^16.4
-          project: HttpRequestMonitor.xcodeproj
           scheme: HttpRequestMonitor
-          destination: platform=macOS
           action: test
