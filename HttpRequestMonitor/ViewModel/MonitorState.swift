@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftUICore
 
 public
 struct MonitorState
@@ -22,25 +23,30 @@ struct MonitorState
     var httpService: HTTPService?
     
     public
-    var httpStatus: HTTPService.Status = .suspend
-    
-    public
-    var status: String {
+    var httpStatus: HTTPService.Status = .suspend {
         
-        switch self.httpStatus {
-        case .suspend:
-            "Service is suspended"
+        willSet {
             
-        case .waitting(let error):
-            "Service is waiting: \(error.localizedDescription)"
-            
-        case .runing:
-            "Service is running"
-            
-        case .failed(let error):
-            "Service failed: \(error.localizedDescription)"
+            switch newValue {
+                
+                case .suspend:
+                    self.status = "Service is suspended"
+                
+                case .waitting(_):
+                    self.status = "Service is waiting"
+                
+                case .runing:
+                    self.status = "Service is running"
+                
+                case .failed(let error as NSError):
+                    self.error = (error.code, error.localizedDescription)
+                    self.status = "Service failed"
+            }
         }
     }
+    
+    public
+    var status: LocalizedStringKey = "Service is suspended"
     
     public private(set)
     var requests: Array<Request> = []

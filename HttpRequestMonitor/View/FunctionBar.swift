@@ -53,7 +53,7 @@ extension FunctionBar
             
             if !self.state.requests.isEmpty {
                 
-                FunctionBarButton(icon: "trash", label: "清除") {
+                FunctionBarButton(icon: "trash", label: "Clean") {
                     
                     let action: MonitorAction = .cleanRequests
                     
@@ -70,7 +70,7 @@ extension FunctionBar
         if self.state.httpStatus != .suspend {
             
             // Stop Monitor Button
-            FunctionBarButton(icon: "stop.fill", label: "停止") {
+            FunctionBarButton(icon: "stop.fill", label: "Stop") {
                 
                 let action: MonitorAction = .stopMonitor
                 
@@ -79,7 +79,7 @@ extension FunctionBar
         } else {
             
             // Start Monitor Button
-            FunctionBarButton(icon: "play.fill", label: "啟動") {
+            FunctionBarButton(icon: "play.fill", label: "Start") {
                 
                 let action: MonitorAction = .startMonitor
                 
@@ -95,7 +95,7 @@ struct FunctionBarButton: View
 {
     let icon: String
     
-    let label: String
+    let label: LocalizedStringKey
     
     let action: () -> Void
     
@@ -106,9 +106,12 @@ struct FunctionBarButton: View
     var body: some View {
         
         Button(action: action) {
+            
             HStack(spacing: 6) {
+                
                 Image(systemName: icon)
                     .font(.system(size: 15, weight: .semibold))
+                
                 Text(label)
                     .font(.system(size: 14, weight: .medium))
             }
