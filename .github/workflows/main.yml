@@ -16,16 +16,20 @@ jobs:
         run: sudo xcode-select -switch /Applications/Xcode_16.4.app && /usr/bin/xcodebuild -version
       
       - name: Build for macOS
-        uses: sersoft-gmbh/xcodebuild-action@v1
+        uses: mxcl/xcodebuild@v3
         with:
+          platform: macOS
+          xcode: ^16.4
           project: HttpRequestMonitor.xcodeproj
           scheme: HttpRequestMonitor
           destination: platform=macOS
           action: build     
 
       - name: Runing tests for macOS
-        uses: sersoft-gmbh/xcodebuild-action@v1
+        uses: mxcl/xcodebuild@v3
         with:
+          platform: macOS
+          xcode: ^16.4
           project: HttpRequestMonitor.xcodeproj
           scheme: HttpRequestMonitor
           destination: platform=macOS
