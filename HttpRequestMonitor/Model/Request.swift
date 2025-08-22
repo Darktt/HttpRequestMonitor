@@ -69,6 +69,18 @@ struct Request
     public private(set)
     var requestHeaders: Array<HTTPHeader> = []
     
+    public
+    var contentType: String? {
+        
+        self.message.contentType
+    }
+    
+    public
+    var requestBodyData: Data? {
+        
+        self.message.body
+    }
+    
     public private(set)
     var requestBody: String = ""
     
@@ -89,7 +101,8 @@ struct Request
     init(dataString: String)
     {
         let requestData: Data = dataString.data(using: .utf8)!
-        let message = HTTPMessage.request(withData: requestData)!
+        let message = HTTPMessage.empty()
+        message.appendData(requestData)
         
         self.message = message
         self.parseMessage()

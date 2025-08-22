@@ -88,9 +88,15 @@ extension DetailView
                     self.requestHeaderView(with: request.requestHeaders)
                 }
                 
-                if !request.requestBody.isEmpty {
+                if let bodyData = request.requestBodyData {
                     
-                    self.bodyView(with: request.requestBody)
+                    if request.contentType?.hasPrefix("image") == true {
+                        
+                        self.bodyView(withImageData: bodyData)
+                    } else {
+                        
+                        self.bodyView(with: request.requestBody)
+                    }
                 }
             }
             .padding(18)
@@ -135,13 +141,36 @@ extension DetailView
         .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
     }
     
-    func bodyView(with body: String) -> some View
+    func bodyView(withImageData data: Data) -> some View
     {
         VStack(alignment: .leading, spacing: 10) {
+            
             Text("Body")
                 .font(.headline)
                 .padding(.vertical, 5)
+            
             Divider().background(Color.accentColor.opacity(0.18))
+            
+            Image(nsImage: NSImage(data: data) ?? NSImage())
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .frame(maxWidth: .infinity, maxHeight: 200)
+        }
+        .padding(10)
+        .background(Color(NSColor.windowBackgroundColor).opacity(0.5))
+        .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
+    }
+    
+    func bodyView(with body: String) -> some View
+    {
+        VStack(alignment: .leading, spacing: 10) {
+            
+            Text("Body")
+                .font(.headline)
+                .padding(.vertical, 5)
+            
+            Divider().background(Color.accentColor.opacity(0.18))
+            
             Text(body)
                 .font(.subheadline)
                 .foregroundColor(.secondary)

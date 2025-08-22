@@ -57,6 +57,20 @@ extension HTTPMessage
         return data
     }
     
+    var contentType: String? {
+        
+        self.httpHeaders()
+            .first(where: { $0.field == "Content-Type" })
+            .flatMap({ $0.value })
+    }
+    
+    var contentSize: Double {
+        
+        self.httpHeaders()
+            .first(where: { $0.field == "Content-Length" })
+            .flatMap({ Double($0.value) }) ?? 0.0
+    }
+    
     internal
     var data: Data? {
         
@@ -68,13 +82,11 @@ extension HTTPMessage
     // MARK: - Methods -
     
     static
-    func request(withData data: Data) -> HTTPMessage?
+    func empty() -> HTTPMessage
     {
         let message: HTTPMessage = CFHTTPMessageCreateEmpty(kCFAllocatorDefault, true).takeRetainedValue()
-        let bytes: Array = Array(data)
-        let result: Bool = CFHTTPMessageAppendBytes(message, bytes, data.count)
         
-        return result ? message : nil
+        return message
     }
     
     static
@@ -100,6 +112,15 @@ extension HTTPMessage
         message.setBody(htmlData)
         
         return message
+    }
+    
+    @discardableResult
+    func appendData(_ data: Data) -> Bool
+    {
+        let bytes: Array = Array(data)
+        let result: Bool = CFHTTPMessageAppendBytes(self, bytes, data.count)
+        
+        return result
     }
     
     func setBody(_ data: Data?)

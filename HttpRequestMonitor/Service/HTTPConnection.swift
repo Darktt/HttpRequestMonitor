@@ -64,16 +64,9 @@ class HTTPConnection
             if let error = error {
                 
                 print("ℹ️ Connection: \(self.connection), content processed with error: \(error)")
-            } else {
-                
-                print("ℹ️ Response sent successfully")
-                
-                // 發送完成後，給客戶端一點時間處理回應，然後關閉連接
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                    
-                    self.cancel()
-                }
             }
+            
+            print("ℹ️ Response sent successfully")
         }
         
         self.connection.send(content: data, contentContext: .finalMessage, completion: completion)
@@ -111,37 +104,17 @@ extension HTTPConnection
         }
     }
     
-    func handleReceive()
+    func handleReceive(_ request: HTTPMessage? = nil)
     {
-        self.connection.receive(minimumIncompleteLength: 1, maximumLength: self.MTU) {
+        let request = request ?? HTTPMessage.empty()
+        
+        let completion:@Sendable (Data?, NWConnection.ContentContext?, Bool, NWError?)  -> Void = {
             
-            [unowned self] data, _, isComplete, error in
+            [weak self] data, _, isComplete, error in
             
-            // 處理接收到的數據
-            if let data = data, !data.isEmpty {
+            guard let self = self else {
                 
-                if let httpMessage = HTTPMessage.request(withData: data) {
-                    
-                    if let string = String(data: data, encoding: .utf8) {
-                        print("ℹ️ Request data: \(string)")
-                    }
-                    
-                    print("ℹ️ Did receive request: \(httpMessage)")
-                    
-                    if let handler = self.receiveRequestHandler {
-                        handler(httpMessage)
-                    }
-                    
-                    let response = self.makeResponse(fromRequest: httpMessage)
-                    self.sendResponse(response)
-                } else {
-                    
-                    print("❗️ Failed to parse HTTP message from data")
-                    
-                    // 發送 400 Bad Request 回應
-                    let errorResponse = HTTPMessage.response(statusCode: .badRequest, htmlString: "<h1>400 Bad Request</h1><p>Invalid HTTP request format</p>")
-                    self.sendResponse(errorResponse)
-                }
+                return
             }
             
             // 處理錯誤和連接狀態
@@ -160,8 +133,32 @@ extension HTTPConnection
                 }
             }
             
+            // 處理接收到的數據
+            if let data = data, !data.isEmpty {
+                
+                if let string = String(data: data, encoding: .utf8) {
+                    
+                    print("ℹ️ Request data: \(string)")
+                }
+                
+                request.appendData(data)
+                
+                print("ℹ️ Request content size: \(request.contentSize)")
+                print("ℹ️ Received data: \(data.count) bytes")
+            }
+            
+            let isComplete: Bool = isComplete || (request.contentSize <= Double(request.body?.count ?? 0))
+            
             // 如果連接完成，關閉連接
             if isComplete {
+                
+                if let handler = self.receiveRequestHandler {
+                    
+                    handler(request)
+                }
+                
+                let response = self.makeResponse(fromRequest: request)
+                self.sendResponse(response)
                 
                 print("ℹ️ Connection completed, closing")
                 self.cancel()
@@ -171,9 +168,18 @@ extension HTTPConnection
             // 只有在連接仍然活躍時才繼續接收
             if error == nil {
                 
-                self.handleReceive()
+                self.handleReceive(request)
+                return
             }
+            
+            print("❗️ Failed to parse HTTP message from data")
+            
+            let errorResponse = self.badRequestResponse()
+            
+            self.sendResponse(errorResponse)
         }
+        
+        self.connection.receive(minimumIncompleteLength: 1, maximumLength: self.MTU, completion: completion)
     }
     
     func makeResponse(fromRequest request: HTTPMessage) -> HTTPMessage
@@ -186,6 +192,14 @@ extension HTTPConnection
         }
         
         let response = HTTPMessage.response(statusCode: .ok, htmlString: "<h1>Hello world!</h1><br/><p>Method: \(method.rawValue)</p>")
+        
+        return response
+    }
+    
+    func badRequestResponse() -> HTTPMessage
+    {
+        let string = "<h1>400 Bad Request</h1><p>Invalid HTTP request format</p>"
+        let response = HTTPMessage.response(statusCode: .badRequest, htmlString: string)
         
         return response
     }
