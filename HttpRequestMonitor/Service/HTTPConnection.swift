@@ -106,7 +106,7 @@ extension HTTPConnection
     
     func handleReceive(_ request: HTTPMessage? = nil)
     {
-        let request = request ?? HTTPMessage.empty()
+        let request = request ?? HTTPMessage()
         
         let completion:@Sendable (Data?, NWConnection.ContentContext?, Bool, NWError?)  -> Void = {
             

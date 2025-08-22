@@ -1,6 +1,5 @@
 //
 //  HTTPMessage.swift
-//  WEBServiceDemo
 //
 //  Created by Eden on 2021/8/23.
 //
@@ -8,20 +7,23 @@
 import Foundation
 
 public
-typealias HTTPMessage = CFHTTPMessage
-
-public
-extension HTTPMessage
+class HTTPMessage
 {
     // MARK: - Properties -
     
+    public
+    let id: UUID = UUID()
+    
+    public
     var requestURL: URL? {
         
-        let url: URL? = CFHTTPMessageCopyRequestURL(self).map({ $0.takeRetainedValue() as URL })
+        let url: URL? = CFHTTPMessageCopyRequestURL(self.message)
+                            .map({ $0.takeRetainedValue() as URL })
         
         return url
     }
     
+    public
     var rootURL: URL? {
         
         guard let requestURL: URL = self.requestURL,
@@ -37,9 +39,10 @@ extension HTTPMessage
         return rootURL
     }
     
+    public
     var requestMethod: HTTPMethod? {
         
-        let method: HTTPMethod? = CFHTTPMessageCopyRequestMethod(self).flatMap {
+        let method: HTTPMethod? = CFHTTPMessageCopyRequestMethod(self.message).flatMap {
             
             let rawValue: String = $0.takeRetainedValue() as String
             let method = HTTPMethod(rawValue: rawValue)
@@ -50,13 +53,7 @@ extension HTTPMessage
         return method
     }
     
-    var body: Data? {
-        
-        let data: Data? = CFHTTPMessageCopyBody(self).map({ $0.takeRetainedValue() as Data })
-        
-        return data
-    }
-    
+    public
     var contentType: String? {
         
         self.httpHeaders()
@@ -64,6 +61,7 @@ extension HTTPMessage
             .flatMap({ $0.value })
     }
     
+    public
     var contentSize: Double {
         
         self.httpHeaders()
@@ -74,22 +72,39 @@ extension HTTPMessage
     internal
     var data: Data? {
         
-        let data: Data? = CFHTTPMessageCopySerializedMessage(self).map({ $0.takeRetainedValue() as Data })
+        let data: Data? = CFHTTPMessageCopySerializedMessage(self.message)
+                                .map({ $0.takeRetainedValue() as Data })
         
         return data
     }
     
-    // MARK: - Methods -
-    
-    static
-    func empty() -> HTTPMessage
-    {
-        let message: HTTPMessage = CFHTTPMessageCreateEmpty(kCFAllocatorDefault, true).takeRetainedValue()
+    public
+    var body: Data? {
         
-        return message
+        let data: Data? = CFHTTPMessageCopyBody(self.message)
+                                .map({ $0.takeRetainedValue() as Data })
+        
+        return data
     }
     
-    static
+    private
+    let message: CFHTTPMessage
+    
+    private
+    lazy var fileHandler: FileHandle? = {
+        
+        let fileManager = FileManager.default
+        let tempDirectory = fileManager.temporaryDirectory
+        let filePath: URL = tempDirectory.appendingPathComponent("http_message_body_\(self.id.uuidString).tmp")
+        
+        let fileHandler = try? FileHandle(forWritingTo: filePath)
+        
+        return fileHandler
+    }()
+    
+    // MARK: - Initializers -
+    
+    public static
     func response(statusCode: StatusCode, htmlString: String) -> HTTPMessage
     {
         let dateFormatter = DateFormatter()
@@ -107,18 +122,33 @@ extension HTTPMessage
         httpHeaders.append(HTTPHeader.contentType("text/html; charset=utf-8"))
         httpHeaders.append(HTTPHeader(field: "Content-Length", value: "\(contentLength)"))
         
-        let message: HTTPMessage = CFHTTPMessageCreateResponse(kCFAllocatorDefault, statusCode.rawValue, statusCode.description as CFString, kCFHTTPVersion1_1).takeRetainedValue()
-        message.setHttpHeaders(httpHeaders)
-        message.setBody(htmlData)
+        let message: CFHTTPMessage = CFHTTPMessageCreateResponse(kCFAllocatorDefault, statusCode.rawValue, statusCode.description as CFString, kCFHTTPVersion1_1).takeRetainedValue()
+        let httpMessage = HTTPMessage(message)
+        httpMessage.setHttpHeaders(httpHeaders)
+        httpMessage.setBody(htmlData)
         
-        return message
+        return httpMessage
+    }
+    
+    public
+    init()
+    {
+        let message: CFHTTPMessage = CFHTTPMessageCreateEmpty(kCFAllocatorDefault, true).takeRetainedValue()
+        
+        self.message = message
+    }
+    
+    private
+    init(_ message: CFHTTPMessage)
+    {
+        self.message = message
     }
     
     @discardableResult
     func appendData(_ data: Data) -> Bool
     {
         let bytes: Array = Array(data)
-        let result: Bool = CFHTTPMessageAppendBytes(self, bytes, data.count)
+        let result: Bool = CFHTTPMessageAppendBytes(self.message, bytes, data.count)
         
         return result
     }
@@ -130,12 +160,13 @@ extension HTTPMessage
             return
         }
         
-        CFHTTPMessageSetBody(self, data as CFData)
+        CFHTTPMessageSetBody(self.message, data as CFData)
     }
     
     func httpHeaders() -> Array<HTTPHeader>
     {
-        guard let allHTTPHeaderFields: Dictionary = CFHTTPMessageCopyAllHeaderFields(self).flatMap({ $0.takeRetainedValue() as? Dictionary<String, String> }) else {
+        guard let allHTTPHeaderFields: Dictionary = CFHTTPMessageCopyAllHeaderFields(self.message)
+                .flatMap({ $0.takeRetainedValue() as? Dictionary<String, String> }) else {
             
             return []
         }
@@ -147,14 +178,15 @@ extension HTTPMessage
     
     func value(forHeadField headField: String) -> String?
     {
-        let value: String? = CFHTTPMessageCopyHeaderFieldValue(self, headField as CFString).map({ $0.takeRetainedValue() as String })
+        let value: String? = CFHTTPMessageCopyHeaderFieldValue(self.message, headField as CFString)
+                                .map({ $0.takeRetainedValue() as String })
         
         return value
     }
     
     func setValue(_ value: String?, forHeadField headField: String)
     {
-        CFHTTPMessageSetHeaderFieldValue(self, headField as CFString, value as CFString?)
+        CFHTTPMessageSetHeaderFieldValue(self.message, headField as CFString, value as CFString?)
     }
     
     func setValue(by header: HTTPHeader)

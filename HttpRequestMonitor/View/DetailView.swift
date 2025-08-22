@@ -106,12 +106,17 @@ extension DetailView
     func queryItemView(with queryItems: Array<URLQueryItem>) -> some View
     {
         VStack(alignment: .leading, spacing: 10) {
+            
             Text("Query Items")
                 .font(.headline)
                 .padding(.bottom, 5)
+            
             Divider().background(Color.accentColor.opacity(0.18))
+            
             ForEach(queryItems, id: \.self) {
+                
                 queryItem in
+                
                 Text("\(queryItem.name): \(queryItem.value ?? "")")
                     .font(.subheadline)
                     .foregroundColor(.secondary)
@@ -125,12 +130,17 @@ extension DetailView
     func requestHeaderView(with requestHeaders: Array<HTTPHeader>) -> some View
     {
         VStack(alignment: .leading, spacing: 10) {
+            
             Text("Request Headers")
                 .font(.headline)
                 .padding(.vertical, 5)
+            
             Divider().background(Color.accentColor.opacity(0.18))
+            
             ForEach(requestHeaders) {
+                
                 header in
+                
                 Text("\(header.field): \(header.value)")
                     .font(.subheadline)
                     .foregroundColor(.secondary)
