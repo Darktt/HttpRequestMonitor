@@ -75,14 +75,14 @@ struct Request
         self.message.contentType
     }
     
-    public
-    var requestBodyData: Data? {
-        
-        self.message.body
-    }
-    
     public private(set)
     var requestBody: String = ""
+    
+    public
+    var bodyPath: URL? {
+        
+        self.message.bodyPath
+    }
     
     private
     let message: HTTPMessage
@@ -101,7 +101,7 @@ struct Request
     init(dataString: String)
     {
         let requestData: Data = dataString.data(using: .utf8)!
-        let message = HTTPMessage.empty()
+        let message = HTTPMessage()
         message.appendData(requestData)
         
         self.message = message

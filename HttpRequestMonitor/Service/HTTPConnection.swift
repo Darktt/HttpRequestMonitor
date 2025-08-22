@@ -147,7 +147,7 @@ extension HTTPConnection
                 print("ℹ️ Received data: \(data.count) bytes")
             }
             
-            let isComplete: Bool = isComplete || (request.contentSize <= Double(request.body?.count ?? 0))
+            let isComplete: Bool = isComplete || request.isComplete
             
             // 如果連接完成，關閉連接
             if isComplete {

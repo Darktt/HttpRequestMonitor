@@ -54,6 +54,14 @@ class HTTPMessage
     }
     
     public
+    var isHeadersComplete: Bool {
+        
+        let isHeaderComplete: Bool = CFHTTPMessageIsHeaderComplete(self.message)
+        
+        return isHeaderComplete
+    }
+    
+    public
     var contentType: String? {
         
         self.httpHeaders()
@@ -69,15 +77,6 @@ class HTTPMessage
             .flatMap({ Double($0.value) }) ?? 0.0
     }
     
-    internal
-    var data: Data? {
-        
-        let data: Data? = CFHTTPMessageCopySerializedMessage(self.message)
-                                .map({ $0.takeRetainedValue() as Data })
-        
-        return data
-    }
-    
     public
     var body: Data? {
         
@@ -87,19 +86,58 @@ class HTTPMessage
         return data
     }
     
+    public
+    var bodyPath: URL?
+    
+    public
+    var isComplete: Bool {
+        
+        if self.isContentTypeNotText() {
+            
+            return self.bodyPath != nil
+        }
+        
+        guard let body = self.body else {
+            
+            return false
+        }
+        
+        let contentSize: Double = self.contentSize
+        
+        return Double(body.count) >= contentSize
+    }
+    
+    internal
+    var data: Data? {
+        
+        let data: Data? = CFHTTPMessageCopySerializedMessage(self.message)
+                                .map({ $0.takeRetainedValue() as Data })
+        
+        return data
+    }
+    
     private
-    let message: CFHTTPMessage
+    var message: CFHTTPMessage
     
     private
     lazy var fileHandler: FileHandle? = {
         
         let fileManager = FileManager.default
-        let tempDirectory = fileManager.temporaryDirectory
+        let tempDirectory: URL = fileManager.temporaryDirectory
         let filePath: URL = tempDirectory.appendingPathComponent("http_message_body_\(self.id.uuidString).tmp")
         
-        let fileHandler = try? FileHandle(forWritingTo: filePath)
-        
-        return fileHandler
+        do {
+            
+            fileManager.createFile(atPath: filePath.path(), contents: nil)
+            let fileHandler = try FileHandle(forWritingTo: filePath)
+            
+            return fileHandler
+        } catch {
+            
+            print("Failed to create file handler with error: \(error)")
+            
+            return nil
+        }
     }()
     
     // MARK: - Initializers -
@@ -147,8 +185,19 @@ class HTTPMessage
     @discardableResult
     func appendData(_ data: Data) -> Bool
     {
+        if self.isHeadersComplete && self.isContentTypeNotText() {
+            
+            self.writeToFile(with: data)
+            return true
+        }
+        
         let bytes: Array = Array(data)
         let result: Bool = CFHTTPMessageAppendBytes(self.message, bytes, data.count)
+        
+        if self.isContentTypeNotText() {
+            
+            self.writeToFile(with: self.body)
+        }
         
         return result
     }
@@ -197,6 +246,62 @@ class HTTPMessage
     func setHttpHeaders(_ httpHeaders: Array<HTTPHeader>)
     {
         httpHeaders.forEach(self.setValue)
+    }
+}
+
+// MARK: - Private Methods -
+
+private
+extension HTTPMessage
+{
+    func isContentTypeNotText() -> Bool
+    {
+        let isNotText = (self.contentType.and({ !$0.hasPrefix("text/") }) != nil)
+        
+        return isNotText
+    }
+    
+    func writeToFile(with bodyData: Data?)
+    {
+        guard let fileHandler = self.fileHandler, let data = bodyData else {
+            
+            return
+        }
+        
+        do {
+            
+            var currentSize: UInt64 = try fileHandler.seekToEnd()
+            currentSize += UInt64(data.count)
+            try fileHandler.write(contentsOf: data)
+            try fileHandler.synchronize()
+            
+            if Double(currentSize) >= self.contentSize {
+                
+                try fileHandler.close()
+                let fileUrl: URL = try self.moveToCatch()
+                
+                self.bodyPath = fileUrl
+            }
+            
+        } catch {
+            
+            print("Failed wirte to file with error: \(error)")
+        }
+    }
+    
+    func moveToCatch() throws -> URL
+    {
+        let fileName: String = "http_message_body_\(self.id.uuidString).tmp"
+        
+        let fileManager = FileManager.default
+        let tempDirectory: URL = fileManager.temporaryDirectory
+        let filePath: URL = tempDirectory.appendingPathComponent(fileName)
+        let catcheDirectory: URL = fileManager.urls(for: .cachesDirectory, in: .userDomainMask).first!
+        let destnationPath: URL = catcheDirectory.appendingPathComponent(fileName)
+        
+        try fileManager.moveItem(at: filePath, to: destnationPath)
+        
+        return destnationPath
     }
 }
 

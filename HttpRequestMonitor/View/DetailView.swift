@@ -88,15 +88,15 @@ extension DetailView
                     self.requestHeaderView(with: request.requestHeaders)
                 }
                 
-                if let bodyData = request.requestBodyData {
+                if let bodyPath: URL = request.bodyPath {
                     
                     if request.contentType?.hasPrefix("image") == true {
                         
-                        self.bodyView(withImageData: bodyData)
-                    } else {
-                        
-                        self.bodyView(with: request.requestBody)
+                        self.bodyView(withImagePath: bodyPath)
                     }
+                } else {
+                    
+                    self.bodyView(with: request.requestBody)
                 }
             }
             .padding(18)
@@ -151,7 +151,7 @@ extension DetailView
         .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
     }
     
-    func bodyView(withImageData data: Data) -> some View
+    func bodyView(withImagePath path: URL) -> some View
     {
         VStack(alignment: .leading, spacing: 10) {
             
@@ -161,7 +161,7 @@ extension DetailView
             
             Divider().background(Color.accentColor.opacity(0.18))
             
-            Image(nsImage: NSImage(data: data) ?? NSImage())
+            Image(nsImage: NSImage(contentsOf: path) ?? NSImage())
                 .resizable()
                 .aspectRatio(contentMode: .fit)
                 .frame(maxWidth: .infinity, maxHeight: 200)

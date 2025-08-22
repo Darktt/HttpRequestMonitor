@@ -61,7 +61,8 @@ class HttpRequestMonitorTests: XCTestCase
             return
         }
         
-        guard let message = HTTPMessage.request(withData: requestData) else {
+        let message = HTTPMessage()
+        guard message.appendData(requestData) else {
             
             XCTAssert(false, "Create request failed.")
             return
@@ -90,7 +91,8 @@ class HttpRequestMonitorTests: XCTestCase
             return
         }
         
-        guard let message = HTTPMessage.request(withData: requestData) else {
+        let message = HTTPMessage()
+        guard message.appendData(requestData) else {
             
             XCTAssert(false, "Create request failed.")
             return
@@ -129,7 +131,8 @@ class HttpRequestMonitorTests: XCTestCase
             return
         }
         
-        guard let message = HTTPMessage.request(withData: requestData) else {
+        let message = HTTPMessage()
+        guard message.appendData(requestData) else {
             
             XCTAssert(false, "Create request failed.")
             return
