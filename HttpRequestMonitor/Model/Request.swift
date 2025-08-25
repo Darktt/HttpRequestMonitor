@@ -149,8 +149,8 @@ extension Request
 
 extension Request: Identifiable {}
 
-extension Request: Equatable {
-    
+extension Request: Equatable
+{
     public static
     func == (lhs: Request, rhs: Request) -> Bool
     {
