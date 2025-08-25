@@ -88,17 +88,9 @@ extension DetailView
                     self.requestHeaderView(with: request.requestHeaders)
                 }
                 
-                if let bodyPath: URL = request.bodyPath {
+                if request.hasBody {
                     
-                    if request.contentType?.hasPrefix("image") == true {
-                        
-                        self.bodyView(withImagePath: bodyPath)
-                    }
-                }
-                
-                if !request.requestBody.isEmpty {
-                    
-                    self.bodyView(with: request.requestBody)
+                    BodyView(request: request)
                 }
             }
             .padding(18)

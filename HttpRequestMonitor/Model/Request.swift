@@ -75,6 +75,15 @@ struct Request
         self.message.contentType
     }
     
+    public
+    var hasBody: Bool {
+        
+        var hasBody: Bool = (self.message.body != nil)
+        hasBody = hasBody || (self.bodyPath != nil)
+        
+        return hasBody
+    }
+    
     public private(set)
     var requestBody: String = ""
     
