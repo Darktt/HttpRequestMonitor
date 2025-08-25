@@ -137,6 +137,16 @@
           }
         }
       }
+    },
+    "Unable to load image." : {
+      "localizations" : {
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "無法載入圖片。"
+          }
+        }
+      }
     }
   },
   "version" : "1.0"

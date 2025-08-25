@@ -94,7 +94,9 @@ extension DetailView
                         
                         self.bodyView(withImagePath: bodyPath)
                     }
-                } else {
+                }
+                
+                if !request.requestBody.isEmpty {
                     
                     self.bodyView(with: request.requestBody)
                 }
@@ -161,10 +163,18 @@ extension DetailView
             
             Divider().background(Color.accentColor.opacity(0.18))
             
-            Image(nsImage: NSImage(contentsOf: path) ?? NSImage())
-                .resizable()
-                .aspectRatio(contentMode: .fit)
-                .frame(maxWidth: .infinity, maxHeight: 200)
+            if let image = NSImage(contentsOf: path) {
+            
+                Image(nsImage: image)
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(maxWidth: .infinity, maxHeight: 200)
+            } else {
+                
+                Text("Unable to load image.")
+                    .font(.subheadline)
+                    .foregroundColor(.secondary)
+            }
         }
         .padding(10)
         .background(Color(NSColor.windowBackgroundColor).opacity(0.5))

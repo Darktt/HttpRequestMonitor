@@ -40,6 +40,19 @@ class HTTPMessage
     }
     
     public
+    var queryItems: Array<URLQueryItem> {
+        
+        guard let url: URL = self.requestURL,
+              let urlComponents = URLComponents(url: url, resolvingAgainstBaseURL: true),
+              let queryItems: Array<URLQueryItem> = urlComponents.queryItems else {
+            
+            return []
+        }
+        
+        return queryItems
+    }
+    
+    public
     var requestMethod: HTTPMethod? {
         
         let method: HTTPMethod? = CFHTTPMessageCopyRequestMethod(self.message).flatMap {
@@ -99,12 +112,13 @@ class HTTPMessage
         
         guard let body = self.body else {
             
-            return false
+            return true
         }
         
         let contentSize: Double = self.contentSize
+        let result: Bool = Double(body.count) >= contentSize
         
-        return Double(body.count) >= contentSize
+        return result
     }
     
     internal

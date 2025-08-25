@@ -117,17 +117,7 @@ extension Request
     mutating
     func parseMessage()
     {
-        let queryItems: Array<URLQueryItem> = {
-            
-            guard let url: URL = self.message.requestURL,
-                  let urlComponents = URLComponents(url: url, resolvingAgainstBaseURL: true),
-                  let queryItems: Array<URLQueryItem> = urlComponents.queryItems else {
-                
-                return []
-            }
-            
-            return queryItems
-        }()
+        let queryItems: Array<URLQueryItem> = self.message.queryItems
         let headers: Array<HTTPHeader> = self.message.httpHeaders().sorted()
         let body: String = {
             
