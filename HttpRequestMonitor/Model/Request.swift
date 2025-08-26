@@ -44,6 +44,51 @@ let kDummyRequests: Array<Request> = [
 ]
 
 public
+let kTextContentTypes: Set<String> = [
+    
+    "text/plain",
+    "text/html",
+    "text/css",
+    "text/javascript",
+    "application/json",
+    "application/xml",
+    "application/x-www-form-urlencoded"
+]
+
+public
+let kImageContentTypes: Set<String> = [
+    
+    "image/png",
+    "image/jpeg",
+    "image/gif",
+    "image/webp",
+    "image/tiff",
+    "image/heic"
+]
+
+public
+let kFileContentTypes: Set<String> = [
+    
+    "application/pdf",
+    "application/zip",
+    "application/msword",
+    "application/octet-stream",
+    "application/vnd.ms-excel",
+    "application/vnd.ms-powerpoint",
+    "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+    "audio/mpeg",
+    "audio/wav",
+    "audio/ogg",
+    "video/mp4",
+    "video/mpeg",
+    "video/quicktime",
+    "video/webm",
+    "video/avi",
+]
+
+public
 struct Request
 {
     // MARK: - Properties -

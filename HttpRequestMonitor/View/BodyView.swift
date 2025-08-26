@@ -49,7 +49,13 @@ extension BodyView
 {
     func contentView() -> some View
     {
-        if let body = self.bodyString.and({ !$0.isEmpty }) {
+        guard let contentType = self.request.contentType else {
+            
+            return EmptyView().eraseToAnyView
+        }
+        
+        if kTextContentTypes.contains(contentType),
+            let body = self.bodyString.and({ !$0.isEmpty }) {
             
             let view = BodyView.TextContent(bodyString: body)
             
@@ -61,13 +67,43 @@ extension BodyView
             return EmptyView().eraseToAnyView
         }
         
-        let view = BodyView.ImageContent(path: path)
+        if kImageContentTypes.contains(contentType) {
+            
+            let view = BodyView.ImageContent(path: path)
+            
+            return view.eraseToAnyView
+        }
         
-        return view.eraseToAnyView
+        if kFileContentTypes.contains(contentType) {
+            
+            let view = BodyView.FileContent(path: path)
+            
+            return view.eraseToAnyView
+        }
+        
+        return EmptyView().eraseToAnyView
     }
 }
 
-// MARK: - BodyView.ImageView -
+// MARK: - BodyView.TextContent -
+
+fileprivate
+extension BodyView
+{
+    struct TextContent: View
+    {
+        let bodyString: String
+        
+        var body: some View {
+            
+            Text(self.bodyString)
+                .font(.subheadline)
+                .foregroundColor(.secondary)
+        }
+    }
+}
+
+// MARK: - BodyView.ImageContent -
 
 fileprivate
 extension BodyView
@@ -92,20 +128,35 @@ extension BodyView
     }
 }
 
-// MARK: - BodyView.TextContent -
+// MARK: - BodyView.FileContent -
 
 fileprivate
 extension BodyView
 {
-    struct TextContent: View
+    struct FileContent: View
     {
-        let bodyString: String
+        let path: URL
         
         var body: some View {
             
-            Text(self.bodyString)
-                .font(.subheadline)
-                .foregroundColor(.secondary)
+            Button("Save file", systemImage: "arrow.down.document.fill") {
+                
+                let panel = NSSavePanel()
+                panel.nameFieldStringValue = self.path.lastPathComponent
+                panel.canCreateDirectories = true
+                
+                if panel.runModal() == .OK,
+                   let destinationURL = panel.url {
+                    
+                    do {
+                        
+                        try FileManager.default.copyItem(at: self.path, to: destinationURL)
+                    } catch {
+                        
+                        print("Error saving file: \(error)")
+                    }
+                }
+            }
         }
     }
 }

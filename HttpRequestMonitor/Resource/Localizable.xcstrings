@@ -78,6 +78,9 @@
         }
       }
     },
+    "Save file" : {
+
+    },
     "Service failed" : {
       "localizations" : {
         "zh-Hant" : {
