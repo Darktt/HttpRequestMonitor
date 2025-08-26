@@ -5,6 +5,7 @@
 //
 
 import Foundation
+import UniformTypeIdentifiers
 
 public
 class HTTPMessage
@@ -134,15 +135,22 @@ class HTTPMessage
     var message: CFHTTPMessage
     
     private
+    lazy var temporaryFileName: String = {
+        
+        "http_message_body_\(self.id.uuidString).tmp"
+    }()
+    
+    private
     lazy var fileHandler: FileHandle? = {
         
         let fileManager = FileManager.default
         let tempDirectory: URL = fileManager.temporaryDirectory
-        let filePath: URL = tempDirectory.appendingPathComponent("http_message_body_\(self.id.uuidString).tmp")
+        let filePath: URL = tempDirectory.appendingPathComponent(self.temporaryFileName)
         
         do {
             
             fileManager.createFile(atPath: filePath.path(), contents: nil)
+            
             let fileHandler = try FileHandle(forWritingTo: filePath)
             
             return fileHandler
@@ -305,17 +313,37 @@ extension HTTPMessage
     
     func moveToCatch() throws -> URL
     {
-        let fileName: String = "http_message_body_\(self.id.uuidString).tmp"
+        let fileName: String = "file"
+        let fileExtension: String = self.contentType.flatMap({ self.fileExtension(for: $0) }) ?? ""
         
         let fileManager = FileManager.default
         let tempDirectory: URL = fileManager.temporaryDirectory
-        let filePath: URL = tempDirectory.appendingPathComponent(fileName)
+        let filePath: URL = tempDirectory.appendingPathComponent(self.temporaryFileName)
+        
         let catcheDirectory: URL = fileManager.urls(for: .cachesDirectory, in: .userDomainMask).first!
-        let destnationPath: URL = catcheDirectory.appendingPathComponent(fileName)
+        var destnationPath: URL = catcheDirectory.appendingPathComponent(fileName)
+        destnationPath = destnationPath.appendingPathExtension(fileExtension)
+        
+        if fileManager.fileExists(atPath: destnationPath.path()) {
+            
+            try fileManager.removeItem(at: destnationPath)
+        }
         
         try fileManager.moveItem(at: filePath, to: destnationPath)
         
         return destnationPath
+    }
+    
+    func fileExtension(for contentType: String) -> String?
+    {
+        guard let type = UTType(mimeType: contentType) else {
+            
+            return nil
+        }
+        
+        let fileExtension: String? = type.preferredFilenameExtension
+        
+        return fileExtension
     }
 }
 

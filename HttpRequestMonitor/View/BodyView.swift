@@ -141,19 +141,23 @@ extension BodyView
             
             Button("Save file", systemImage: "arrow.down.document.fill") {
                 
-                let panel = NSSavePanel()
-                panel.nameFieldStringValue = self.path.lastPathComponent
-                panel.canCreateDirectories = true
-                
-                if panel.runModal() == .OK,
-                   let destinationURL = panel.url {
+                Task {
                     
-                    do {
+                    let panel = NSSavePanel()
+                    panel.nameFieldStringValue = self.path.lastPathComponent
+                    panel.isExtensionHidden = false
+                    panel.canCreateDirectories = true
+                    
+                    if await panel.begin() == .OK,
+                       let destinationURL = panel.url {
                         
-                        try FileManager.default.copyItem(at: self.path, to: destinationURL)
-                    } catch {
-                        
-                        print("Error saving file: \(error)")
+                        do {
+                            
+                            try FileManager.default.copyItem(at: self.path, to: destinationURL)
+                        } catch {
+                            
+                            print("Error saving file: \(error)")
+                        }
                     }
                 }
             }

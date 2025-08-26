@@ -79,7 +79,14 @@
       }
     },
     "Save file" : {
-
+      "localizations" : {
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "保存檔案"
+          }
+        }
+      }
     },
     "Service failed" : {
       "localizations" : {
