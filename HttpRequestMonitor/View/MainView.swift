@@ -74,8 +74,11 @@ extension MainView
                 // Sidebar（RequestListView）
                 RequestListView(requests: self.state.requests, selected: selectedRequest)
                     .onSelected {
+                        
                         request in
+                        
                         let action = MonitorAction.selectRequest(request)
+                        
                         self.store.dispatch(action)
                     }
                     .frame(width: geometry.size.width * 0.3)

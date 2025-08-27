@@ -49,7 +49,7 @@ extension BodyView
 {
     func contentView() -> some View
     {
-        guard var contentType = self.request.contentType else {
+        guard var contentType: String = self.request.contentType else {
             
             return EmptyView().eraseToAnyView
         }
@@ -68,7 +68,7 @@ extension BodyView
             return view.eraseToAnyView
         }
         
-        guard let path = self.path else {
+        guard let path: URL = self.path else {
             
             return EmptyView().eraseToAnyView
         }

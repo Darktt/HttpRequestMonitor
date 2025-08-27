@@ -26,7 +26,7 @@ struct RequestListView: View
             
             LazyVStack {
                 
-                ForEach(requests) { request in
+                ForEach(self.requests) { request in
                     
                     RequestCell(title: request.rootUrl, detail: request.requestMethod, isSelected: (request == self.selectedRequest))
                         .onTapGesture {
