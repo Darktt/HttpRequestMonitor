@@ -182,7 +182,11 @@ class HTTPMessage
         httpHeaders.append(HTTPHeader.contentType("text/html; charset=utf-8"))
         httpHeaders.append(HTTPHeader(field: "Content-Length", value: "\(contentLength)"))
         
-        let message: CFHTTPMessage = CFHTTPMessageCreateResponse(kCFAllocatorDefault, statusCode.rawValue, statusCode.description as CFString, kCFHTTPVersion1_1).takeRetainedValue()
+        let message: CFHTTPMessage = CFHTTPMessageCreateResponse(kCFAllocatorDefault,
+                                                                 statusCode.rawValue,
+                                                                 statusCode.description as CFString,
+                                                                 kCFHTTPVersion1_1)
+                                                                .takeRetainedValue()
         let httpMessage = HTTPMessage(message)
         httpMessage.setHttpHeaders(httpHeaders)
         httpMessage.setBody(htmlData)
@@ -193,7 +197,8 @@ class HTTPMessage
     public
     init()
     {
-        let message: CFHTTPMessage = CFHTTPMessageCreateEmpty(kCFAllocatorDefault, true).takeRetainedValue()
+        let message: CFHTTPMessage = CFHTTPMessageCreateEmpty(kCFAllocatorDefault, true)
+                                                             .takeRetainedValue()
         
         self.message = message
     }
