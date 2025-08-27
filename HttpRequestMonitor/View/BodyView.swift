@@ -49,9 +49,15 @@ extension BodyView
 {
     func contentView() -> some View
     {
-        guard let contentType = self.request.contentType else {
+        guard var contentType = self.request.contentType else {
             
             return EmptyView().eraseToAnyView
+        }
+        
+        if contentType.contains("; ") {
+            
+            let components: Array<String> = contentType.components(separatedBy: ";")
+            contentType = components.first!
         }
         
         if kTextContentTypes.contains(contentType),

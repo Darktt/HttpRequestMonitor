@@ -52,7 +52,8 @@ let kTextContentTypes: Set<String> = [
     "text/javascript",
     "application/json",
     "application/xml",
-    "application/x-www-form-urlencoded"
+    "application/x-www-form-urlencoded",
+    "multipart/form-data"
 ]
 
 public
