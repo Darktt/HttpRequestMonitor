@@ -318,7 +318,7 @@ extension HTTPMessage
     
     func moveToCatch() throws -> URL
     {
-        let fileName: String = "file"
+        let fileName: String = "file" + self.id.uuidString
         let fileExtension: String = self.contentType.flatMap({ self.fileExtension(for: $0) }) ?? ""
         
         let fileManager = FileManager.default

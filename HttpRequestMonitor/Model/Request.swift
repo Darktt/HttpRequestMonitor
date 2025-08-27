@@ -87,6 +87,7 @@ let kFileContentTypes: Set<String> = [
     "video/quicktime",
     "video/webm",
     "video/avi",
+    "multipart/form-data"
 ]
 
 public
