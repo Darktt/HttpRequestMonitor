@@ -323,10 +323,10 @@ extension HTTPMessage
         
         let fileManager = FileManager.default
         let tempDirectory: URL = fileManager.temporaryDirectory
-        let filePath: URL = tempDirectory.appendingPathComponent(self.temporaryFileName)
+        let filePath: URL = tempDirectory.appending(path:self.temporaryFileName)
         
         let catcheDirectory: URL = fileManager.urls(for: .cachesDirectory, in: .userDomainMask).first!
-        var destnationPath: URL = catcheDirectory.appendingPathComponent(fileName)
+        var destnationPath: URL = catcheDirectory.appending(path:fileName)
         destnationPath = destnationPath.appendingPathExtension(fileExtension)
         
         if fileManager.fileExists(atPath: destnationPath.path()) {

@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import RegexBuilder
 
 private
 let kGetRequestDataString: String = """
@@ -52,8 +53,7 @@ let kTextContentTypes: Set<String> = [
     "text/javascript",
     "application/json",
     "application/xml",
-    "application/x-www-form-urlencoded",
-    "multipart/form-data"
+    "application/x-www-form-urlencoded"
 ]
 
 public
@@ -87,8 +87,11 @@ let kFileContentTypes: Set<String> = [
     "video/quicktime",
     "video/webm",
     "video/avi",
-    "multipart/form-data"
+    kFormData
 ]
+
+private
+let kFormData = "multipart/form-data"
 
 public
 struct Request
@@ -140,6 +143,9 @@ struct Request
         self.message.bodyPath
     }
     
+    public
+    var fromParts: Array<FormPart> = []
+    
     private
     let message: HTTPMessage
     
@@ -189,6 +195,42 @@ extension Request
         self.queryItems = queryItems
         self.requestHeaders = headers
         self.requestBody = body
+        self.parseFromData()
+    }
+    
+    mutating
+    func parseFromData()
+    {
+        guard var contentType: String = self.message.contentType,
+                let path = self.bodyPath else {
+            
+            return
+        }
+        
+        var boundary: String = ""
+        
+        if contentType.contains("; ") {
+            
+            let components: Array<String> = contentType.components(separatedBy: "; ")
+            let regex = "boundary=".regex
+            
+            contentType = components.first!
+            boundary = String(components.last?.trimmingPrefix(regex) ?? "")
+        }
+        
+        if contentType == kFormData {
+            
+            do {
+                
+                let formData = try FormData(path: path, boundary: boundary)
+                let parts: Array<FormPart> = formData.parts
+                
+                self.fromParts = parts
+            } catch {
+                
+                print("Parse form data error: \(error.localizedDescription)")
+            }
+        }
     }
 }
 

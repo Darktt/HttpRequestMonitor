@@ -82,6 +82,13 @@ extension BodyView
         
         if kFileContentTypes.contains(contentType) {
             
+            if !self.request.fromParts.isEmpty {
+                
+                let view = BodyView.FormDataContent(parts: self.request.fromParts)
+                
+                return view.eraseToAnyView
+            }
+            
             let view = BodyView.FileContent(path: path)
             
             return view.eraseToAnyView
@@ -167,6 +174,75 @@ extension BodyView
                     }
                 }
             }
+        }
+    }
+}
+
+// MARK: - BodyView.FormDataContent -
+
+extension BodyView
+{
+    struct FormDataContent: View
+    {
+        let parts: Array<FormPart>
+        
+        var body: some View {
+            
+            VStack(alignment: .center, spacing: 15.0) {
+                
+                ForEach(self.parts) {
+                    
+                    part in
+                    
+                    FormPartView(part: part)
+                }
+            }
+        }
+    }
+}
+
+fileprivate
+extension BodyView.FormDataContent
+{
+    struct FormPartView: View
+    {
+        let part: FormPart
+        
+        var body: some View {
+            
+            HStack(spacing: 2.0) {
+                
+                Text("Header")
+                    .font(.subheadline)
+                    .foregroundColor(.secondary)
+                
+                Spacer()
+                
+                Text(self.part.header)
+                    .font(.caption)
+                    .foregroundColor(.secondary.opacity(0.8))
+            }
+            
+            HStack(spacing: 2.0) {
+                
+                Text("Content")
+                    .font(.subheadline)
+                    .foregroundColor(.secondary)
+                
+                Spacer()
+                
+                if let path = self.part.path {
+                    
+                    BodyView.FileContent(path: path)
+                } else {
+                    
+                    BodyView.TextContent(bodyString: self.part.content ?? "")
+                }
+            }
+            
+            Divider()
+                .background(Color.gray.opacity(0.5))
+                .padding(.leading, 15.0)
         }
     }
 }
