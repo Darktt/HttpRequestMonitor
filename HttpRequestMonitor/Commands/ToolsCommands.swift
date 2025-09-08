@@ -1,5 +1,5 @@
 //
-//  HttpRequestMonitorCommands.swift
+//  ToolsCommands.swift
 //  HttpRequestMonitor
 //
 //  Created by Eden on 2025/9/8.
@@ -8,7 +8,7 @@
 import SwiftUI
 
 public
-struct HttpRequestMonitorCommands: Commands
+struct ToolsCommands: Commands
 {
     @StateObject
     public
@@ -40,7 +40,7 @@ struct HttpRequestMonitorCommands: Commands
 // MARK: - Private Methods -
 
 private
-extension HttpRequestMonitorCommands
+extension ToolsCommands
 {
     // 開始/停止選單項目
     @ViewBuilder

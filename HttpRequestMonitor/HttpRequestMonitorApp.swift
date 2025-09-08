@@ -24,7 +24,7 @@ struct HttpRequestMonitorApp: App
         .windowResizability(.contentSize)
         .commands {
             
-            HttpRequestMonitorCommands(store: kMonitorStore)
+            ToolsCommands(store: kMonitorStore)
         }
     }
     
