@@ -105,29 +105,29 @@ struct FunctionBarButton: View
     
     var body: some View {
         
-        Button(action: action) {
+        Button(action: self.action) {
             
             HStack(spacing: 6) {
                 
-                Image(systemName: icon)
+                Image(systemName: self.icon)
                     .font(.system(size: 15, weight: .semibold))
                 
-                Text(label)
+                Text(self.label)
                     .font(.system(size: 14, weight: .medium))
             }
             .padding(.vertical, 6)
             .padding(.horizontal, 14)
-            .background(isHover ? Color.accentColor.opacity(0.18) : Color.clear)
-            .foregroundColor(isHover ? .accentColor : .primary)
+            .background(self.isHover ? Color.accentColor.opacity(0.18) : Color.clear)
+            .foregroundColor(self.isHover ? .accentColor : .primary)
             .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
-            .shadow(color: isHover ? .accentColor.opacity(0.08) : .clear, radius: 4, x: 0, y: 1)
+            .shadow(color: self.isHover ? .accentColor.opacity(0.08) : .clear, radius: 4, x: 0, y: 1)
         }
         .buttonStyle(PlainButtonStyle())
         .onHover {
             hover in
             
-            isHover = hover
+            self.isHover = hover
         }
-        .animation(.easeInOut(duration: 0.18), value: isHover)
+        .animation(.easeInOut(duration: 0.18), value: self.isHover)
     }
 }

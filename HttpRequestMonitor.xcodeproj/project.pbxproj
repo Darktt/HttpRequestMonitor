@@ -6,6 +6,11 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		F2F7F6962E6E67F5000881A5 /* Algorithms in Frameworks */ = {isa = PBXBuildFile; productRef = F2F7F6952E6E67F5000881A5 /* Algorithms */; };
+		F2F7F6982E6E6E19000881A5 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = F2F7F6972E6E6E19000881A5 /* README.md */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		F2F2AA9D2E56A44000FA9464 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -20,6 +25,7 @@
 		F27BDBA52E544D5400036841 /* HttpRequestMonitor.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HttpRequestMonitor.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F2F2AA992E56A44000FA9464 /* HttpRequestMonitorTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HttpRequestMonitorTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		F2F2AB022E56AB5000FA9464 /* HttpRequestMonitor.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = HttpRequestMonitor.xctestplan; sourceTree = "<group>"; };
+		F2F7F6972E6E6E19000881A5 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -53,6 +59,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F2F7F6962E6E67F5000881A5 /* Algorithms in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -70,6 +77,7 @@
 			isa = PBXGroup;
 			children = (
 				F2F2AB022E56AB5000FA9464 /* HttpRequestMonitor.xctestplan */,
+				F2F7F6972E6E6E19000881A5 /* README.md */,
 				F27BDBA72E544D5400036841 /* HttpRequestMonitor */,
 				F2F2AA9A2E56A44000FA9464 /* HttpRequestMonitorTests */,
 				F27BDBA62E544D5400036841 /* Products */,
@@ -105,6 +113,7 @@
 			);
 			name = HttpRequestMonitor;
 			packageProductDependencies = (
+				F2F7F6952E6E67F5000881A5 /* Algorithms */,
 			);
 			productName = HttpRequestMonitor;
 			productReference = F27BDBA52E544D5400036841 /* HttpRequestMonitor.app */;
@@ -162,6 +171,9 @@
 			);
 			mainGroup = F27BDB9C2E544D5400036841;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				F2F7F6942E6E67F5000881A5 /* XCRemoteSwiftPackageReference "swift-algorithms" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = F27BDBA62E544D5400036841 /* Products */;
 			projectDirPath = "";
@@ -178,6 +190,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F2F7F6982E6E6E19000881A5 /* README.md in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -453,6 +466,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		F2F7F6942E6E67F5000881A5 /* XCRemoteSwiftPackageReference "swift-algorithms" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/apple/swift-algorithms";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.2.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		F2F7F6952E6E67F5000881A5 /* Algorithms */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F2F7F6942E6E67F5000881A5 /* XCRemoteSwiftPackageReference "swift-algorithms" */;
+			productName = Algorithms;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = F27BDB9D2E544D5400036841 /* Project object */;
 }
