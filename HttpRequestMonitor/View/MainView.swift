@@ -11,6 +11,7 @@ public
 struct MainView: View
 {
     @EnvironmentObject
+    private
     var store: MonitorStore
     
     private
@@ -18,6 +19,10 @@ struct MainView: View
         
         self.store.state
     }
+    
+    @State
+    private
+    var isShowingErrorAlert: Bool = false
     
     public
     var body: some View {
@@ -40,6 +45,22 @@ struct MainView: View
                         .transition(.move(edge: .bottom))
                 }
             }
+        }
+        .alert("Error", isPresented: self.$isShowingErrorAlert) {
+            
+            Button("OK", role: .cancel) {
+                
+                self.isShowingErrorAlert = false
+            }
+        } message: {
+            
+            Text(self.state.error?.message ?? "Unknown Error")
+        }
+        .onChange(of: self.state.error != nil) {
+            
+            _, newValue in
+            
+            self.isShowingErrorAlert = newValue
         }
         .edgesIgnoringSafeArea(.top)
         .animation(.easeInOut(duration: 0.3), value: self.state.httpStatus)

@@ -22,6 +22,10 @@ struct HttpRequestMonitorApp: App
         .windowStyle(.hiddenTitleBar)
         .windowToolbarStyle(.unifiedCompact)
         .windowResizability(.contentSize)
+        .commands {
+            
+            HttpRequestMonitorCommands(store: kMonitorStore)
+        }
     }
     
     public
