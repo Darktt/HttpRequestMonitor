@@ -22,7 +22,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		F27BDBA52E544D5400036841 /* HttpRequestMonitor.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HttpRequestMonitor.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		F27BDBA52E544D5400036841 /* Fluxo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Fluxo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F2F2AA992E56A44000FA9464 /* HttpRequestMonitorTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HttpRequestMonitorTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		F2F2AB022E56AB5000FA9464 /* HttpRequestMonitor.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = HttpRequestMonitor.xctestplan; sourceTree = "<group>"; };
 		F2F7F6972E6E6E19000881A5 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
@@ -87,7 +87,7 @@
 		F27BDBA62E544D5400036841 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				F27BDBA52E544D5400036841 /* HttpRequestMonitor.app */,
+				F27BDBA52E544D5400036841 /* Fluxo.app */,
 				F2F2AA992E56A44000FA9464 /* HttpRequestMonitorTests.xctest */,
 			);
 			name = Products;
@@ -116,7 +116,7 @@
 				F2F7F6952E6E67F5000881A5 /* Algorithms */,
 			);
 			productName = HttpRequestMonitor;
-			productReference = F27BDBA52E544D5400036841 /* HttpRequestMonitor.app */;
+			productReference = F27BDBA52E544D5400036841 /* Fluxo.app */;
 			productType = "com.apple.product-type.application";
 		};
 		F2F2AA982E56A44000FA9464 /* HttpRequestMonitorTests */ = {
@@ -354,12 +354,15 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = HttpRequestMonitor/HttpRequestMonitor.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = Fluxo;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -368,7 +371,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 14.6;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.myCompany.HttpRequestMonitor;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = Fluxo;
 				REGISTER_APP_GROUPS = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -380,12 +383,15 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = HttpRequestMonitor/HttpRequestMonitor.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = Fluxo;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -394,7 +400,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 14.6;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.myCompany.HttpRequestMonitor;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = Fluxo;
 				REGISTER_APP_GROUPS = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
