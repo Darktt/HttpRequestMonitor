@@ -1,7 +1,7 @@
-# HttpRequestMonitor
+# Fluxo
 
 [![Swift-5.5](https://img.shields.io/badge/Swift-5.5-red.svg?style=plastic&logo=Swift&logoColor=white&link=)](https://developer.apple.com/swift/)
-[![example workflow](https://github.com/Darktt/HttpRequestMonitor/actions/workflows/main.yml/badge.svg)]()
+[![example workflow](https://github.com/Darktt/Fluxo/actions/workflows/main.yml/badge.svg)]()
 
 一個專為 macOS 設計的 HTTP 請求監控工具，協助開發者即時監控和分析 API 請求數據。
 
@@ -27,19 +27,19 @@
 
 1. **從源碼編譯**
    ```bash
-   git clone https://github.com/Darktt/HttpRequestMonitor.git
-   cd HttpRequestMonitor
-   open HttpRequestMonitor.xcodeproj
+   git clone https://github.com/Darktt/Fluxo.git
+   cd Fluxo
+   open Fluxo.xcodeproj
    ```
 
 2. **使用 xcodebuild 編譯**
    ```bash
-   xcodebuild -scheme HttpRequestMonitor -platform macOS build
+   xcodebuild -scheme Fluxo -platform macOS build
    ```
 
 ### 使用方法
 
-1. 啟動 HttpRequestMonitor 應用程式
+1. 啟動 Fluxo 應用程式
 2. 點選「Start」按鈕開始監控
 3. 應用程式將在指定埠號啟動 HTTP 伺服器
 4. 設定您的應用程式或測試工具將請求發送至監控伺服器
@@ -62,17 +62,17 @@
 
 ### 編譯專案
 ```bash
-xcodebuild -scheme HttpRequestMonitor -platform macOS build
+xcodebuild -scheme Fluxo -platform macOS build
 ```
 
 ### 執行測試
 ```bash
-xcodebuild -scheme HttpRequestMonitor -platform macOS test
+xcodebuild -scheme Fluxo -platform macOS test
 ```
 
 ### 執行測試計劃
 ```bash
-xcodebuild test -testPlan HttpRequestMonitor.xctestplan
+xcodebuild test -testPlan Fluxo.xctestplan
 ```
 
 ## 📱 介面截圖
