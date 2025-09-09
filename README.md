@@ -103,19 +103,6 @@ xcodebuild test -testPlan Fluxo.xctestplan
 
 本專案採用 [MIT License](LICENSE) 授權。
 
-## 🎯 未來規劃
-
-- [ ] 支援 HTTPS 監控
-- [ ] 加入請求匯出功能
-- [ ] 支援自訂篩選器
-- [ ] 加入效能分析工具
-- [ ] 支援 WebSocket 監控
-
 ## 📞 技術支援
 
 如有任何問題或建議，請透過 GitHub Issues 回報。
-
----
-
-**開發者**: Eden  
-**最後更新**: 2025年8月
