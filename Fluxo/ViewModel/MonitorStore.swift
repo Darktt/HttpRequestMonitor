@@ -56,9 +56,8 @@ typealias MonitorStore = Store<MonitorState, MonitorAction>
 
 @MainActor
 let kMonitorStore = MonitorStore(initialState: MonitorState(),
-                           reducer: kReducer,
-                            middlewares: [
-                                
-                                MonitorMiddleware
-                            ]
-)
+                                      reducer: kReducer,
+                                  middlewares: [
+                                    MonitorMiddleware
+                                  ]
+                                )

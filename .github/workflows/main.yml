@@ -20,7 +20,7 @@ jobs:
         with:
           platform: macOS
           xcode: ^16.4
-          scheme: HttpRequestMonitor
+          scheme: Fluxo
           action: build
 
       - name: Runing tests for macOS
@@ -28,5 +28,5 @@ jobs:
         with:
           platform: macOS
           xcode: ^16.4
-          scheme: HttpRequestMonitor
+          scheme: Fluxo
           action: test
