@@ -143,9 +143,9 @@ extension HTTPConnection
                     return
                 }
                 
+                print("⬅️ Received data: \(data.count) bytes")
+                print("➡️ Current size: \(request.currentSize) bytes")
                 print("ℹ️ Request content size: \(request.contentSize)")
-                print("➡️ Received data: \(data.count) bytes")
-                print("➡️ Current size: \(request.contentSize) bytes")
                 print("------------------")
             }
             
@@ -163,11 +163,10 @@ extension HTTPConnection
                     self.cancel()
                 }
                 
-            } else {
-                
-                // 只有在連接仍然活躍時才繼續接收
-                self.handleReceive(request)
+                return
             }
+            
+            self.handleReceive(request)
         }
         
         self.connection.receive(minimumIncompleteLength: 1, maximumLength: self.MTU, completion: completion)
@@ -175,7 +174,7 @@ extension HTTPConnection
     
     func isValidHTTPRequest(_ request: HTTPMessage) -> Bool
     {
-        var isValid: Bool = (request.requestMethod != nil)
+        let isValid: Bool = (request.requestMethod != nil)
         
         return isValid
     }
