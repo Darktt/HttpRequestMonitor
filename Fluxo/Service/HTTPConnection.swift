@@ -24,6 +24,9 @@ class HTTPConnection
     public
     var receiveRequestHandler: HTTPService.ReceiveRequestHandler?
     
+    public
+    var errorHandler: HTTPService.ErrorHandler?
+    
     // MARK: - Methods -
     // MARK: Initial Method
     
@@ -100,19 +103,21 @@ extension HTTPConnection
             }
             
             // 處理錯誤和連接狀態
-            if let error = error {
+            if let error: NWError = error {
                 print("❌ Receive error: \(error)")
                 
                 // 如果是連接重置錯誤，不要嘗試繼續接收
                 
-                let error = error as NSError
-                if error.code == 54 {
+                if error.errorCode == 54 {
                     
                     // ECONNRESET
                     print("ℹ️ Connection reset by peer, closing connection")
                     self.cancel()
                     return
                 }
+                
+                self.errorHandler.unwrapped({ $0(error) })
+                return
             }
             
             // 處理接收到的數據
@@ -125,6 +130,19 @@ extension HTTPConnection
                 
                 request.appendData(data)
                 
+                if !self.isValidHTTPRequest(request) {
+                    
+                    print("❗️ Failed to parse HTTP message from data")
+                    
+                    let errorResponse = self.badRequestResponse()
+                    
+                    self.sendResponse(errorResponse) {
+                        
+                        self.cancel()
+                    }
+                    return
+                }
+                
                 print("ℹ️ Request content size: \(request.contentSize)")
                 print("➡️ Received data: \(data.count) bytes")
                 print("➡️ Current size: \(request.contentSize) bytes")
@@ -136,10 +154,7 @@ extension HTTPConnection
             // 如果連接完成，關閉連接
             if isComplete {
                 
-                if let handler = self.receiveRequestHandler {
-                    
-                    handler(request)
-                }
+                self.receiveRequestHandler.unwrapped({ $0(request) })
                 
                 let response = self.makeResponse(fromRequest: request)
                 self.sendResponse(response) {
@@ -148,27 +163,21 @@ extension HTTPConnection
                     self.cancel()
                 }
                 
-                return
-            }
-            
-            // 只有在連接仍然活躍時才繼續接收
-            if error == nil {
+            } else {
                 
+                // 只有在連接仍然活躍時才繼續接收
                 self.handleReceive(request)
-                return
-            }
-            
-            print("❗️ Failed to parse HTTP message from data")
-            
-            let errorResponse = self.badRequestResponse()
-            
-            self.sendResponse(errorResponse) {
-                
-                self.cancel()
             }
         }
         
         self.connection.receive(minimumIncompleteLength: 1, maximumLength: self.MTU, completion: completion)
+    }
+    
+    func isValidHTTPRequest(_ request: HTTPMessage) -> Bool
+    {
+        var isValid: Bool = (request.requestMethod != nil)
+        
+        return isValid
     }
     
     func makeResponse(fromRequest request: HTTPMessage) -> HTTPMessage
@@ -209,9 +218,11 @@ extension HTTPConnection
             
             [unowned self] error in
             
-            if let error = error {
+            if let error: NWError = error {
                 
                 print("ℹ️ Connection: \(self.connection), content processed with error: \(error)")
+                
+                self.errorHandler.unwrapped({ $0(error) })
             }
             
             print("ℹ️ Response sent successfully")

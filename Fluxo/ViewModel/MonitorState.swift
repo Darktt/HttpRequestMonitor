@@ -32,14 +32,15 @@ struct MonitorState
                 case .suspend:
                     self.status = "Service is suspended"
                 
-                case .waitting(_):
+                case .waitting(let error):
+                    self.error = (error.errorCode, error.localizedDescription)
                     self.status = "Service is waiting"
                 
                 case .runing:
                     self.status = "Service is running"
                 
-                case .failed(let error as NSError):
-                    self.error = (error.code, error.localizedDescription)
+                case .failed(let error):
+                    self.error = (error.errorCode, error.localizedDescription)
                     self.status = "Service failed"
             }
         }

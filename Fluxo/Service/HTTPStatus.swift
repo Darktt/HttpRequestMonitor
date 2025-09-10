@@ -16,11 +16,11 @@ extension HTTPService
     {
         case suspend
         
-        case waitting(Error)
+        case waitting(NWError)
         
         case runing
         
-        case failed(Error)
+        case failed(NWError)
     }
 }
 

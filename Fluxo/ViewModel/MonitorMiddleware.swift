@@ -49,6 +49,7 @@ func startMonitorAction(_ portNumber: UInt16) -> MonitorAction
         let service = try HTTPService(port: port)
         service.statusUpdateHandler = serviceStatusUpdate(status:)
         service.receiveRequestHandler = receiveRequest(request:)
+        service.errorHandler = errorHandle(error:)
         service.start()
         
         let action = MonitorAction.startMonitorResponse(service)
@@ -84,6 +85,19 @@ func receiveRequest(request: HTTPMessage)
         @MainActor in
         
         let action = MonitorAction.receiveRequest(request)
+        
+        kMonitorStore.dispatch(action)
+    }
+}
+
+private
+func errorHandle(error: NWError)
+{
+    Task {
+        @MainActor in
+        
+        let error: MonitorError = (error.errorCode, error.localizedDescription)
+        let action = MonitorAction.error(error)
         
         kMonitorStore.dispatch(action)
     }

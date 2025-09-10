@@ -18,6 +18,9 @@ class HTTPService
     public
     typealias ReceiveRequestHandler = ((HTTPMessage) -> Void)
     
+    public
+    typealias ErrorHandler = ((NWError) -> Void)
+    
     public private(set)
     var port: NWEndpoint.Port
     
@@ -29,6 +32,9 @@ class HTTPService
     
     public
     var receiveRequestHandler: ReceiveRequestHandler?
+    
+    public
+    var errorHandler: ErrorHandler?
     
     private
     var listener: NWListener?
@@ -132,6 +138,7 @@ extension HTTPService
     {
         let httpConnection = HTTPConnection(connection)
         httpConnection.receiveRequestHandler = self.receiveRequestHandler
+        httpConnection.errorHandler = self.errorHandler
         httpConnection.start(queue: self.listener?.queue ?? .main)
         
         self.connections[httpConnection.identifier] = httpConnection
