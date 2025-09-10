@@ -98,6 +98,16 @@
         }
       }
     },
+    "No Request Selected" : {
+      "localizations" : {
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "請選擇左邊的請求"
+          }
+        }
+      }
+    },
     "OK" : {
       "localizations" : {
         "zh-Hant" : {

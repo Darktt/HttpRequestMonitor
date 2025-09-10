@@ -1,8 +1,9 @@
 //
 //  FileHandleExtension.swift
 //
-//  Created by Eden on 2025/8/28.
-//  
+//  Created by Darktt on 2025/8/28.
+//  Copyright © 2025 Darktt. All rights reserved.
+//
 //
 
 import Foundation

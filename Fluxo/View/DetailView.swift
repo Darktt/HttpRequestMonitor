@@ -59,17 +59,21 @@ extension DetailView
             
             Spacer(minLength: 40)
             
-            Image(systemName: "doc.text.magnifyingglass")
-                .font(.system(size: 32, weight: .light))
+            Image(systemName: "network")
+                .font(.system(size: 48, weight: .light))
                 .foregroundColor(.secondary.opacity(0.4))
             
-            Text("No Request")
-                .font(.headline)
-                .foregroundColor(.secondary.opacity(0.4))
-                .padding()
+            VStack(spacing: 8) {
+                
+                Text("No Request Selected")
+                    .font(.headline)
+                    .foregroundColor(.secondary.opacity(0.4))
+                    .padding()
+            }
             
             Spacer(minLength: 40)
         }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
     
     func requestView(with request: Request) -> some View

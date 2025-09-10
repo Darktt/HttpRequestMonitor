@@ -1,8 +1,9 @@
 //
 //  EdgeInsetsExtension.swift
 //
-//  Created by Eden on 2025/8/20.
-//  
+//  Created by Darktt on 2025/8/20.
+//  Copyright © 2025 Darktt. All rights reserved.
+//
 //
 
 import SwiftUI

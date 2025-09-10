@@ -15,6 +15,7 @@ extension View
         AnyView(self)
     }
     
+    @available(macOS 11.0, *)
     nonisolated
     func disableFullScreen() -> some View
     {

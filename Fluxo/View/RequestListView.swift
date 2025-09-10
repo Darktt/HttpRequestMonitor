@@ -22,21 +22,12 @@ struct RequestListView: View
     public
     var body: some View {
         
-        ScrollView {
+        if !self.requests.isEmpty {
             
-            LazyVStack {
-                
-                ForEach(self.requests) { request in
-                    
-                    RequestCell(title: request.rootUrl, detail: request.requestMethod, isSelected: (request == self.selectedRequest))
-                        .onTapGesture {
-                            
-                            self.selectedHandler?(request)
-                        }
-                }
-            }
-            .padding(.top, 10.0)
-            .padding(.horizontal, 5.0)
+            self.listView()
+        } else {
+            
+            self.emptyView()
         }
     }
     
@@ -57,6 +48,49 @@ struct RequestListView: View
         view.selectedHandler = handler
             
         return view
+    }
+}
+
+private
+extension RequestListView
+{
+    func listView() -> some View
+    {
+        ScrollView {
+            
+            LazyVStack {
+                
+                ForEach(self.requests) { request in
+                    
+                    RequestCell(title: request.rootUrl, detail: request.requestMethod, isSelected: (request == self.selectedRequest))
+                        .onTapGesture {
+                            
+                            self.selectedHandler?(request)
+                        }
+                }
+            }
+            .padding(.top, 10.0)
+            .padding(.horizontal, 5.0)
+        }
+    }
+    
+    func emptyView() -> some View
+    {
+        VStack(alignment: .center, spacing: 0.0) {
+            
+            Spacer(minLength: 40)
+            
+            Image(systemName: "doc.text.magnifyingglass")
+                .font(.system(size: 32, weight: .light))
+                .foregroundColor(.secondary.opacity(0.4))
+            
+            Text("No Request")
+                .font(.headline)
+                .foregroundColor(.secondary.opacity(0.4))
+                .padding()
+            
+            Spacer(minLength: 40)
+        }
     }
 }
 
