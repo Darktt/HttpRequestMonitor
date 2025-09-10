@@ -94,7 +94,14 @@ extension RequestListView
     }
 }
 
-#Preview {
+#Preview("Empty") {
+    
+    RequestListView(requests: [])
+        .frame(width: 400)
+}
+
+#Preview("Not empty") {
         
     RequestListView(requests: kDummyRequests, selected: kDummyRequests.first)
+        .frame(width: 400)
 }

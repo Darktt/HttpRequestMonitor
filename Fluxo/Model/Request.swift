@@ -212,7 +212,7 @@ extension Request
         if contentType.contains("; ") {
             
             let components: Array<String> = contentType.components(separatedBy: "; ")
-            let regex = "boundary=".regex
+            let regex: Regex<String.Output> = "boundary=".regex
             
             contentType = components.first!
             boundary = String(components.last?.trimmingPrefix(regex) ?? "")
