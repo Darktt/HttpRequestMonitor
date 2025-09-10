@@ -91,6 +91,9 @@ class HTTPMessage
             .flatMap({ Double($0.value) }) ?? 0.0
     }
     
+    public private(set)
+    var currentSize: Double = 0.0
+    
     public
     var body: Data? {
         
@@ -214,12 +217,15 @@ class HTTPMessage
     {
         if self.isHeadersComplete && self.isContentTypeNotText() {
             
+            self.currentSize += Double(data.count)
+            
             self.writeToFile(with: data)
             return true
         }
         
         let bytes: Array = Array(data)
         let result: Bool = CFHTTPMessageAppendBytes(self.message, bytes, data.count)
+        self.currentSize = Double(data.count)
         
         if self.isContentTypeNotText() {
             

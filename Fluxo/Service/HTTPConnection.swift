@@ -53,24 +53,6 @@ class HTTPConnection
         self.connection.pathUpdateHandler = nil
         self.connection.cancel()
     }
-    
-    public
-    func send(_ data: Data)
-    {
-        let completion: NWConnection.SendCompletion = .contentProcessed {
-            
-            [unowned self] error in
-            
-            if let error = error {
-                
-                print("ℹ️ Connection: \(self.connection), content processed with error: \(error)")
-            }
-            
-            print("ℹ️ Response sent successfully")
-        }
-        
-        self.connection.send(content: data, contentContext: .finalMessage, completion: completion)
-    }
 }
 
 private
@@ -108,7 +90,7 @@ extension HTTPConnection
     {
         let request = request ?? HTTPMessage()
         
-        let completion:@Sendable (Data?, NWConnection.ContentContext?, Bool, NWError?)  -> Void = {
+        let completion: @Sendable (Data?, NWConnection.ContentContext?, Bool, NWError?)  -> Void = {
             
             [weak self] data, _, isComplete, error in
             
@@ -144,7 +126,9 @@ extension HTTPConnection
                 request.appendData(data)
                 
                 print("ℹ️ Request content size: \(request.contentSize)")
-                print("ℹ️ Received data: \(data.count) bytes")
+                print("➡️ Received data: \(data.count) bytes")
+                print("➡️ Current size: \(request.contentSize) bytes")
+                print("------------------")
             }
             
             let isComplete: Bool = isComplete || request.isComplete
@@ -158,10 +142,12 @@ extension HTTPConnection
                 }
                 
                 let response = self.makeResponse(fromRequest: request)
-                self.sendResponse(response)
+                self.sendResponse(response) {
+                    
+                    print("ℹ️ Connection completed, closing")
+                    self.cancel()
+                }
                 
-                print("ℹ️ Connection completed, closing")
-                self.cancel()
                 return
             }
             
@@ -176,7 +162,10 @@ extension HTTPConnection
             
             let errorResponse = self.badRequestResponse()
             
-            self.sendResponse(errorResponse)
+            self.sendResponse(errorResponse) {
+                
+                self.cancel()
+            }
         }
         
         self.connection.receive(minimumIncompleteLength: 1, maximumLength: self.MTU, completion: completion)
@@ -204,13 +193,32 @@ extension HTTPConnection
         return response
     }
     
-    func sendResponse(_ response: HTTPMessage)
+    func sendResponse(_ response: HTTPMessage, completion: @escaping () -> Void)
     {
         guard let data: Data = response.data else {
             
             return
         }
         
-        self.send(data)
+        self.send(data, completion: completion)
+    }
+    
+    func send(_ data: Data, completion: @escaping () -> Void)
+    {
+        let completion: NWConnection.SendCompletion = .contentProcessed {
+            
+            [unowned self] error in
+            
+            if let error = error {
+                
+                print("ℹ️ Connection: \(self.connection), content processed with error: \(error)")
+            }
+            
+            print("ℹ️ Response sent successfully")
+            
+            completion()
+        }
+        
+        self.connection.send(content: data, contentContext: .finalMessage, completion: completion)
     }
 }
