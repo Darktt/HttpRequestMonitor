@@ -58,30 +58,6 @@
 - `Request`: HTTP 請求數據模型
 - `MainView`: 主要使用者介面
 
-## 🛠️ 開發指南
-
-### 編譯專案
-```bash
-xcodebuild -scheme Fluxo -platform macOS build
-```
-
-### 執行測試
-```bash
-xcodebuild -scheme Fluxo -platform macOS test
-```
-
-### 執行測試計劃
-```bash
-xcodebuild test -testPlan Fluxo.xctestplan
-```
-
-## 📱 介面截圖
-
-應用程式採用三欄式設計：
-- **功能列**: 包含開始/停止監控按鈕和清理功能
-- **請求列表**: 左側邊欄顯示所有攔截的請求
-- **詳細檢視**: 右側主要區域顯示選中請求的詳細資訊
-
 ## 🔧 支援的內容格式
 
 - `application/json` - JSON 數據
